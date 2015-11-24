@@ -1,0 +1,3 @@
+addpath('simout');
+addpath('perf');
+
