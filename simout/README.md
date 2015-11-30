@@ -26,10 +26,39 @@ iteration. Outputs in the following order:
 5212	3515	125627	10.427091327705295	14.636130867709815	0.88034375
 5241	3465	131158	10.964892196145774	14.225396825396825	0.807075
 ```
+### Octave compatibility
+
+All these utilities work in GNU Octave.
 
 ### Utilities
 
+#### Generic utilities
+
+TO DO
+
+#### PPHPC-specific utilities
+
 * [pp_plot](pp_plot.m) - Plot PPHPC simulation output
+
+#### Helper functions
+
+* [ci_t](ci_t.m) - Obtain a t-confidence interval.
+
+* [ci_willink](ci_willink.m) - Obtain a Willink confidence interval (accounts 
+for skewness).
+
+* [hist_edges](hist_edges.m) - Finds the edges for an histogram (helper 
+function used by other functions).
+
+* [ltxp](ltxp.m) - Formats a p-value for LaTeX, value less than `minpv` are 
+formatted to `< minpv` (requires LaTeX [siunitx] package).
+
+* [ltxpe](ltxpe.m) - Formats a p-value for LaTeX, using exponents for very low 
+p-values and underlining (double-underlining) values below 0.05 (0.01). Requires
+[siunitx] and [ulem] LaTeX packages.
+
+* [ltxr](ltxr.m) - Formats a real value for LaTeX (mainly a helper function used
+by other functions, requires LaTeX [siunitx] package)
 
 ### Examples
 
@@ -41,4 +70,5 @@ To do.
 
 To do.
 
-
+[siunitx]: https://www.ctan.org/pkg/siunitx
+[ulem]: https://www.ctan.org/pkg/ulem
