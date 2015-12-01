@@ -11,6 +11,7 @@ function lvalue = ltxpe(pvalue)
 % Returns:
 %  lvalue - A string with the formatted p-value, according to the following
 %           rules:
+%             * If p-value is NaN, return the character '-'.
 %             * If p-value is more than 0.0005, it is formatted with three
 %               decimal digits, otherwise it is formatted with scientific
 %               notation (the final value will always have five 
@@ -25,16 +26,20 @@ function lvalue = ltxpe(pvalue)
 % at http://opensource.org/licenses/MIT)
 %
 
-if pvalue > 0.0005
-    lvalue = sprintf('%6.3f', pvalue);
+if isnan(pvalue)
+    lvalue = '-';
 else
-    lvalue = sprintf('\\num[output-exponent-marker=\\text{e}]{%5.0e}', ...
-        pvalue);
-end;
-if pvalue < 0.01
-    lvalue = sprintf('\\uuline{%s}', lvalue);
-elseif pvalue < 0.05
-    lvalue = sprintf('\\uline{%s}', lvalue);
-end;
 
+    if pvalue > 0.0005
+        lvalue = sprintf('%6.3f', pvalue);
+    else
+        lvalue = sprintf('\\num[output-exponent-marker=\\text{e}]{%5.0e}', ...
+            pvalue);
+    end;
+    if pvalue < 0.01
+        lvalue = sprintf('\\uuline{%s}', lvalue);
+    elseif pvalue < 0.05
+        lvalue = sprintf('\\uline{%s}', lvalue);
+    end;
 
+end;

@@ -52,6 +52,11 @@ min, argmin, mean, std) taken from simulation outputs from one file.
 number of runs, either 1) with superimposed outputs, 2) plot filled area 
 encompassed by output extremes, or, 3) moving average plot.
 
+* [pp_stats_analyze_f](pp_stats_analyze_f.m) - Print a table of focal 
+measures (obtained with the [stats_analyze](stats_analyze.m) function) 
+formatted in plain text or in LaTeX (the latter requires the [siunitx], 
+[multirow], [booktabs] and [ulem] packages).
+
 ### Examples
 
 #### Distributional output analysis
@@ -106,6 +111,26 @@ have only one column, i.e. one value per focal measure, while the `cit`
 variables have two columns, which correspond to the lower and upper
 limits of the respective intervals.
 
+While the data returned by the [stats_analyze](stats_analyze.m) is in a 
+format adequate for further processing and/or analysis, it is not very
+human readable. To this purpose, one can use the 
+[pp_stats_analyze_f](pp_stats_analyze_f.m) to print a nice plain text
+table (the last parameter, 0, specifies plain text output):
+
+```matlab
+pp_stats_analyze_f(s100v1.sdata, 0.05, 0);
+```
+
+This function can also output a publication quality LaTeX table by 
+setting the last argument to 1:
+
+```matlab
+pp_stats_analyze_f(s100v1.sdata, 0.05, 1);
+```
+
+However, the [pp_stats_analyze_f](pp_stats_analyze_f.m) is not generic,
+i.e. it only works with output from PPHPC model.
+
 #### Statistical comparison of multiple implementations
 
 These examples use the datasets available at 
@@ -126,3 +151,6 @@ TODO
 
 [siunitx]: https://www.ctan.org/pkg/siunitx
 [ulem]: https://www.ctan.org/pkg/ulem
+[multirow]: https://www.ctan.org/pkg/multirow
+[booktabs]: https://www.ctan.org/pkg/booktabs
+
