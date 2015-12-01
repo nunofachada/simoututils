@@ -135,12 +135,12 @@ elseif isnumeric(type) && type >= 0 % Moving average
     
     % Smooth average?
     if w > 0
-        avgSheepData = ma(avgSheepData, w);
-        avgWolfData = ma(avgWolfData, w);
-        avgGrassData = ma(avgGrassData, w);
-        avgAvgSheepEnergyData = ma(avgAvgSheepEnergyData, w);
-        avgAvgWolfEnergyData = ma(avgAvgWolfEnergyData, w);
-        avgAvgGrassCountdownData = ma(avgAvgGrassCountdownData, w);
+        avgSheepData = mavg(avgSheepData, w);
+        avgWolfData = mavg(avgWolfData, w);
+        avgGrassData = mavg(avgGrassData, w);
+        avgAvgSheepEnergyData = mavg(avgAvgSheepEnergyData, w);
+        avgAvgWolfEnergyData = mavg(avgAvgWolfEnergyData, w);
+        avgAvgGrassCountdownData = mavg(avgAvgGrassCountdownData, w);
     end;
     
     % Initialize output matrix
@@ -182,14 +182,3 @@ title('Energy');
 xlabel('Iterations');
 ylabel('Average energy');
 
-% This function performs a moving average
-function y = ma(x, w)
-
-y = zeros(numel(x) - w, 1);
-for i = 1:numel(y)
-    if i <= w
-        y(i) = sum(x((i - (i - 1)):(i + (i - 1)))) / (2 * i - 1);
-    else
-        y(i) = sum(x((i - w):(i + w))) / (2 * w + 1);
-    end;
-end;

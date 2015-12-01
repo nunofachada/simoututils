@@ -55,23 +55,35 @@ encompassed by output extremes, or, 3) moving average plot.
 
 These examples use the datasets available at 
 [![DOI](https://zenodo.org/badge/doi/10.5281/zenodo.34053.svg)](http://dx.doi.org/10.5281/zenodo.34053).
-Unpack the datasets to any folder and put the complete path to this folder in
-variable `datafolder`, e.g.:
+Unpack the datasets to any folder and put the complete path to this 
+folder in variable `datafolder`, e.g.:
 
 ```matlab
 datafolder = 'path/to/datasets';
 ```
+
+These datasets correspond to the results presented in the article
+[Towards a standard model for research in agent-based modeling and simulation](https://peerj.com/articles/cs-36/).
+
+##### Example 1
+
+TODO
 
 #### Statistical comparison of multiple implementations
 
 These examples use the datasets available at 
 [![DOI](https://zenodo.org/badge/doi/10.5281/zenodo.34049.svg)](http://dx.doi.org/10.5281/zenodo.34049).
-Unpack the datasets to any folder and put the complete path to this folder in
-variable `datafolder`, e.g.:
+Unpack the datasets to any folder and put the complete path to this 
+folder in variable `datafolder`, e.g.:
 
 ```matlab
 datafolder = 'path/to/datasets';
 ```
+
+These datasets correspond to the results presented in the manuscript
+[Parallelization Strategies for Spatial Agent-Based Models](http://arxiv.org/abs/1507.04047).
+
+##### Example 1
 
 TODO
 
