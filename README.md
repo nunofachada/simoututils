@@ -3,13 +3,15 @@ PPHPC Data Analysis Utilities
 
 ## What are these utilities?
 
-A number of [MATLAB]/[Octave] functions and scripts for analyzing PPHPC 
-[simulation outputs](simout).
+A number of [MATLAB]/[Octave] functions and scripts for analyzing
+[output](simout) data from simulation models. These utilities were developed to
+analyze the [PPHPC] model, and while some are PPHPC-specific, most can be used 
+to study any model.
 
 ## How to use them
 
-Start [MATLAB]/[Octave] directly in this folder, or `cd` into this folder and
-execute the [startup](startup.m) script:
+Start [MATLAB]/[Octave] directly in this folder, or `cd` into this 
+folder and execute the [startup](startup.m) script:
 
 ```
 startup
@@ -18,6 +20,8 @@ startup
 The following links describe in detail how to use the utilities:
 
 * [Analysis of PPHPC simulation output](simout)
+* [Helper functions](helpers)
+* [Third-party functions](3rdparty)
 
 ## License
 
@@ -26,3 +30,4 @@ The following links describe in detail how to use the utilities:
 [Matlab]: http://www.mathworks.com/products/matlab/
 [Octave]: https://gnu.org/software/octave/
 [GNU time]: https://www.gnu.org/software/time/
+[PPHPC]: https://peerj.com/articles/cs-36/ 
