@@ -34,7 +34,12 @@ All these utilities work in GNU Octave.
 
 #### Generic utilities
 
-TO DO
+* [stats_gather](stats_gather.m) - Get statistical summaries (max, 
+argmax, min, argmin, mean, std) taken from simulation outputs from 
+multiple files.
+
+* [stats_get](stats_get.m) - Get statistical summaries (max, argmax, 
+min, argmin, mean, std) taken from simulation outputs from one file.
 
 #### PPHPC-specific utilities
 
@@ -48,11 +53,27 @@ encompassed by output extremes, or, 3) moving average plot.
 
 #### Distributional output analysis
 
-To do.
+These examples use the datasets available at 
+[![DOI](https://zenodo.org/badge/doi/10.5281/zenodo.34053.svg)](http://dx.doi.org/10.5281/zenodo.34053).
+Unpack the datasets to any folder and put the complete path to this folder in
+variable `datafolder`, e.g.:
+
+```matlab
+datafolder = 'path/to/datasets';
+```
 
 #### Statistical comparison of multiple implementations
 
-To do.
+These examples use the datasets available at 
+[![DOI](https://zenodo.org/badge/doi/10.5281/zenodo.34049.svg)](http://dx.doi.org/10.5281/zenodo.34049).
+Unpack the datasets to any folder and put the complete path to this folder in
+variable `datafolder`, e.g.:
+
+```matlab
+datafolder = 'path/to/datasets';
+```
+
+TODO
 
 [siunitx]: https://www.ctan.org/pkg/siunitx
 [ulem]: https://www.ctan.org/pkg/ulem
