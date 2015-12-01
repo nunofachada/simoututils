@@ -73,7 +73,52 @@ datafolder = 'path/to/datasets';
 These datasets correspond to the results presented in the article
 [Towards a standard model for research in agent-based modeling and simulation](https://peerj.com/articles/cs-36/).
 
-##### Example 1: Get and analyze statistical summaries taken from simulation output
+##### Example 1: Plot simulation output
+
+Use the [pp_plot](pp_plot.m) to plot one replication of the PPHPC model:
+
+```matlab
+pp_plot([datafolder '/v1/stats100v1r1.txt']);
+```
+
+The [pp_plot_many](pp_plot_many.m) function can be used to plot outputs
+from multiple replications. It works in three modes. In first mode,
+outputs from multiple replications are simply superimposed. This mode is
+selected using the 'a' option as the last parameter, as follows:
+
+```matlab
+pp_plot_many([datafolder '/v1'], 'stats100v1*.txt', 4001, 'a');
+```
+
+The first argument specifies the folder where the simulation output 
+files are located, and the second indicates, using wildcards, the 
+specific files which contain simulation output. The third argument is
+the number of iterations to plot.
+
+The second mode, selected using the 'f' option, allows to plot areas 
+limited by output extremes, offering a good perspective on the range of 
+values each output takes during simulation runs:
+
+```matlab
+pp_plot_many([datafolder '/v1'], 'stats100v1*.txt', 4001, 'f');
+```
+
+Finally, the third mode plots the moving average of each output over the 
+multiple replications. This mode is selected by passing a positive 
+integer as the last argument to the [pp_plot_many](pp_plot_many.m) 
+function. This positive integer is the window size with which to smooth
+the output. A value of zero is equivalent to no smoothing, i.e. the 
+function will simply plot the averaged outputs. A value of 10 offers a
+good balance between rough and overly smooth plots:
+
+```matlab
+pp_plot_many([datafolder '/v1'], 'stats100v1*.txt', 4001, 10);
+```
+
+The third mode of the [pp_plot_many](pp_plot_many.m) function is useful
+for empirically selecting a steady-state truncation point.
+
+##### Example 2: Get and analyze statistical summaries taken from simulation output
 
 First, get statistical summaries for 30 runs of the PPHPC model for size
 100 and parameter set 1, where 6 corresponds to the number of outputs of
