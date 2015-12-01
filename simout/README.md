@@ -34,6 +34,9 @@ All these utilities work in GNU Octave.
 
 #### Generic utilities
 
+* [stats_analyze](stats_analyze.m) - Analyze statistical summaries taken
+from simulation output.
+
 * [stats_gather](stats_gather.m) - Get statistical summaries (max, 
 argmax, min, argmin, mean, std) taken from simulation outputs from 
 multiple files.
@@ -65,9 +68,43 @@ datafolder = 'path/to/datasets';
 These datasets correspond to the results presented in the article
 [Towards a standard model for research in agent-based modeling and simulation](https://peerj.com/articles/cs-36/).
 
-##### Example 1
+##### Example 1: Get and analyze statistical summaries taken from simulation output
 
-TODO
+First, get statistical summaries for 30 runs of the PPHPC model for size
+100 and parameter set 1, where 6 corresponds to the number of outputs of
+the PPHPC model and 1000 to the iteration after which the outputs are in 
+steady-state.
+
+```matlab
+s100v1 = stats_gather('100v1', [datafolder '/v1'], 'stats100v1r*.txt', 6, 1000);
+```
+Six statistical summaries are returned: maximum (**max**), iteration 
+where maximum occurs (**argmax**), minimum (**min**), iteration 
+where minimum occurs (**argmin**), mean (**mean**), and standard 
+deviation (**std**). The **mean** and **std** statistics are obtained
+during the steady-state phase of the output.
+
+The [stats_gather](stats_gather.m) returns a _struct_ containing two 
+fields: 1) `name` contains the name with which the data was tagged, 
+'100v1' in this case; and, 2) `sdata`, a 30 x 36 matrix, with 30
+observations (from 30 files) and 36 focal measures (six statistical 
+summaries for each of the six outputs).
+
+Let's now analyze the focal measures (i.e. statistical summaries for
+each output). The 0.05 value in the second parameter is the significance
+level for the confidence intervals and the Shapiro-Wilk test:
+
+```matlab
+[m, v, cit, ciw, sw, sk] = stats_analyze(s100v1.sdata', 0.05);
+```
+
+The variables returned by the [stats_analyze](stats_analyze.m) function
+have 36 rows, one per focal measure. The `m` (mean), `v` (variance), 
+`sw` (_p_-value of the Shapiro-Wilk test) and `sk` (skewness) variables
+have only one column, i.e. one value per focal measure, while the `cit`
+(_t_-confidence interval) and `ciw` (Willink confidence interval)
+variables have two columns, which correspond to the lower and upper
+limits of the respective intervals.
 
 #### Statistical comparison of multiple implementations
 

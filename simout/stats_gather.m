@@ -16,8 +16,8 @@ function stats = stats_gather(name, folder, files, num_outputs, ss_idx)
 % Returns:
 %     stats - a struct containing the fields 'name', containing the name
 %             with which the data was tagged, and 'sdata', a n x m matrix, 
-%             with n observations (from n files) and m statistical 
-%             summaries (such that m = 6 * num_outputs, where 6 is the
+%             with n observations (from n files) and m focal measures
+%             (such that m = 6 * num_outputs, where 6 is the
 %             number of statistical summaries).
 %
 % Details:
