@@ -79,7 +79,8 @@ if type == 'a' % Many
         
         % Fill the output matrix
         d(i, :, :) = [sheepData(:, i) wolfData(:, i) grassData(:, i) ...
-            avgSheepEnergyData(:, i) avgWolfEnergyData(:, i) avgGrassCountdownData(:, i)];
+            avgSheepEnergyData(:, i) avgWolfEnergyData(:, i) ...
+            avgGrassCountdownData(:, i)];
         
     end;
 
@@ -93,32 +94,43 @@ elseif type == 'f' % Filled
     extSheepData = [min(sheepData, [], 2) max(sheepData, [], 2)];
     extWolfData = [min(wolfData, [], 2) max(wolfData, [], 2)];
     extGrassData = [min(grassData, [], 2) max(grassData, [], 2)];
-    extAvgSheepEnergyData = [min(avgSheepEnergyData, [], 2) max(avgSheepEnergyData, [], 2)];
-    extAvgWolfEnergyData = [min(avgWolfEnergyData, [], 2) max(avgWolfEnergyData, [], 2)];
-    extAvgGrassCountdownData = [min(avgGrassCountdownData, [], 2) max(avgGrassCountdownData, [], 2)];
+    extAvgSheepEnergyData = [min(avgSheepEnergyData, [], 2) ...
+        max(avgSheepEnergyData, [], 2)];
+    extAvgWolfEnergyData = [min(avgWolfEnergyData, [], 2) ...
+        max(avgWolfEnergyData, [], 2)];
+    extAvgGrassCountdownData = [min(avgGrassCountdownData, [], 2) ...
+        max(avgGrassCountdownData, [], 2)];
     
     % Initialize output matrix
     d = zeros(2, iters, 6);
     
     % Fill output matrix
     d(1, :, :) = [extSheepData(:,1) extWolfData(:,1) extGrassData(:,1) ...
-        extAvgSheepEnergyData(:,1) extAvgWolfEnergyData(:,1) extAvgGrassCountdownData(:,1)];
+        extAvgSheepEnergyData(:,1) extAvgWolfEnergyData(:,1) ...
+        extAvgGrassCountdownData(:,1)];
     d(2, :, :) = [extSheepData(:,2) extWolfData(:,2) extGrassData(:,2) ...
-        extAvgSheepEnergyData(:,2) extAvgWolfEnergyData(:,2) extAvgGrassCountdownData(:,2)];
+        extAvgSheepEnergyData(:,2) extAvgWolfEnergyData(:,2) ...
+        extAvgGrassCountdownData(:,2)];
 
     % Iterations axis
     x=1:iters;
 
     % Plot graphs
     figure(pop_fig);
-    fill_between(x, extSheepData(:,1), extSheepData(:,2), 1, 'FaceColor', 'b');
-    fill_between(x, extWolfData(:,1), extWolfData(:,2), 1, 'FaceColor', 'r');
-    fill_between(x, extGrassData(:,1)./4, extGrassData(:,2)./4, 1, 'FaceColor', 'g');
+    fill_between(x, extSheepData(:,1), extSheepData(:,2), 1, ...
+        'FaceColor', 'b');
+    fill_between(x, extWolfData(:,1), extWolfData(:,2), 1, ...
+        'FaceColor', 'r');
+    fill_between(x, extGrassData(:,1)./4, extGrassData(:,2)./4, 1, ...
+        'FaceColor', 'g');
 
     figure(en_fig);
-    fill_between(x, extAvgSheepEnergyData(:,1), extAvgSheepEnergyData(:,2), 1, 'FaceColor', 'b');
-    fill_between(x, extAvgWolfEnergyData(:,1), extAvgWolfEnergyData(:,2), 1, 'FaceColor', 'r');
-    fill_between(x, 4*extAvgGrassCountdownData(:,1), 4*extAvgGrassCountdownData(:,2), 1, 'FaceColor', 'g');
+    fill_between(x, extAvgSheepEnergyData(:,1), ...
+        extAvgSheepEnergyData(:,2), 1, 'FaceColor', 'b');
+    fill_between(x, extAvgWolfEnergyData(:,1), ...
+        extAvgWolfEnergyData(:,2), 1, 'FaceColor', 'r');
+    fill_between(x, 4*extAvgGrassCountdownData(:,1), ...
+        4*extAvgGrassCountdownData(:,2), 1, 'FaceColor', 'g');
     
 elseif isnumeric(type) && type >= 0 % Moving average
 
@@ -148,7 +160,8 @@ elseif isnumeric(type) && type >= 0 % Moving average
 
     % Fill output data
     d(1, :, :) = [avgSheepData avgWolfData avgGrassData ...
-        avgAvgSheepEnergyData avgAvgWolfEnergyData avgAvgGrassCountdownData];
+        avgAvgSheepEnergyData avgAvgWolfEnergyData ...
+        avgAvgGrassCountdownData];
     
     % Plot averages
     figure(pop_fig);
