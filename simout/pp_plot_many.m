@@ -85,6 +85,10 @@ if type == 'a' % Many
 
 elseif type == 'f' % Filled
     
+    if is_octave()
+        warning('Legends may not appear correctly in Octave');
+    end;
+
     % Find extremes
     extSheepData = [min(sheepData, [], 2) max(sheepData, [], 2)];
     extWolfData = [min(wolfData, [], 2) max(wolfData, [], 2)];
@@ -166,14 +170,14 @@ end;
 % Set legends and title
 figure(pop_fig);
 h = legend('$P^s_i$', '$P^w_i$', '$P^c_i/4$');
-set(h,'interpreter','Latex','FontSize',14);
+set(h, 'interpreter', 'Latex', 'FontSize', 14);
 title('Population');
 xlabel('Iterations');
 ylabel('Total population');
 
 figure(en_fig);
 h = legend('$\bar{E}^s_i$', '$\bar{E}^w_i$', '$4 \bar{C}_i$');
-set(h,'interpreter','Latex','FontSize',14);
+set(h, 'interpreter', 'Latex', 'FontSize', 14);
 title('Energy');
 xlabel('Iterations');
 ylabel('Average energy');

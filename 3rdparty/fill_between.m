@@ -2,6 +2,9 @@ function [y1handle, y2handle, h] = fill_between(x, y1, y2, where, varargin)
 % function originally written by Ben Vincent, July 2014. Inspired by a
 % function of the same name available in the Matplotlib Python library.
 
+% Modified at Dec 1, 2015 by Nuno Fachada so it (+-) works with Octave
+% which does not implement uistack
+
 % Save current axes so it can't change during runtime
 ca = gca;
 
@@ -98,8 +101,10 @@ y2handle = plot(x,y2,'k-');
 % http://www.mathworks.co.uk/help/matlab/ref/patch_props.html
 set(h, varargin{:});
 
-% move it to the back
-uistack(h, 'bottom')
+% move it to the back (does not work in Octave - added by Nuno Fachada)
+if ~is_octave()
+    uistack(h, 'bottom')
+end;
 
 % return to initial hold state
 if initialHoldState==0
