@@ -27,15 +27,21 @@ if nargin == 1
     minpv = 0.001;
 end;
 
-% This prevents printing zero for very low pvalues
-if pvalue < minpv
-    pvalue = minpv / 2;
-end;
+% Number of decimal places in minpv
+mpp = abs(floor(log10(minpv)));
+% How to format minpv in LaTeX
+mpf = sprintf('%%1.%df', mpp);
 
+% Is the pvalue less than minpv?
 if pvalue < minpv
-    lvalue = sprintf('\\num[round-mode=places,round-minimum=%f]{%f}', ...
-        minpv, pvalue);
+    
+    % If so, return "< minpv" 
+    lvalue = sprintf(['< \\num{' mpf '}'], minpv);
+    
 else
+    
+    % Otherwise, return the "real" representation of the p-value
     lvalue = ltxr(pvalue);
+    
 end;
 
