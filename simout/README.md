@@ -44,6 +44,11 @@ multiple files.
 * [stats_get](stats_get.m) - Get statistical summaries (max, argmax, 
 min, argmin, mean, std) taken from simulation outputs from one file.
 
+* [stats_plotdist](stats_plotdist.m) - Plot the distributional
+properties of one focal measure (i.e. of a statistical summary of a 
+single output), namely its probability density function (estimated), 
+histogram and QQ-plot.
+
 #### PPHPC-specific utilities
 
 * [pp_plot](pp_plot.m) - Plot PPHPC simulation output.
@@ -175,6 +180,33 @@ pp_stats_analyze_f(s100v1.sdata, 0.05, 1);
 
 However, the [pp_stats_analyze_f](pp_stats_analyze_f.m) is not generic,
 i.e. it only works with output from PPHPC model.
+
+##### Example 3: Visually analyze the distributional properties of a focal measure
+
+The [stats_plotdist](stats_plotdist.m) function offers a simple way of
+assessing the distributional properties of a focal measure for different
+model configurations (i.e. different model sizes, different parameter
+set, etc). It works with the data returned by the [stats_gather](stats_gather.m)
+function. 
+
+* For example, lets assess the distributional properties of the PPHPC
+focal measure given by the **argmin** of the _grass quantity_ output for
+parameter set 2 and a number of different model sizes:
+
+```matlab
+% Get statistical summaries for different model sizes, parameter set 2
+s100v2 = stats_gather('100v2', [datafolder '/v2'], 'stats100v2r*.txt', 6, 2000);
+s200v2 = stats_gather('200v2', [datafolder '/v2'], 'stats200v2r*.txt', 6, 2000);
+s400v2 = stats_gather('400v2', [datafolder '/v2'], 'stats400v2r*.txt', 6, 2000);
+s800v2 = stats_gather('800v2', [datafolder '/v2'], 'stats800v2r*.txt', 6, 2000);
+s1600v2 = stats_gather('1600v2', [datafolder '/v2'], 'stats1600v2r*.txt', 6, 2000);
+
+% Group them into a cell array
+sv2 = {s100v2, s200v2, s400v2, s800v2, s1600v2};
+
+% Plot distributional properties
+stats_plotdist(sv2, 3, 4, 'Grass qty.');
+```
 
 #### Statistical comparison of multiple implementations
 
