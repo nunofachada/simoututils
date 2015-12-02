@@ -26,6 +26,13 @@ function used by other functions, requires LaTeX [siunitx] package)
 * [mavg](mavg.m) - Applies a moving average (low-pass) filter to vector
 _x_ using a window of size _w_.
 
+* [qqcalc](qqcalc.m) - Calculates the (normalized) points for a QQ-plot 
+of the specified sample data versus the normal distribution.
+
+* [tikqq](tikqq.m) - Creates a QQ-plot in TikZ (LaTeX).
+
+* [tikhist](tikhist.m) - Creates an histogram in TikZ (LaTeX).
+
 
 [siunitx]: https://www.ctan.org/pkg/siunitx
 [ulem]: https://www.ctan.org/pkg/ulem
