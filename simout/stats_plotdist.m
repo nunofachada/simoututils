@@ -7,7 +7,8 @@ function hout = stats_plotdist(datas, output, stat, outname)
 %
 % Parameters:
 %   datas - Cell array with stats to analyze, each cell correspond to stats
-%          returned by the stats_gather function for a model configuration.
+%           returned by the stats_gather function for a model 
+%           configuration.
 %  output - Index of output to analyze (1, 2, ...).
 %    stat - Index of statistical summary to analyze (1 to 6).
 % outname - Output name (optional), used for the figure title.

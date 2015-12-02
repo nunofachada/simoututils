@@ -62,6 +62,15 @@ measures (obtained with the [stats_analyze](stats_analyze.m) function)
 formatted in plain text or in LaTeX (the latter requires the [siunitx], 
 [multirow], [booktabs] and [ulem] packages).
 
+* [pp_stats_ltxtab_per_setup](pp_stats_ltxtab_per_setup.m) - Outputs a 
+LaTeX table with a distributional analysis of a PPHPC for one setup
+for all focal measures. For each focal measure, the table shows the 
+mean, variance, _p_-value of the Shapiro-Wilk test, skewness, histogram
+and QQ-plot. Requires the [siunitx], [multirow] and [booktabs] LaTeX 
+packages.
+
+* [pp_stats_ltxtab_per_fm](pp_stats_ltxtab_per_fm.m) - To do...
+
 ### Examples
 
 #### Distributional output analysis
@@ -207,6 +216,29 @@ sv2 = {s100v2, s200v2, s400v2, s800v2, s1600v2};
 % Plot distributional properties
 stats_plotdist(sv2, 3, 4, 'Grass qty.');
 ```
+
+##### Example 4: LaTeX table with distributional analysis of all PPHPC focal measures for one setup
+
+In the article [Towards a standard model...](https://peerj.com/articles/cs-36/)
+a number of [tables](https://doi.org/10.7717/peerj-cs.36/supp-2) 
+containing a detailed distributional analysis of all PPHPC focal 
+measures are provided as supplemental information. Each table displays a
+distributional analysis for one setup, i.e. for one size/parameter set
+combinations. The [pp_stats_ltxtab_per_setup](pp_stats_ltxtab_per_setup.m) 
+returns these tables, accepting a single parameter which corresponds to
+the output of the [stats_gather](stats_gather.m) function. For example,
+to get a table with the distributional analysis of all PPHPC focal
+measures for model size 1600, parameter set 2, only two commands are
+required:
+
+```matlab
+s1600v2 = stats_gather('1600v2', [datafolder '/v2'], 'stats1600v2r*.txt', 6, 2000);
+pp_stats_ltxtab_per_setup(s1600v2)
+```
+
+##### Example 5: LaTeX table with a distributional analysis of one PPHPC focal measure for multiple setups
+
+TODO
 
 #### Statistical comparison of multiple implementations
 
