@@ -1,9 +1,9 @@
-function hout = stats_plotdist(datas, output, stat, outname)
-% STATS_PLOTDIST Plot the distributional properties of one focal measure 
+function hout = dist_plot_per_fm(datas, output, stat)
+% DIST_PLOT_PER_FM Plot the distributional properties of one focal measure 
 % (i.e. of a statistical summary of a single output), namely its 
 % probability density function (estimated), histogram and QQ-plot.
 %
-%   hout = STATS_PLOTDIST(datas, output, stat, outname)
+%   hout = DIST_PLOT_PER_FM(datas, output, stat)
 %
 % Parameters:
 %   datas - Cell array with stats to analyze, each cell correspond to stats
@@ -11,7 +11,6 @@ function hout = stats_plotdist(datas, output, stat, outname)
 %           configuration.
 %  output - Index of output to analyze (1, 2, ...).
 %    stat - Index of statistical summary to analyze (1 to 6).
-% outname - Output name (optional), used for the figure title.
 %
 % Returns:
 %    hout - Figure handle.
@@ -32,9 +31,7 @@ function hout = stats_plotdist(datas, output, stat, outname)
 %
 
 % Output name
-if nargin == 3
-    outname = 'Output';
-end;
+outname = datas{1}.outputs{output};
 
 % Statistical summaries
 stsumm = {'max','argmax','min','argmin','mean','std'};

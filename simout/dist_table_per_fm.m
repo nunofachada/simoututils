@@ -1,10 +1,10 @@
-function table_info = pp_stats_ltxtab_per_fm(datas, output, stat, pre)
-% PP_STATS_LTXTAB_PER_FM Outputs a LaTeX table with a distributional
+function table_info = dist_table_per_fm(datas, output, stat, pre)
+% DIST_TABLE_PER_FM Outputs a LaTeX table with a distributional
 % analysis of a PPHPC focal measure for a number of setups/configurations.
 % For each setup/configuration, the table shows the p-value of the 
 % Shapiro-Wilk test, skewness, histogram and QQ-plot.
 %
-%   t = PP_STATS_LTXTAB_PER_FM(datas, output, stat, pre)
+%   t = DIST_TABLE_PER_FM(datas, output, stat, pre)
 %
 % Parameters:
 %      datas - Cell array with stats to analyze, each cell containing stats 
@@ -24,6 +24,10 @@ function table_info = pp_stats_ltxtab_per_fm(datas, output, stat, pre)
 % Distributed under the MIT License (See accompanying file LICENSE or copy 
 % at http://opensource.org/licenses/MIT)
 %
+
+% Example:
+% datas = {st30_nl100v1, st30_nl200v1, st30_nl400v1, st30_nl800v1, st30_nl1600v1, st30_nl100v2, st30_nl200v2, st30_nl400v2, st30_nl800v2, st30_nl1600v2};
+% pp_stats_latextable_fm(datas, 1, 3);
 
 % if "pre" parameter not specified, set default value to 0
 if nargin < 4

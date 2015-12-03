@@ -1,15 +1,15 @@
-function t = pp_stats_ltxtab_per_setup(data)
-% PP_STATS_LTXTAB_PER_SETUP Outputs a LaTeX table with a distributional
-% analysis of a PPHPC for one setup/configuration for all focal measures.
-% For each focal measure, the table shows the mean, variance, p-value of
-% the Shapiro-Wilk test, skewness, histogram and QQ-plot. Requires the 
-% siunitx, multirow and booktabs LaTeX packages.
+function t = dist_table_per_setup(data)
+% DIST_TABLE_PER_SETUP Outputs a LaTeX table with a distributional
+% analysis of all focal measures for one model setup/configuration. For 
+% each focal measure, the table shows the mean, variance, p-value of the 
+% Shapiro-Wilk test, skewness, histogram and QQ-plot. Requires the siunitx, 
+% multirow and booktabs LaTeX packages.
 %
-%   t = PP_STATS_LTXTAB_PER_SETUP(data)
+%   t = DIST_TABLE_PER_SETUP(data)
 %
 % Parameters:
-%      data - Stats returned by the stats_gather function for the desired
-%             model setup/configuration.
+%      data - Stats returned by the stats_gather function for a number of 
+%             runs with the desired model setup/configuration.
 %
 % Returns:
 %      t - A string containing the LaTeX table.
@@ -18,14 +18,17 @@ function t = pp_stats_ltxtab_per_setup(data)
 %     To make a table fit in one page you can wrap the produced table in
 %     "\resizebox*{!}{0.9\textheight}{" and "}". 
 %
+% See also STATS_TABLE_PER_SETUP.
+%
 % Copyright (c) 2015 Nuno Fachada
 % Distributed under the MIT License (See accompanying file LICENSE or copy 
 % at http://opensource.org/licenses/MIT)
 %
 
-% Outputs and statistical summaries
-outputs = {'P_i^s', 'P_i^w', 'P_i^c', '\mean{E}^s_i', '\mean{E}^w_i', ...
-    '\mean{C}_i'};
+% Output names
+outputs = data.outputs;
+
+% Statistical summaries
 ssumm = {'\max', '\argmax', '\min', '\argmin', '\mean{X}^{\text{ss}}',...
     'S^{\text{ss}}'};
 
@@ -100,7 +103,7 @@ for i=1:numel(outputs)
         ltxp(sw(4)), ltxp(sw(5)), ltxp(sw(6)));
     
     % Print the output variable here, before the Skewness
-    t = sprintf('%s $%s$\n', t, outputs{i});
+    t = sprintf('%s %s\n', t, outputs{i});
     
     % Print the skewness
     t = sprintf(...

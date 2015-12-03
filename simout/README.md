@@ -34,6 +34,17 @@ All these utilities work in GNU Octave.
 
 #### Generic utilities
 
+* [dist_plot_per_fm](dist_plot_per_fm.m) - Plot the distributional
+properties of one focal measure (i.e. of a statistical summary of a 
+single output), namely its probability density function (estimated), 
+histogram and QQ-plot.
+
+* [dist_table_per_setup](dist_table_per_setup.m) - Outputs a LaTeX table
+with a distributional analysis of all focal measures for one model 
+setup/configuration. For each focal measure, the table shows the mean, 
+variance, p-value of the Shapiro-Wilk test, skewness, histogram and 
+QQ-plot.
+
 * [stats_analyze](stats_analyze.m) - Analyze statistical summaries taken
 from simulation output.
 
@@ -44,10 +55,9 @@ multiple files.
 * [stats_get](stats_get.m) - Get statistical summaries (max, argmax, 
 min, argmin, mean, std) taken from simulation outputs from one file.
 
-* [stats_plotdist](stats_plotdist.m) - Plot the distributional
-properties of one focal measure (i.e. of a statistical summary of a 
-single output), namely its probability density function (estimated), 
-histogram and QQ-plot.
+* [stats_table_per_setup](stats_table_per_setup.m) - Outputs a plain 
+text or LaTeX table with the statistics returned by the [stats_analyze](stats_analyze.m) 
+function for all focal measures for one model setup/configuration.
 
 #### PPHPC-specific utilities
 
@@ -56,20 +66,6 @@ histogram and QQ-plot.
 * [pp_plot_many](pp_plot_many.m) - Plot PPHPC simulation output from a 
 number of runs, either 1) with superimposed outputs, 2) plot filled area 
 encompassed by output extremes, or, 3) moving average plot.
-
-* [pp_stats_analyze_f](pp_stats_analyze_f.m) - Print a table of focal 
-measures (obtained with the [stats_analyze](stats_analyze.m) function) 
-formatted in plain text or in LaTeX (the latter requires the [siunitx], 
-[multirow], [booktabs] and [ulem] packages).
-
-* [pp_stats_ltxtab_per_setup](pp_stats_ltxtab_per_setup.m) - Outputs a 
-LaTeX table with a distributional analysis of a PPHPC for one setup
-for all focal measures. For each focal measure, the table shows the 
-mean, variance, _p_-value of the Shapiro-Wilk test, skewness, histogram
-and QQ-plot. Requires the [siunitx], [multirow] and [booktabs] LaTeX 
-packages.
-
-* [pp_stats_ltxtab_per_fm](pp_stats_ltxtab_per_fm.m) - To do...
 
 ### Examples
 
@@ -148,11 +144,17 @@ where minimum occurs (**argmin**), mean (**mean**), and standard
 deviation (**std**). The **mean** and **std** statistics are obtained
 during the steady-state phase of the output.
 
-The [stats_gather](stats_gather.m) returns a _struct_ containing two 
+The [stats_gather](stats_gather.m) returns a _struct_ containing three 
 fields: 1) `name` contains the name with which the data was tagged, 
-'100v1' in this case; and, 2) `sdata`, a 30 x 36 matrix, with 30
+'100v1' in this case; 2) cell array containing the output names (which
+default to 'o1', 'o2', etc.); and, 3) `sdata`, a 30 x 36 matrix, with 30
 observations (from 30 files) and 36 focal measures (six statistical 
 summaries for each of the six outputs).
+
+Instead of the number of outputs, the [stats_gather](stats_gather.m) 
+alternatively accepts a cell array of strings containing the output 
+names, which can be useful for latter producing publication quality
+tables.
 
 Let's now analyze the focal measures (i.e. statistical summaries for
 each output). The 0.05 value in the second parameter is the significance
@@ -172,27 +174,27 @@ limits of the respective intervals.
 
 While the data returned by the [stats_analyze](stats_analyze.m) is in a 
 format adequate for further processing and/or analysis, it is not very
-human readable. To this purpose, one can use the 
-[pp_stats_analyze_f](pp_stats_analyze_f.m) to print a nice plain text
-table (the last parameter, 0, specifies plain text output):
+human readable. To this purpose, one can use the [stats_table_per_setup](stats_table_per_setup.m) 
+function to output a nice plain text table (the last parameter, 0, 
+specifies plain text output):
 
 ```matlab
-pp_stats_analyze_f(s100v1.sdata, 0.05, 0);
+stats_table_per_setup(s100v1, 0.05, 0)
 ```
 
 This function can also output a publication quality LaTeX table by 
 setting the last argument to 1:
 
 ```matlab
-pp_stats_analyze_f(s100v1.sdata, 0.05, 1);
+stats_table_per_setup(s100v1, 0.05, 1)
 ```
 
-However, the [pp_stats_analyze_f](pp_stats_analyze_f.m) is not generic,
-i.e. it only works with output from PPHPC model.
+The produced LaTeX table requires the [siunitx], [multirow], [booktabs] 
+and [ulem] packages to compile.
 
 ##### Example 3: Visually analyze the distributional properties of a focal measure
 
-The [stats_plotdist](stats_plotdist.m) function offers a simple way of
+The [dist_plot_per_fm](dist_plot_per_fm.m) function offers a simple way of
 assessing the distributional properties of a focal measure for different
 model configurations (i.e. different model sizes, different parameter
 set, etc). It works with the data returned by the [stats_gather](stats_gather.m)
@@ -204,27 +206,32 @@ parameter set 2 and a number of different model sizes:
 
 ```matlab
 % Get statistical summaries for different model sizes, parameter set 2
-s100v2 = stats_gather('100v2', [datafolder '/v2'], 'stats100v2r*.txt', 6, 2000);
-s200v2 = stats_gather('200v2', [datafolder '/v2'], 'stats200v2r*.txt', 6, 2000);
-s400v2 = stats_gather('400v2', [datafolder '/v2'], 'stats400v2r*.txt', 6, 2000);
-s800v2 = stats_gather('800v2', [datafolder '/v2'], 'stats800v2r*.txt', 6, 2000);
-s1600v2 = stats_gather('1600v2', [datafolder '/v2'], 'stats1600v2r*.txt', 6, 2000);
+outputs = {'SheepPop', 'WolfPop', 'GrassQty', 'SheepEn', 'WolfEn', 'GrassEn'};
+s100v2 = stats_gather('100v2', [datafolder '/v2'], 'stats100v2r*.txt', outputs, 2000);
+s200v2 = stats_gather('200v2', [datafolder '/v2'], 'stats200v2r*.txt', outputs, 2000);
+s400v2 = stats_gather('400v2', [datafolder '/v2'], 'stats400v2r*.txt', outputs, 2000);
+s800v2 = stats_gather('800v2', [datafolder '/v2'], 'stats800v2r*.txt', outputs, 2000);
+s1600v2 = stats_gather('1600v2', [datafolder '/v2'], 'stats1600v2r*.txt', outputs, 2000);
 
 % Group them into a cell array
 sv2 = {s100v2, s200v2, s400v2, s800v2, s1600v2};
 
 % Plot distributional properties
-stats_plotdist(sv2, 3, 4, 'Grass qty.');
+dist_plot_per_fm(sv2, 3, 4);
 ```
 
-##### Example 4: LaTeX table with distributional analysis of all PPHPC focal measures for one setup
+Note that in this example we explicitly specified the output names when
+calling the [stats_gather](stats_gather.m) function. Also, for parameter
+set 2, we set the steady-state truncation point to iteration 2000.
+
+##### Example 4: LaTeX table with distributional analysis of all focal measures for one setup
 
 In the article [Towards a standard model...](https://peerj.com/articles/cs-36/)
 a number of [tables](https://doi.org/10.7717/peerj-cs.36/supp-2) 
 containing a detailed distributional analysis of all PPHPC focal 
 measures are provided as supplemental information. Each table displays a
 distributional analysis for one setup, i.e. for one size/parameter set
-combinations. The [pp_stats_ltxtab_per_setup](pp_stats_ltxtab_per_setup.m) 
+combination. The [dist_table_per_setup](dist_table_per_setup.m) 
 returns these tables, accepting a single parameter which corresponds to
 the output of the [stats_gather](stats_gather.m) function. For example,
 to get a table with the distributional analysis of all PPHPC focal
@@ -232,9 +239,12 @@ measures for model size 1600, parameter set 2, only two commands are
 required:
 
 ```matlab
-s1600v2 = stats_gather('1600v2', [datafolder '/v2'], 'stats1600v2r*.txt', 6, 2000);
-pp_stats_ltxtab_per_setup(s1600v2)
+outputs = {'$P^s_i$', '$P^w_i$', '$P^c_i$', '$\bar{E}^s_i$', '$\bar{E}^w_i$', '$\bar{C}_i$'};
+s1600v2 = stats_gather('1600v2', [datafolder '/v2'], 'stats1600v2r*.txt', outputs, 2000);
+dist_table_per_setup(s1600v2)
 ```
+We specify the output names in LaTeX math mode so they appear in the
+produced table as they appear in the article.
 
 ##### Example 5: LaTeX table with a distributional analysis of one PPHPC focal measure for multiple setups
 
