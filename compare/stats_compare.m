@@ -78,18 +78,32 @@ if numel(unique(sample1)) == 1 && numel(unique(sample2)) == 1 ...
 elseif strcmp(test, 't')
     
     % t-test
-    [h,p] = ttest2(sample1, sample2, 'Alpha', alpha);
-    
+    if is_octave()
+        p = t_test_2(sample1, sample2);
+        h = p < alpha;
+    else
+        [h, p] = ttest2(sample1, sample2, 'Alpha', alpha);
+    end;
 
 elseif strcmp(test, 'mw')
     
     % Mann-Whitney
-    [p,h] = ranksum(sample1, sample2, 'Alpha', alpha);
-
+    if is_octave()
+        p = u_test(sample1, sample2);
+        h = p < alpha;
+    else
+        [p, h] = ranksum(sample1, sample2, 'Alpha', alpha);
+    end;
+    
 elseif strcmp(test, 'ks')
     
     % Kolmogrov-Smirnoff
-    [h,p] = kstest2(sample1, sample2, 'Alpha', alpha);
+    if is_octave()
+        p = kolmogorov_smirnov_test_2(sample1, sample2);
+        h = p < alpha;
+    else
+        [h, p] = kstest2(sample1, sample2, 'Alpha', alpha);
+    end;
     
 else
     
