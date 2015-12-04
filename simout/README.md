@@ -1,4 +1,4 @@
-## Analysis of PPHPC simulation output
+## Distributional analysis of simulation output
 
 ### File format
 
@@ -69,8 +69,6 @@ encompassed by output extremes, or, 3) moving average plot.
 
 ### Examples
 
-#### Distributional output analysis
-
 These examples use the datasets available at 
 [![DOI](https://zenodo.org/badge/doi/10.5281/zenodo.34053.svg)](http://dx.doi.org/10.5281/zenodo.34053).
 Unpack the datasets to any folder and put the complete path to this 
@@ -83,7 +81,7 @@ datafolder = 'path/to/datasets';
 These datasets correspond to the results presented in the article
 [Towards a standard model for research in agent-based modeling and simulation](https://peerj.com/articles/cs-36/).
 
-##### Example 1: Plot simulation output
+#### Example 1: Plot simulation output
 
 Use the [pp_plot](pp_plot.m) to plot one replication of the PPHPC model:
 
@@ -128,7 +126,7 @@ pp_plot_many([datafolder '/v1'], 'stats100v1*.txt', 4001, 10);
 The third mode of the [pp_plot_many](pp_plot_many.m) function is useful
 for empirically selecting a steady-state truncation point.
 
-##### Example 2: Get and analyze statistical summaries taken from simulation output
+#### Example 2: Get and analyze statistical summaries taken from simulation output
 
 First, get statistical summaries for 30 runs of the PPHPC model for size
 100 and parameter set 1, where 6 corresponds to the number of outputs of
@@ -192,7 +190,7 @@ stats_table_per_setup(s100v1, 0.05, 1)
 The produced LaTeX table requires the [siunitx], [multirow], [booktabs] 
 and [ulem] packages to compile.
 
-##### Example 3: Visually analyze the distributional properties of a focal measure
+#### Example 3: Visually analyze the distributional properties of a focal measure
 
 The [dist_plot_per_fm](dist_plot_per_fm.m) function offers a simple way of
 assessing the distributional properties of a focal measure for different
@@ -224,7 +222,7 @@ Note that in this example we explicitly specified the output names when
 calling the [stats_gather](stats_gather.m) function. Also, for parameter
 set 2, we set the steady-state truncation point to iteration 2000.
 
-##### Example 4: LaTeX table with distributional analysis of all focal measures for one setup
+#### Example 4: LaTeX table with distributional analysis of all focal measures for one setup
 
 In the article [Towards a standard model...](https://peerj.com/articles/cs-36/)
 a number of [tables](https://doi.org/10.7717/peerj-cs.36/supp-2) 
@@ -246,25 +244,7 @@ dist_table_per_setup(s1600v2)
 We specify the output names in LaTeX math mode so they appear in the
 produced table as they appear in the article.
 
-##### Example 5: LaTeX table with a distributional analysis of one PPHPC focal measure for multiple setups
-
-TODO
-
-#### Statistical comparison of multiple implementations
-
-These examples use the datasets available at 
-[![DOI](https://zenodo.org/badge/doi/10.5281/zenodo.34049.svg)](http://dx.doi.org/10.5281/zenodo.34049).
-Unpack the datasets to any folder and put the complete path to this 
-folder in variable `datafolder`, e.g.:
-
-```matlab
-datafolder = 'path/to/datasets';
-```
-
-These datasets correspond to the results presented in the manuscript
-[Parallelization Strategies for Spatial Agent-Based Models](http://arxiv.org/abs/1507.04047).
-
-##### Example 1
+#### Example 5: LaTeX table with a distributional analysis of one PPHPC focal measure for multiple setups
 
 TODO
 

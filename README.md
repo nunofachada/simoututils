@@ -10,8 +10,8 @@ to study any model.
 
 ## How to use them
 
-Start [MATLAB]/[Octave] directly in this folder, or `cd` into this 
-folder and execute the [startup](startup.m) script:
+Start [MATLAB]/[Octave] directly in this folder, or `cd` into this folder and
+execute the [startup](startup.m) script:
 
 ```
 startup
@@ -19,7 +19,8 @@ startup
 
 The following links describe in detail how to use the utilities:
 
-* [Analysis of PPHPC simulation output](simout)
+* [Analysis of simulation output](simout)
+* [Comparison of model implementations](compare)
 * [Helper functions](helpers)
 * [Third-party functions](3rdparty)
 
