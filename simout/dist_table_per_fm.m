@@ -1,6 +1,6 @@
-function table_info = dist_table_per_fm(datas, output, stat, pre)
+function t = dist_table_per_fm(datas, output, stat, pre)
 % DIST_TABLE_PER_FM Outputs a LaTeX table with a distributional
-% analysis of a PPHPC focal measure for a number of setups/configurations.
+% analysis of a focal measure for a number of setups/configurations.
 % For each setup/configuration, the table shows the p-value of the 
 % Shapiro-Wilk test, skewness, histogram and QQ-plot.
 %
@@ -18,16 +18,15 @@ function table_info = dist_table_per_fm(datas, output, stat, pre)
 %      t - A string containing the LaTeX table.
 % 
 % Note:
-%     
+%     This function returns a partial table, which can have additional
+%     columns (specified with the 'pre' parameter) prior to the data, as
+%     well as additional rows (headers, footers, similar partial tables for
+%     other focal measures, etc).
 %
 % Copyright (c) 2015 Nuno Fachada
 % Distributed under the MIT License (See accompanying file LICENSE or copy 
 % at http://opensource.org/licenses/MIT)
 %
-
-% Example:
-% datas = {st30_nl100v1, st30_nl200v1, st30_nl400v1, st30_nl800v1, st30_nl1600v1, st30_nl100v2, st30_nl200v2, st30_nl400v2, st30_nl800v2, st30_nl1600v2};
-% pp_stats_latextable_fm(datas, 1, 3);
 
 % if "pre" parameter not specified, set default value to 0
 if nargin < 4
@@ -37,7 +36,7 @@ end;
 % Set pre-columns before data
 pretxt = ' ';
 for i=1:pre
-    pretxt = sprinf('& %s', pretxt);
+    pretxt = sprintf('& %s', pretxt);
 end;
 
 % Table containing data to print in latex table: sw, skew, hist, qq
@@ -55,7 +54,7 @@ for i=1:numel(datas)
     
     % Create histogram, keep data
     table_info{3, i} = ...
-        histc(datas{i}.sdata(:, idx), edges(datas{i}.sdata(:, idx)));
+        histc(datas{i}.sdata(:, idx), hist_edges(datas{i}.sdata(:, idx)));
         
     % Create data for qq plot, keep data
     table_info{4, i} = qqcalc(datas{i}.sdata(:, idx));
@@ -63,36 +62,36 @@ for i=1:numel(datas)
 end;
 
 % Print data name as comment
-fprintf('%% ');
+t = sprintf('%% ');
 for i=1:numel(datas)
-    fprintf(' %s | ', datas{i}.name);
+    t = sprintf('%s %s | ', t, datas{i}.name);
 end;
-fprintf('\n');
+t = sprintf('%s\n', t);
 
 % Print SW p-values
-fprintf('%sSW ', pretxt);
+t = sprintf('%s%sSW ', t, pretxt);
 for i=1:numel(datas)
-    fprintf('& %s ', ltxp(table_info{1, i}));
+    t = sprintf('%s& %s ', t, ltxp(table_info{1, i}));
 end;
-fprintf('\\\\ \n');
+t = sprintf('%s\\\\ \n', t);
 
 % Print Skewness
-fprintf('%sSkew. ', pretxt);
+t = sprintf('%s%sSkew. ', t, pretxt);
 for i=1:numel(datas)
-    fprintf('& %s ', ltx(table_info{2, i}));
+    t = sprintf('%s& %s ', t, ltxr(table_info{2, i}));
 end;
-fprintf('\\\\ \n');
+t = sprintf('%s\\\\ \n', t);
 
 % Print histograms
-fprintf('%sHist. ', pretxt);
+t = sprintf('%s%sHist. ', t, pretxt);
 for i=1:numel(datas)
-    fprintf('& %s ', tikhist(table_info{3, i}));
+    t = sprintf('%s& \\multicolumn{1}{c}{\\resizebox {!} {0.5cm} {%s}} ', t, tikhist(table_info{3, i}));
 end;
-fprintf('\\\\ \n');
+t = sprintf('%s\\\\ \n', t);
 
 % Print QQ-plots
-fprintf('%sQ-Q ', pretxt);
+t = sprintf('%s%sQ-Q ', t, pretxt);
 for i=1:numel(datas)
-    fprintf('& %s ', tikqq(table_info{4, i}));
+    t = sprintf('%s& \\raisebox{-.5\\height}{\\resizebox {1.2cm} {1.2cm} {%s}} ', t, tikqq(table_info{4, i}));
 end;
-fprintf('\\\\ \n');
+t = sprintf('%s\\\\ \n', t);
