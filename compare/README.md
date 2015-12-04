@@ -8,13 +8,14 @@ The simulation output file format is the same as in the case of the
 
 ### Octave compatibility
 
-All these utilities work in GNU Octave.
+Not yet.
 
 ### Utilities
 
 #### Generic utilities
 
-TODO
+* [stats_compare](stats_compare.m) - Compare statistical summaries from 
+simulation outputs (i.e. focal measures) from two sets of simulation runs.
 
 #### PPHPC-specific utilities
 
