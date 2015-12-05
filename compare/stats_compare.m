@@ -1,6 +1,6 @@
 function [ps, h_all] = stats_compare(stats1, stats2, tests, alpha)
 % STATS_COMPARE Compare focal measures from two model implementations by
-% applying the specified statistical tests.
+% applying the specified two-sample statistical tests.
 %
 %   [ps, h_all] = STATS_COMPARE(stats1, stats2, tests, alpha)
 %

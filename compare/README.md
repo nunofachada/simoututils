@@ -15,11 +15,16 @@ _p_-values from those returned by the equivalent MATLAB functions.
 ### Utilities
 
 * [stats_compare](stats_compare.m) - Compare focal measures from two model 
-implementations by applying the specified statistical tests.
+implementations by applying the specified two-sample statistical tests.
 
-* [stats_compare_many_pw](stats_compare_many_pw.m) Compare focal measures from
-multiple model implementations, pair-wise, by applying the specified statistical 
-tests. This function outputs a plain text table of pair-wise failed tests.
+* [stats_compare_many_pw](stats_compare_many_pw.m) - Compare focal measures from 
+multiple model implementations, pair-wise, by applying the specified two-sample
+statistical tests. This function outputs a plain text table of pair-wise failed
+tests.
+
+* [stats_compare_many_all](stats_compare_many_all.m) - Simultaneously compare 
+focal measures from multiple model implementations by applying the specified 
+_n_-sample statistical tests.
 
 ### Examples
 
@@ -71,7 +76,7 @@ _p_-values for the requested tests (rows correspond to outputs, columns to
 statistical summaries), and `h_all`, containing the number of tests failed for 
 the specified significance level.
 
-#### Example 2: Compare focal measures of all Java variants of the PPHPC model
+#### Example 2: Compare focal measures of all Java variants of the PPHPC model, pairwise
 
 The [stats_compare_many_pw](stats_compare_many_pw.m) function performs pair-wise 
 comparisons of multiple model implementations by outputting a table of failed 
@@ -102,9 +107,32 @@ When comparing multiple model implementations or variants, the
 [stats_compare_many_pw](stats_compare_many_pw.m) function quickly shows if any
 of the implementations is misaligned.
 
-#### Example 3: Compare focal measures of all Java variants of the PPHPC model
+#### Example 3: Simultaneously compare focal measures of all Java variants of the PPHPC model
 
-TODO.
+While the [stats_compare_many_pw](stats_compare_many_pw.m) function can be 
+useful to determine if any of the tested implementations is misaligned, it
+does not provide much more information, namely in terms of _p_-values. An
+alternative is to use _n_-sample statistical tests, which allow to 
+simultaneously compare a focal measure from _n_ model implementations. The
+[stats_compare_many_all](stats_compare_many_all.m) function offers this
+functionality, returning a matrix of _p_-values obtained with the comparison of
+all focal measures of _n_ model implementations using the parametric ANOVA 
+and/or non-parametric Kruskal-Wallis tests. The following command does this with
+the data from the previous example:
+
+```matlab
+ps = stats_compare_many_all(0.05, {'a','kw','a','kw','a','a'}, sjst800v2, sjeql800v2, sjexl800v2, sjerl800v2, sjodl800v2);
+```
+
+The first argument establishes the significance level for the tests, while the
+second determines the tests to perform to each statistical measure, i.e. either
+ANOVA, 'a', or Kruskal-Wallis, 'kw'. The function returns 'ps', a matrix of
+_p_-values, where rows correspond to outputs, and columns to statistical
+summaries (max, argmax, min, argmin, steady-state mean and steady-state std).
+
+#### Example 4. Table with _p_-values from simultaneous comparison of multiple model implementations
+
+TODO
 
 [siunitx]: https://www.ctan.org/pkg/siunitx
 [ulem]: https://www.ctan.org/pkg/ulem

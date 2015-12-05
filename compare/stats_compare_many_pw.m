@@ -1,7 +1,8 @@
 function [t, h_all] = stats_compare_many_pw(alpha, tests, varargin)
 % STATS_COMPARE_MANY_PW Compare focal measures from multiple model 
-% implementations, pair-wise, by applying the specified statistical tests.
-% This function outputs a plain text table of pair-wise failed tests.
+% implementations, pair-wise, by applying the specified two-sample
+% statistical tests. This function outputs a plain text table of pair-wise 
+% failed tests.
 %
 %   [t, h_all] = STATS_COMPARE_MANY_PW(alpha, tests, varargin)
 %
@@ -22,24 +23,24 @@ function [t, h_all] = stats_compare_many_pw(alpha, tests, varargin)
 %    h_all - Matrix of pair-wise failed tests.
 %
 %
-% See also STATS_COMPARE.
+% See also STATS_COMPARE, STATS_COMPARE_MANY_ALL.
 %
 % Copyright (c) 2015 Nuno Fachada
 % Distributed under the MIT License (See accompanying file LICENSE or copy 
 % at http://opensource.org/licenses/MIT)
 %
 
-% Number of datasets
-numDataSets = nargin - 2;
+% Number of implementations
+num_impls = nargin - 2;
 
 % Matrix of failed tests
-h_all = zeros(numDataSets, numDataSets);
+h_all = zeros(num_impls, num_impls);
 
-% Compare all datasets with each other
-for i = 1:numDataSets
-    for j = (i + 1):numDataSets
+% Compare all implementations pair-wise
+for i = 1:num_impls
+    for j = (i + 1):num_impls
         
-        % Compare datasets i and j
+        % Compare implementations i and j
         [~, fails] = stats_compare(varargin{i}, varargin{j}, tests, alpha);
         
         % Update matrix of failed tests
@@ -55,31 +56,31 @@ else t = '';
 end;
     
 t = sprintf('%s %12.12s', t, ' ');
-for i = 1:numDataSets
+for i = 1:num_impls
     t = sprintf('%s--------------', t);
 end;
 t = sprintf('%s-\n', t);
 
 t = sprintf('%s %11.11s', t, ' ');
-for i = 1:numDataSets
+for i = 1:num_impls
     t = sprintf('%s | %11.11s', t, varargin{i}.name);
 end;
 t = sprintf('%s |\n', t);
 
-for i = 1:(numDataSets + 1)
+for i = 1:(num_impls + 1)
     t = sprintf('%s--------------', t);
 end;
 t = sprintf('%s\n', t);
 
-for i = 1:numDataSets
+for i = 1:num_impls
     t = sprintf('%s| %10.10s', t, varargin{i}.name);
-    for j = 1:numDataSets
+    for j = 1:num_impls
         t = sprintf('%s | %11d', t, h_all(i,j));
     end;
     t = sprintf('%s |\n', t);
 end;
 
-for i = 1:(numDataSets + 1)
+for i = 1:(num_impls + 1)
     t = sprintf('%s--------------', t);
 end;
 t = sprintf('%s\n', t);
