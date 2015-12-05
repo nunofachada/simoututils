@@ -31,7 +31,7 @@ outputs:
 
 ### Octave compatibility
 
-All these utilities work in GNU Octave.
+These utilities are compatible with GNU Octave.
 
 ### Utilities
 

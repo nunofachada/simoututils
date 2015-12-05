@@ -1,26 +1,28 @@
 function [ps, h_all] = stats_compare(stats1, stats2, tests, alpha)
-% STATS_COMPARE Compare statistical summaries from simulation outputs (i.e. 
-% focal measures) from two sets of simulation runs.
+% STATS_COMPARE Compare focal measures from two model implementations by
+% applying the specified statistical tests.
 %
 %   [ps, h_all] = STATS_COMPARE(stats1, stats2, tests, alpha)
 %
 % Parameters:
 %   stats1 - Statistical summaries (given by the stats_gather function) 
-%            from the first set of simulation runs.
+%            from the first model implementation.
 %   stats1 - Statistical summaries (given by the stats_gather function) 
-%            from the second set of simulation runs.
+%            from the second model implementation.
 %    tests - 't' - t-test, 'mw' - Mann-Whitney, 'ks' - Kolmogrov-Smirnoff.
 %            Can also be a cell array of strings, each string corresponding
-%            to the test to apply to each of the six statistical summaries.
+%            to the test to apply to each of the six statistical summaries,
+%            namely max, argmax, min, argmin, ss-mean and ss-std.
 %            For example, {'t', 'mw', 't', 'mw', 't', 't'} will apply the 
 %            t-test to all summaries except argmax and argmin, to which the
 %            Mann-Whitney test is applied instead. Default is 't' (t-tests
 %            for all statistical summaries).
-%    alpha - Significante level for the test (optional, default = 0.05)
+%    alpha - Significante level for the tests (optional, default = 0.05).
 %
 % Outputs:
-%      ps - Vector of p-values for the requested tests.
-%   h_all - How many tests failed.
+%      ps - Matrix of p-values for the requested tests, rows correspond to
+%           outputs, columns to statistical summaries.
+%   h_all - How many tests failed for the specified significance level.
 %
 %
 % See also STATS_GATHER.
@@ -37,7 +39,7 @@ h_all = 0;
 % Number of comparisons to perform
 ncomps = size(stats1.sdata, 2);
 
-% Vector of p-values
+% Vector of p-values (will be converted to matrix later)
 ps = zeros(1, ncomps);
 
 % Use default alpha?
@@ -65,7 +67,13 @@ for i=1:ncomps
 
 end;
 
-% Helper function
+% Convert vector of p-values to matrix (rows correspond to outputs, columns
+% to statistical summaries).
+ps = reshape(ps, 6, numel(stats1.outputs))';
+
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% %
+% Helper function to perform the actual tests %
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% %
 function [h, p] = dotest(test, sample1, sample2, alpha)
         
 if numel(unique(sample1)) == 1 && numel(unique(sample2)) == 1 ...
