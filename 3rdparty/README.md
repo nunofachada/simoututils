@@ -1,4 +1,4 @@
-### PPHPC Utilities
+### Simulation Model Analysis Utilities
 
 #### List of 3rd party functions
 

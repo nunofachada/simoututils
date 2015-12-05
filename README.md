@@ -1,5 +1,5 @@
-PPHPC Data Analysis Utilities
-=============================
+Simulation Model Analysis Utilities
+===================================
 
 ## What are these utilities?
 
@@ -30,5 +30,4 @@ The following links describe in detail how to use the utilities:
 
 [Matlab]: http://www.mathworks.com/products/matlab/
 [Octave]: https://gnu.org/software/octave/
-[GNU time]: https://www.gnu.org/software/time/
 [PPHPC]: https://peerj.com/articles/cs-36/ 
