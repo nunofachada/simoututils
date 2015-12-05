@@ -38,6 +38,7 @@ function stats = stats_gather(name, folder, files, outputs, args)
 % at http://opensource.org/licenses/MIT)
 %
 
+%<<<<<<< HEAD
 % Get names and number of statistical summaries
 ssnames = stats_get(args);
 ssnum = numel(ssnames.text);
@@ -66,6 +67,10 @@ else
         ' of strings']);
     
 end;
+%=======
+% Determine effective output names and number of outputs
+%[outputs, num_outputs] = parse_output_names(outputs);
+%>>>>>>> Attempt to have generic plot functions (in progress)
 
 % Get file list
 listing = dir([folder '/' files]);
