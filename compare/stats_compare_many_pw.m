@@ -1,9 +1,9 @@
-function h_all = stats_compare_many(alpha, tests, varargin)
-% STATS_COMPARE_MANY Compare focal measures from multiple model 
+function [t, h_all] = stats_compare_many_pw(alpha, tests, varargin)
+% STATS_COMPARE_MANY_PW Compare focal measures from multiple model 
 % implementations, pair-wise, by applying the specified statistical tests.
-% This function prints a table of pair-wise failed tests.
+% This function outputs a plain text table of pair-wise failed tests.
 %
-%   h_all = STATS_COMPARE_MANY(alpha, tests, varargin)
+%   [t, h_all] = STATS_COMPARE_MANY_PW(alpha, tests, varargin)
 %
 % Parameters:
 %    alpha - Significante level for the tests.
@@ -18,10 +18,11 @@ function h_all = stats_compare_many(alpha, tests, varargin)
 %            for each implementation.
 %
 % Outputs:
+%        t - String containing plain text table of pair-wise failed tests.
 %    h_all - Matrix of pair-wise failed tests.
 %
 %
-% See also STATS_GATHER.
+% See also STATS_COMPARE.
 %
 % Copyright (c) 2015 Nuno Fachada
 % Distributed under the MIT License (See accompanying file LICENSE or copy 
@@ -48,33 +49,37 @@ for i = 1:numDataSets
     end;
 end;
 
-% Print a table of failed tests
-fprintf(1, ' %12.12s', ' ');
-for i = 1:numDataSets
-    fprintf(1, '--------------');
+% Output a plain text table of failed tests
+if is_octave(), t = sprintf('\n');
+else t = '';
 end;
-fprintf(1, '-\n');
+    
+t = sprintf('%s %12.12s', t, ' ');
+for i = 1:numDataSets
+    t = sprintf('%s--------------', t);
+end;
+t = sprintf('%s-\n', t);
 
-fprintf(1, ' %11.11s', ' ');
+t = sprintf('%s %11.11s', t, ' ');
 for i = 1:numDataSets
-    fprintf(1, ' | %11.11s', varargin{i}.name);
+    t = sprintf('%s | %11.11s', t, varargin{i}.name);
 end;
-fprintf(1, ' |\n');
+t = sprintf('%s |\n', t);
 
 for i = 1:(numDataSets + 1)
-    fprintf(1, '--------------');
+    t = sprintf('%s--------------', t);
 end;
-fprintf(1, '\n');
+t = sprintf('%s\n', t);
 
 for i = 1:numDataSets
-    fprintf(1, '| %10.10s', varargin{i}.name);
+    t = sprintf('%s| %10.10s', t, varargin{i}.name);
     for j = 1:numDataSets
-        fprintf(1, ' | %11d', h_all(i,j));
+        t = sprintf('%s | %11d', t, h_all(i,j));
     end;
-    fprintf(1, ' |\n');
+    t = sprintf('%s |\n', t);
 end;
 
 for i = 1:(numDataSets + 1)
-    fprintf(1, '--------------');
+    t = sprintf('%s--------------', t);
 end;
-fprintf(1, '\n');
+t = sprintf('%s\n', t);

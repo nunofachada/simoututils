@@ -17,9 +17,9 @@ _p_-values from those returned by the equivalent MATLAB functions.
 * [stats_compare](stats_compare.m) - Compare focal measures from two model 
 implementations by applying the specified statistical tests.
 
-* [stats_compare_many](stats_compare_many.m) Compare focal measures from 
+* [stats_compare_many_pw](stats_compare_many_pw.m) Compare focal measures from
 multiple model implementations, pair-wise, by applying the specified statistical 
-tests. This function prints a table of pair-wise failed tests.
+tests. This function outputs a plain text table of pair-wise failed tests.
 
 ### Examples
 
@@ -73,34 +73,34 @@ the specified significance level.
 
 #### Example 2: Compare focal measures of all Java variants of the PPHPC model
 
-The [stats_compare_many](stats_compare_many.m) function performs pair-wise 
-comparisons of multiple model implementations simultaneously by printing a table 
-of pair-wise failed tests. The following example prints this table for all Java 
-variants of the PPHPC model for size 800, parameter set 2:
+The [stats_compare_many_pw](stats_compare_many_pw.m) function performs pair-wise 
+comparisons of multiple model implementations by outputting a table of failed 
+tests for each pair of implementations. The following example outputs this table
+for all Java variants of the PPHPC model for size 800, parameter set 2:
 
 ```matlab
 % Get stats data for Java implementation, ST strategy
-sjst800v2 = stats_gather('ST', [datafolder '/simout/ST'], 'stats800v2pSTr*.txt', outputs, 2000);
+sjst800v2 = stats_gather('ST', [datafolder '/simout/ST'], 'stats800v2pSTr*.txt', 6, 2000);
 
 % Get stats data for the Java implementation, EQ strategy (12 threads)
-sjeql800v2 = stats_gather('EQ', [datafolder '/simout/EQ'], 'stats800v2pEQt12r*.txt', outputs, 2000);
+sjeql800v2 = stats_gather('EQ', [datafolder '/simout/EQ'], 'stats800v2pEQt12r*.txt', 6, 2000);
 
 % Get stats data for the Java implementation, EX strategy (12 threads)
-sjexl800v2 = stats_gather('EX', [datafolder '/simout/EX'], 'stats800v2pEXt12r*.txt', outputs, 2000);
+sjexl800v2 = stats_gather('EX', [datafolder '/simout/EX'], 'stats800v2pEXt12r*.txt', 6, 2000);
 
 % Get stats data for the Java implementation, ER strategy (12 threads)
-sjerl800v2 = stats_gather('ER', [datafolder '/simout/ER'], 'stats800v2pERt12r*.txt', outputs, 2000);
+sjerl800v2 = stats_gather('ER', [datafolder '/simout/ER'], 'stats800v2pERt12r*.txt', 6, 2000);
 
 % Get stats data for the Java implementation, OD strategy (12 threads, b = 500)
-sjodl800v2 = stats_gather('OD', [datafolder '/simout/OD'], 'stats800v2pODb500t12r*.txt', outputs, 2000);
+sjodl800v2 = stats_gather('OD', [datafolder '/simout/OD'], 'stats800v2pODb500t12r*.txt', 6, 2000);
 
-% Print table of pair-wise failed tests for significance level 0.05
-stats_compare_many(0.05, {'t', 'mw', 't', 'mw', 't', 't'}, sjst800v2, sjeql800v2, sjexl800v2, sjerl800v2, sjodl800v2);
+% Output table of pair-wise failed tests for significance level 0.05
+stats_compare_many_pw(0.05, {'t', 'mw', 't', 'mw', 't', 't'}, sjst800v2, sjeql800v2, sjexl800v2, sjerl800v2, sjodl800v2)
 ```
 
 When comparing multiple model implementations or variants, the 
-[stats_compare_many](stats_compare_many.m) function quickly shows if any of the
-implementations is misaligned.
+[stats_compare_many_pw](stats_compare_many_pw.m) function quickly shows if any
+of the implementations is misaligned.
 
 #### Example 3: Compare focal measures of all Java variants of the PPHPC model
 
