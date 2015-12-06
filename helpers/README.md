@@ -13,12 +13,14 @@ function used by other functions).
 * [is_octave](is_octave.m) - Checks if the code is running in Octave or
 Matlab.
 
-* [ltxp](ltxp.m) - Formats a p-value for LaTeX, value less than `minpv` 
-are formatted to `< minpv` (requires LaTeX [siunitx] package).
+* [ltxp](ltxp.m) - Formats a _p_-value for LaTeX using the [ltxpv](ltxpv.m) 
+function, setting 'minpv' to `0.001` (i.e. truncating _p_-values to 0.001) and 
+'ulims' to `[0 0]` (i.e. disabling underlines).
 
-* [ltxpe](ltxpe.m) - Formats a p-value for LaTeX, using exponents for 
-very low p-values and underlining (double-underlining) values below 0.05
-(0.01). Requires [siunitx] and [ulem] LaTeX packages.
+* [ltxpv](ltxpv.m) - Formats a p-value for LaTeX, using exponents and/or 
+truncating very low _p_-values, and underlining/double-underlining _p_-values 
+below user specified limits (defaulting to 0.05 for underline and 0.01 for
+double-underline). Requires [siunitx] and [ulem] LaTeX packages.
 
 * [ltxr](ltxr.m) - Formats a real value for LaTeX (mainly a helper 
 function used by other functions, requires LaTeX [siunitx] package)

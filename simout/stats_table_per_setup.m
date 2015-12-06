@@ -89,7 +89,8 @@ else
             
             t = sprintf('%s & $%s$ & $%s$ & $%s$ & %s & % 31s\\\\\n', ...
                 t, ...
-                ssumm{1}, ltxr(m(idx)), ltxr(v(idx)), ci, ltxpe(sw(idx)));
+                ssumm{1}, ltxr(m(idx)), ltxr(v(idx)), ci, ...
+                ltxpv(sw(idx), 1e-8));
         end;
     end;
     t = sprintf('%s\\bottomrule\n', t);
