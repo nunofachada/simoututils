@@ -8,17 +8,13 @@ The simulation output file format is the same as in the case of the
 
 ### Utilities
 
-* [stats_compare](stats_compare.m) - Compare focal measures from two model 
-implementations by applying the specified two-sample statistical tests.
+* [stats_compare](stats_compare.m) -  Compare focal measures from two or more 
+model implementations by applying the specified statistical tests.
 
-* [stats_compare_many_pw](stats_compare_many_pw.m) - Compare focal measures from 
+* [stats_compare_pw](stats_compare_pw.m) - Compare focal measures from 
 multiple model implementations, pair-wise, by applying the specified two-sample
 statistical tests. This function outputs a plain text table of pair-wise failed
 tests.
-
-* [stats_compare_many_all](stats_compare_many_all.m) - Simultaneously compare 
-focal measures from multiple model implementations by applying the specified 
-_n_-sample statistical tests.
 
 ### Examples
 
@@ -47,12 +43,15 @@ been used.
 
 For the [stats_compare](stats_compare.m) function:
 
-* The third parameter specifies the tests to be performed to each of the six
-  statistical summaries for each output. In this case were performing the
-  _t_-test to all summaries, except **argmax** and **argmin**, to which the
-  Mann-Whitney test is applied instead.
-* The fourth parameter specifies the significance level for the statistical
+* The first parameter specifies the significance level for the statistical
   tests.
+* The second parameter specifies the tests to be performed to each of the six
+  statistical summaries for each output. In this case we're performing the
+  _t_-test to all summaries, except **argmax** and **argmin**, to which the
+  Mann-Whitney test is applied instead. The options 'p' and 'np' stand for 
+  parametric and non-parameteric, respectively.
+* The remaining parameters are the statistical summaries returned by the
+[stats_gather](stats_gather.m) function for the implementations to be compared.
 
 ```matlab
 % Get stats data for NetLogo implementation, parameter set 1, all sizes
@@ -62,7 +61,7 @@ snl400v1 = stats_gather('NL', [datafolder '/simout/NL'], 'stats400v1r*.txt', 6, 
 sjex400v1 = stats_gather('JEX', [datafolder '/simout/EX'], 'stats400v1pEXt12r*.txt', 6, 1000);
 
 % Perform comparison
-[ps, h_all] = stats_compare(snl400v1, sjex400v1, {'t', 'mw', 't', 'mw', 't', 't'}, 0.01);
+[ps, h_all] = stats_compare(0.01, {'p', 'np', 'p', 'np', 'p', 'p'}, snl400v1, sjex400v1);
 ```
 
 The [stats_compare](stats_compare.m) function return `ps`, a matrix of 
@@ -70,12 +69,15 @@ _p_-values for the requested tests (rows correspond to outputs, columns to
 statistical summaries), and `h_all`, containing the number of tests failed for 
 the specified significance level.
 
-#### Example 2: Compare focal measures of all Java variants of the PPHPC model, pairwise
+#### Example 2: Compare focal measures of all Java variants of the PPHPC model
 
-The [stats_compare_many_pw](stats_compare_many_pw.m) function performs pair-wise 
-comparisons of multiple model implementations by outputting a table of failed 
-tests for each pair of implementations. The following example outputs this table
-for all Java variants of the PPHPC model for size 800, parameter set 2:
+The [stats_compare](stats_compare.m) function also allows to compare focal 
+measure from more than two model implementations. If more than two 
+[stats_gather](stats_gather.m) structs are passed as arguments, the 
+[stats_compare](stats_compare.m) function automatically uses _n_-sample
+statistical tests, namely ANOVA as a parametric test, and Kruskal-Wallis as a
+non-parametric test. In the following, we compare all Java variants of the PPHPC
+model for size 800, parameter set 2:
 
 ```matlab
 % Get stats data for Java implementation, ST strategy
@@ -93,36 +95,25 @@ sjerl800v2 = stats_gather('ER', [datafolder '/simout/ER'], 'stats800v2pERt12r*.t
 % Get stats data for the Java implementation, OD strategy (12 threads, b = 500)
 sjodl800v2 = stats_gather('OD', [datafolder '/simout/OD'], 'stats800v2pODb500t12r*.txt', 6, 2000);
 
-% Output table of pair-wise failed tests for significance level 0.05
-stats_compare_many_pw(0.05, {'t', 'mw', 't', 'mw', 't', 't'}, sjst800v2, sjeql800v2, sjexl800v2, sjerl800v2, sjodl800v2)
+% Perform comparison
+ps = stats_compare(0.05, {'p','np','p','np','p','p'}, sjst800v2, sjeql800v2, sjexl800v2, sjerl800v2, sjodl800v2);
 ```
 
-When comparing multiple model implementations or variants, the 
-[stats_compare_many_pw](stats_compare_many_pw.m) function quickly shows if any
-of the implementations is misaligned.
+#### Example 3: Pairwise comparison of all Java variants of the PPHPC model
 
-#### Example 3: Simultaneously compare focal measures of all Java variants of the PPHPC model
-
-While the [stats_compare_many_pw](stats_compare_many_pw.m) function can be 
-useful to determine if any of the tested implementations is misaligned, it
-does not provide much more information, namely in terms of _p_-values. An
-alternative is to use _n_-sample statistical tests, which allow to 
-simultaneously compare a focal measure from _n_ model implementations. The
-[stats_compare_many_all](stats_compare_many_all.m) function offers this
-functionality, returning a matrix of _p_-values obtained with the comparison of
-all focal measures of _n_ model implementations using the parametric ANOVA 
-and/or non-parametric Kruskal-Wallis tests. The following command does this with
-the data from the previous example:
+When comparing multiple model implementations, if one or more are misaligned, 
+the [stats_compare](stats_compare.m) function will detected a misalignment, but
+will not provide information regarding which implementation is misaligned. The 
+[stats_compare_pw](stats_compare_pw.m) function performs pair-wise comparisons 
+of multiple model implementations by outputting a table of failed tests for each
+pair of implementations, thus allowing to detect which implementation(s) is
+(are) misaligned. The following example outputs this table for the 
+data used in the previous example:
 
 ```matlab
-ps = stats_compare_many_all(0.05, {'a','kw','a','kw','a','a'}, sjst800v2, sjeql800v2, sjexl800v2, sjerl800v2, sjodl800v2);
+% Output table of pair-wise failed tests for significance level 0.05
+stats_compare_pw(0.05, {'p', 'np', 'p', 'np', 'p', 'p'}, sjst800v2, sjeql800v2, sjexl800v2, sjerl800v2, sjodl800v2)
 ```
-
-The first argument establishes the significance level for the tests, while the
-second determines the tests to perform to each statistical measure, i.e. either
-ANOVA, 'a', or Kruskal-Wallis, 'kw'. The function returns 'ps', a matrix of
-_p_-values, where rows correspond to outputs, and columns to statistical
-summaries (max, argmax, min, argmin, steady-state mean and steady-state std).
 
 #### Example 4. Table with _p_-values from simultaneous comparison of multiple model implementations
 

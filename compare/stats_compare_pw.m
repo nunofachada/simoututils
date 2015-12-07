@@ -1,20 +1,20 @@
-function [t, h_all] = stats_compare_many_pw(alpha, tests, varargin)
-% STATS_COMPARE_MANY_PW Compare focal measures from multiple model 
+function [t, h_all] = stats_compare_pw(alpha, tests, varargin)
+% STATS_COMPARE_PW Compare focal measures from multiple model 
 % implementations, pair-wise, by applying the specified two-sample
 % statistical tests. This function outputs a plain text table of pair-wise 
 % failed tests.
 %
-%   [t, h_all] = STATS_COMPARE_MANY_PW(alpha, tests, varargin)
+%   [t, h_all] = STATS_COMPARE_PW(alpha, tests, varargin)
 %
 % Parameters:
 %    alpha - Significante level for the tests.
-%    tests - 't' - t-test, 'mw' - Mann-Whitney, 'ks' - Kolmogrov-Smirnoff.
-%            Can also be a cell array of strings, each string corresponding
-%            to the test to apply to each of the six statistical summaries,
-%            namely max, argmax, min, argmin, ss-mean and ss-std. For 
-%            example, {'t', 'mw', 't', 'mw', 't', 't'} will apply the 
-%            t-test to all summaries except argmax and argmin, to which the
-%            Mann-Whitney test is applied instead.
+%    tests - 'p' - t-test, 'np' - Mann-Whitney. Can also be a cell array of
+%            strings, each string corresponding to the test to apply to 
+%            each of the six statistical summaries, namely max, argmax, 
+%            min, argmin, ss-mean and ss-std. For example, 
+%            {'p', 'np', 'p', 'np', 'p', 'p'} will apply the t-test to all
+%            summaries except argmax and argmin, to which the Mann-Whitney
+%            test is applied instead.
 % varargin - Statistical summaries (given by the stats_gather function) 
 %            for each implementation.
 %
@@ -23,7 +23,7 @@ function [t, h_all] = stats_compare_many_pw(alpha, tests, varargin)
 %    h_all - Matrix of pair-wise failed tests.
 %
 %
-% See also STATS_COMPARE, STATS_COMPARE_MANY_ALL.
+% See also STATS_COMPARE.
 %
 % Copyright (c) 2015 Nuno Fachada
 % Distributed under the MIT License (See accompanying file LICENSE or copy 
@@ -41,7 +41,7 @@ for i = 1:num_impls
     for j = (i + 1):num_impls
         
         % Compare implementations i and j
-        [~, fails] = stats_compare(varargin{i}, varargin{j}, tests, alpha);
+        [~, fails] = stats_compare(alpha, tests, varargin{i}, varargin{j});
         
         % Update matrix of failed tests
         h_all(i, j) = h_all(i, j) + fails;
