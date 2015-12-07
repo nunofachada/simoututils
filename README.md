@@ -24,6 +24,12 @@ The following links describe in detail how to use the utilities:
 * [Helper functions](helpers)
 * [Third-party functions](3rdparty)
 
+## GNU Octave compatibility
+
+These utilities are compatible with GNU Octave. However, note that a number of 
+statistical tests provided by Octave return slightly different _p_-values from
+those returned by the equivalent MATLAB functions.
+
 ## License
 
 [MIT License](LICENSE)

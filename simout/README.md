@@ -29,10 +29,6 @@ outputs:
 5. Mean wolves energy
 6. Mean value of the countdown parameter in all cells.
 
-### Octave compatibility
-
-These utilities are compatible with GNU Octave.
-
 ### Utilities
 
 #### Generic utilities

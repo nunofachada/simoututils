@@ -6,12 +6,6 @@ The simulation output file format is the same as in the case of the
 [distributional analysis of simulation output](../simout), i.e. TSV 
 (tab-separated values), one column per output, one row per iteration.
 
-### Octave compatibility
-
-These utilities are compatible with GNU Octave. However, note that a number of 
-statistical test functions provided by Octave return slightly different 
-_p_-values from those returned by the equivalent MATLAB functions. 
-
 ### Utilities
 
 * [stats_compare](stats_compare.m) - Compare focal measures from two model 
