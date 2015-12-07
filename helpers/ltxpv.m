@@ -4,7 +4,7 @@ function lvalue = ltxpv(pvalue, minpv, ulims)
 % specified limits (defaulting to 0.05 for underline and 0.01 for
 % double-underline). Requires siunitx and ulem LaTeX packages.
 %
-%   lvalue = LTXPV(pvalue, minpv)
+%   lvalue = LTXPV(pvalue, minpv, ulims)
 %
 % Parameters:
 %   value - P-value to format.
