@@ -84,19 +84,19 @@ model for size 800, parameter set 2:
 sjst800v2 = stats_gather('ST', [datafolder '/simout/ST'], 'stats800v2pSTr*.txt', 6, 2000);
 
 % Get stats data for the Java implementation, EQ strategy (12 threads)
-sjeql800v2 = stats_gather('EQ', [datafolder '/simout/EQ'], 'stats800v2pEQt12r*.txt', 6, 2000);
+sjeq800v2 = stats_gather('EQ', [datafolder '/simout/EQ'], 'stats800v2pEQt12r*.txt', 6, 2000);
 
 % Get stats data for the Java implementation, EX strategy (12 threads)
-sjexl800v2 = stats_gather('EX', [datafolder '/simout/EX'], 'stats800v2pEXt12r*.txt', 6, 2000);
+sjex800v2 = stats_gather('EX', [datafolder '/simout/EX'], 'stats800v2pEXt12r*.txt', 6, 2000);
 
 % Get stats data for the Java implementation, ER strategy (12 threads)
-sjerl800v2 = stats_gather('ER', [datafolder '/simout/ER'], 'stats800v2pERt12r*.txt', 6, 2000);
+sjer800v2 = stats_gather('ER', [datafolder '/simout/ER'], 'stats800v2pERt12r*.txt', 6, 2000);
 
 % Get stats data for the Java implementation, OD strategy (12 threads, b = 500)
-sjodl800v2 = stats_gather('OD', [datafolder '/simout/OD'], 'stats800v2pODb500t12r*.txt', 6, 2000);
+sjod800v2 = stats_gather('OD', [datafolder '/simout/OD'], 'stats800v2pODb500t12r*.txt', 6, 2000);
 
 % Perform comparison
-ps = stats_compare(0.05, {'p','np','p','np','p','p'}, sjst800v2, sjeql800v2, sjexl800v2, sjerl800v2, sjodl800v2);
+ps = stats_compare(0.05, {'p','np','p','np','p','p'}, sjst800v2, sjeq800v2, sjex800v2, sjer800v2, sjod800v2);
 ```
 
 #### Example 3: Pairwise comparison of all Java variants of the PPHPC model
@@ -112,7 +112,7 @@ data used in the previous example:
 
 ```matlab
 % Output table of pair-wise failed tests for significance level 0.05
-stats_compare_pw(0.05, {'p', 'np', 'p', 'np', 'p', 'p'}, sjst800v2, sjeql800v2, sjexl800v2, sjerl800v2, sjodl800v2)
+stats_compare_pw(0.05, {'p', 'np', 'p', 'np', 'p', 'p'}, sjst800v2, sjeq800v2, sjex800v2, sjer800v2, sjod800v2)
 ```
 
 #### Example 4. Table with _p_-values from simultaneous comparison of multiple model implementations
