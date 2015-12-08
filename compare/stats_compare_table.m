@@ -1,6 +1,6 @@
 function t = stats_compare_table(tests, pthresh, tformat, varargin)
 % STATS_COMPARE_TABLE Output a LaTeX table with p-values resulting from
-% statistical tests used to ascertain aligment of model implementations.
+% statistical tests used to evaluate the alignment of model implementations.
 %
 %   t = STATS_COMPARE_TABLE(tests, pthresh, tformat, varargin)
 %
@@ -21,14 +21,14 @@ function t = stats_compare_table(tests, pthresh, tformat, varargin)
 %            header. If 1, output names are placed in the first column.
 % varargin - Variable number of cell arrays containing the following two
 %            items defining a comparison:
-%            - Either: a) a string describing the comparison name; b) a 
-%              cell array of two strings, the first describing a comparison
-%              group name, and the second describing a comparison name; or,
-%              c) a zero, 0, which is an indication not to print any type 
-%              of comparison name.
-%            - A cell array of statistical summaries (given by the 
-%              stats_gather function) of the implementations to be 
-%              compared.
+%            1 - Either: a) a string describing the comparison name; b) a 
+%                cell array of two strings, the first describing a 
+%                comparison group name, and the second describing a 
+%                comparison name; or, c) zero, 0, an indication not to 
+%                print any type of comparison name.
+%            2 - A cell array of statistical summaries (given by the 
+%                stats_gather function) of the implementations to be 
+%                compared.
 %
 % Outputs:
 %        t - LaTeX table.

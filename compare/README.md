@@ -16,19 +16,29 @@ multiple model implementations, pair-wise, by applying the specified two-sample
 statistical tests. This function outputs a plain text table of pair-wise failed
 tests.
 
+* [stats_compare_table](stats_compare_table.m) - Output a LaTeX table with 
+_p_-values resulting from statistical tests used to evaluate the alignment of 
+model implementations.
+
 ### Examples
 
-These examples use the datasets available at 
-[![DOI](https://zenodo.org/badge/doi/10.5281/zenodo.34049.svg)](http://dx.doi.org/10.5281/zenodo.34049).
-Unpack the datasets to any folder and put the complete path to this 
-folder in variable `datafolder`, e.g.:
+The examples use the following datasets:
+
+1. [![DOI](https://zenodo.org/badge/doi/10.5281/zenodo.34049.svg)](http://dx.doi.org/10.5281/zenodo.34049)
+2. [![DOI](https://zenodo.org/badge/doi/10.5281/zenodo.34049.svg)](http://dx.doi.org/10.5281/zenodo.34049)
+
+Dataset 1 corresponds to the results presented in the manuscript
+[Parallelization Strategies for Spatial Agent-Based Models](http://arxiv.org/abs/1507.04047),
+while dataset 2 corresponds to the results presented in the manuscript
+[Model-independent comparison of simulation output](http://arxiv.org/abs/1509.09174).
+
+Unpack the datasets to any folder and put the complete path to these folders in
+variables `datafolder1` and `datafolder2`, respectively:
 
 ```matlab
-datafolder = 'path/to/datasets';
+datafolder1 = 'path/to/dataset1';
+datafolder2 = 'path/to/dataset2';
 ```
-
-These datasets correspond to the results presented in the manuscript
-[Parallelization Strategies for Spatial Agent-Based Models](http://arxiv.org/abs/1507.04047).
 
 #### Example 1: Compare focal measures of the NetLogo and Java EX implementations of the PPHPC model
 
@@ -55,10 +65,10 @@ For the [stats_compare](stats_compare.m) function:
 
 ```matlab
 % Get stats data for NetLogo implementation, parameter set 1, all sizes
-snl400v1 = stats_gather('NL', [datafolder '/simout/NL'], 'stats400v1r*.txt', 6, 1000);
+snl400v1 = stats_gather('NL', [datafolder1 '/simout/NL'], 'stats400v1r*.txt', 6, 1000);
 
 % Get stats data for the Java implementation, EX strategy (12 threads), parameter set 1, all sizes
-sjex400v1 = stats_gather('JEX', [datafolder '/simout/EX'], 'stats400v1pEXt12r*.txt', 6, 1000);
+sjex400v1 = stats_gather('JEX', [datafolder1 '/simout/EX'], 'stats400v1pEXt12r*.txt', 6, 1000);
 
 % Perform comparison
 [ps, h_all] = stats_compare(0.01, {'p', 'np', 'p', 'np', 'p', 'p'}, snl400v1, sjex400v1);
@@ -81,19 +91,19 @@ model for size 800, parameter set 2:
 
 ```matlab
 % Get stats data for Java implementation, ST strategy
-sjst800v2 = stats_gather('ST', [datafolder '/simout/ST'], 'stats800v2pSTr*.txt', 6, 2000);
+sjst800v2 = stats_gather('ST', [datafolder1 '/simout/ST'], 'stats800v2pSTr*.txt', 6, 2000);
 
 % Get stats data for the Java implementation, EQ strategy (12 threads)
-sjeq800v2 = stats_gather('EQ', [datafolder '/simout/EQ'], 'stats800v2pEQt12r*.txt', 6, 2000);
+sjeq800v2 = stats_gather('EQ', [datafolder1 '/simout/EQ'], 'stats800v2pEQt12r*.txt', 6, 2000);
 
 % Get stats data for the Java implementation, EX strategy (12 threads)
-sjex800v2 = stats_gather('EX', [datafolder '/simout/EX'], 'stats800v2pEXt12r*.txt', 6, 2000);
+sjex800v2 = stats_gather('EX', [datafolder1 '/simout/EX'], 'stats800v2pEXt12r*.txt', 6, 2000);
 
 % Get stats data for the Java implementation, ER strategy (12 threads)
-sjer800v2 = stats_gather('ER', [datafolder '/simout/ER'], 'stats800v2pERt12r*.txt', 6, 2000);
+sjer800v2 = stats_gather('ER', [datafolder1 '/simout/ER'], 'stats800v2pERt12r*.txt', 6, 2000);
 
 % Get stats data for the Java implementation, OD strategy (12 threads, b = 500)
-sjod800v2 = stats_gather('OD', [datafolder '/simout/OD'], 'stats800v2pODb500t12r*.txt', 6, 2000);
+sjod800v2 = stats_gather('OD', [datafolder1 '/simout/OD'], 'stats800v2pODb500t12r*.txt', 6, 2000);
 
 % Perform comparison
 ps = stats_compare(0.05, {'p','np','p','np','p','p'}, sjst800v2, sjeq800v2, sjex800v2, sjer800v2, sjod800v2);
@@ -117,7 +127,25 @@ stats_compare_pw(0.05, {'p', 'np', 'p', 'np', 'p', 'p'}, sjst800v2, sjeq800v2, s
 
 #### Example 4. Table with _p_-values from simultaneous comparison of multiple model implementations
 
-TODO
+The [stats_compare_table](stats_compare_table.m) function produces publication
+quality tables of _p_-values in LaTeX. This function accepts four parameters:
+
+1. `tests` - Type of statistical tests to perform (parametric or 
+non-parametric).
+2. `pthresh` - Minimum value of _p_-values before truncation (e.g. if this value
+is set to 0.001 and a certain _p_-value is less than that, the table will
+display "&lt; 0.001".
+3. `tformat` - Specifies if outputs appear in the header (0) or in the first
+column (1).
+4. `varargin` - Variable number of cell arrays containing the following two
+items defining a comparison: 
+   * Item 1 can take one of three formats: a) a string describing the comparison
+     name; b) a cell array of two strings, the first describing a comparison
+     group name, and the second describing a comparison name; or, c) zero, 0, 
+     which is an indication not to print any type of comparison name.
+   * Item 2, a cell array of statistical summaries (given by the 
+     [stats_gather](../simout/stats_gather.m) function) of the implementations 
+     to be compared.
 
 [siunitx]: https://www.ctan.org/pkg/siunitx
 [ulem]: https://www.ctan.org/pkg/ulem
