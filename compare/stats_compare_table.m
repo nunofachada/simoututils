@@ -94,7 +94,7 @@ t = '\begin{tabular}{';
 % What is the table format?
 if tformat == 0 % Output names in the header
 
-    % Comparison group and comparison name
+    % Columns for comparison group name and comparison name
     t = sprintf('%s%s', t, repmat('c', 1, cmplvl));
     
     % Close begin tabular for the specified number of outpus, and add a
@@ -201,7 +201,49 @@ if tformat == 0 % Output names in the header
     
 elseif tformat == 1 % Output names in the first column
     
-    error('Not yet implemented.');
+    % Close begin tabular for the specified number of comparisons, and add
+    % a top rule.
+    t = sprintf('%scl%s}\n', t, repmat('r', 1, ncomps));
+    t = sprintf('%s\\toprule\n', t);
+    
+    % Print header
+    if cmplvl == 0
+        t = sprintf('%sOut. & ', t);
+        t = sprintf('%sStat.', t);
+        t = sprintf('%s & \\multicolumn{%d}{c}{Comparisons}', t, ncomps);
+    elseif cmplvl == 1
+        t = sprintf('%s\\multirow{2}{*}{Out.} & ', t);
+        t = sprintf('%s\\multirow{2}{*}{Stat.}', t);
+        t = sprintf('%s & \\multicolumn{%d}{c}{Comparisons}', t, ncomps);
+        t = sprintf('%s\\\\\n\\cmidrule(r){3-%d}\n &', t, 2 + ncomps);
+        for i = 1:ncomps
+            t = sprintf('%s & \\multicolumn{1}{c}{%s}', t, varargin{i}{1});
+        end;
+    elseif cmplvl == 2
+        t = sprintf('%s\\multirow{2}{*}{Out.} & ', t);
+        t = sprintf('%s\\multirow{2}{*}{Stat.}', t);
+        for i = 1:ngrps
+            t = sprintf('%s & \\multicolumn{%d}{c}{%s}', ...
+                t, grps(i).ncomps, grps(i).name);
+        end;
+        t = sprintf('%s\\\\\n', t);
+        % cmidrules
+        sumcmps = 0;
+        for i = 1:ngrps
+            t = sprintf('%s\\cmidrule(r){%d-%d} ', t, ...
+                3 + sumcmps, 2 + sumcmps + grps(i).ncomps);
+            sumcmps = sumcmps + grps(i).ncomps;
+        end;
+        t = sprintf('%s\n & ', t);
+        for i = 1:ncomps
+            t = sprintf('%s & \\multicolumn{1}{c}{%s}', ...
+                t, varargin{i}{1}{2});
+        end;
+    end;
+    t = sprintf('%s\\\\\n', t);
+    
+   
+    
     
 else % Unknown table format.
     
