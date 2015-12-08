@@ -44,6 +44,12 @@ if ncomps < 1
     error('At least one comparison must be specified.');
 end;
 
+% Perform statistical comparison
+cmp_pvals = cell(1, ncomps);
+for i = 1:ncomps
+    cmp_pvals{i} = stats_compare(0.01, tests, varargin{i}{2}{:});
+end;
+
 % Comparison grouping and names
 if isnumeric(varargin{1}{1})
     
@@ -123,9 +129,6 @@ if tformat == 0 % Output names in the header
     % Cycle through comparisons
     for i = 1:ncomps
         
-        % Perform comparison
-        ps = stats_compare(0.01, tests, varargin{i}{2}{:});
-        
         if cmplvl == 2
             
             print_comp_name = false;
@@ -188,7 +191,8 @@ if tformat == 0 % Output names in the header
             for k = 1:nout
                 
                 % Print p-value for current focal measure
-                t = sprintf('%s & %s', t, ltxpv(ps(k, j), pthresh));
+                t = sprintf('%s & %s', ...
+                    t, ltxpv(cmp_pvals{i}(k, j), pthresh));
                 
             end;
             
@@ -242,7 +246,22 @@ elseif tformat == 1 % Output names in the first column
     end;
     t = sprintf('%s\\\\\n', t);
     
-   
+    % Print p-values
+    for i = 1:nout
+        t = sprintf('%s\\midrule\n', t);
+        t = sprintf('%s\\multirow{6}{*}{%s}', t, outputs{i});
+        for j = 1:6
+            t = sprintf('%s & %s', t, ssumms{j});
+            for k = 1:ncomps
+
+                % Print p-value for current focal measure
+                t = sprintf('%s & %s', ...
+                    t, ltxpv(cmp_pvals{k}(i, j), pthresh));
+                
+            end;
+            t = sprintf('%s\\\\\n', t);
+        end;
+    end;
     
     
 else % Unknown table format.
