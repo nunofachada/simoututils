@@ -164,12 +164,49 @@ rows.
 #### Example 5. Multiple comparisons and comparison names
 
 Table 2 from
-[Model-independent comparison of simulation output](http://arxiv.org/abs/1509.09174).
+[Model-independent comparison of simulation output](http://arxiv.org/abs/1509.09174):
+
+```matlab
+% Specify output names
+outputs = {'$P^s$', '$P^w$', '$P^c$', '$\overline{E}^s$', '$\overline{E}^w$', '$\overline{C}$'};
+
+% Determine focal measures
+snl400v1 = stats_gather('NL', [datafolder2 '/nl_ok'], 'stats400v1*.txt', outputs, 1000);
+sjexok400v1 = stats_gather('JEXOK', [datafolder2 '/j_ex_ok'], 'stats400v1*.txt', outputs, 1000);
+sjexns400v1 = stats_gather('JEXNS', [datafolder2 '/j_ex_noshuff'], 'stats400v1*.txt', outputs, 1000);
+sjexdiff400v1 = stats_gather('JEXDIFF', [datafolder2 '/j_ex_diff'], 'stats400v1*.txt', outputs, 1000);
+
+% Output comparison table
+stats_compare_table({'p', 'np', 'p', 'np', 'p', 'p'}, 0.000001, 0, {'I', {snl400v1, sjexok400v1}}, {'II', {snl400v1, sjexns400v1 }}, {'III', {snl400v1, sjexdiff400v1}})
+```
 
 #### Example 6. Comparison groups
 
 Table 8 from
-[Parallelization Strategies for Spatial Agent-Based Models](http://arxiv.org/abs/1507.04047),
+[Parallelization Strategies for Spatial Agent-Based Models](http://arxiv.org/abs/1507.04047):
+
+```matlab
+% Specify output names
+outputs = {'$P_i^s$', '$P_i^w$', '$P_i^c$', '$\overline{E}^s_i$', '$\overline{E}^w_i$', '$\overline{C}_i$'};
+
+% ...
+
+% Group same size/param.set focal measures
+s100v1 = {snl100v1, sjst100v1, sjeq100v1, sjex100v1, sjer100v1, jod100v1};
+s200v1 = {snl200v1, sjst200v1, sjeq200v1, sjex200v1, sjer200v1, jod200v1};
+s400v1 = {snl400v1, sjst400v1, sjeq400v1, sjex400v1, sjer400v1, jod400v1};
+s800v1 = {snl800v1, sjst800v1, sjeq800v1, sjex800v1, sjer800v1, jod800v1};
+s1600v1 = {snl1600v1, sjst1600v1, sjeq1600v1, sjex1600v1, sjer1600v1, jod1600v1};
+s100v2 = {snl100v2, sjst100v2, sjeq100v2, sjex100v2, sjer100v2, jod100v2};
+s200v2 = {snl200v2, sjst200v2, sjeq200v2, sjex200v2, sjer200v2, jod200v2};
+s400v2 = {snl400v2, sjst400v2, sjeq400v2, sjex400v2, sjer400v2, jod400v2};
+s800v2 = {snl800v2, sjst800v2, sjeq800v2, sjex800v2, sjer800v2, jod800v2};
+s1600v2 = {snl1600v2, sjst1600v2, sjeq1600v2, sjex1600v2, sjer1600v2, jod1600v2};
+
+% Output comparison table
+stats_compare_table('np', 0.000001, 1, {{'Param. set 1', '100'}, s100v1}, , {{'Param. set 1', '200'}, s200v1}, {{'Param. set 1', '400'}, s400v1}, {{'Param. set 1', '800'}, s800v1}, {{'Param. set 1', '1600'}, s1600v1}, {{'Param. set 2', '100'}, s100v2}, , {{'Param. set 2', '200'}, s200v2}, {{'Param. set 2', '400'}, s400v2}, {{'Param. set 2', '800'}, s800v2}, {{'Param. set 2', '1600'}, s1600v2})
+
+```
 
 [siunitx]: https://www.ctan.org/pkg/siunitx
 [ulem]: https://www.ctan.org/pkg/ulem
