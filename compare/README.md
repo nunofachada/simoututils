@@ -11,6 +11,9 @@ The simulation output file format is the same as in the case of the
 * [stats_compare](stats_compare.m) -  Compare focal measures from two or more 
 model implementations by applying the specified statistical tests.
 
+* [stats_compare_plot](stats_compare_plot.m) - Plot statistical distributions
+of focal measures.
+
 * [stats_compare_pw](stats_compare_pw.m) - Compare focal measures from 
 multiple model implementations, pair-wise, by applying the specified two-sample
 statistical tests. This function outputs a plain text table of pair-wise failed
