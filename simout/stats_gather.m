@@ -66,6 +66,11 @@ listing = dir([folder '/' files]);
 % How many files?
 numFiles = size(listing, 1);
 
+% Throw error if no files were found
+if numFiles == 0
+    error('No files were found.');
+end;
+
 % Initialize stats
 sdata = zeros(numFiles, num_outputs * 6);
 
