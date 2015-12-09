@@ -125,7 +125,7 @@ data used in the previous example:
 stats_compare_pw(0.05, {'p', 'np', 'p', 'np', 'p', 'p'}, sjst800v2, sjeq800v2, sjex800v2, sjer800v2, sjod800v2)
 ```
 
-#### Example 4. Table with _p_-values from simultaneous comparison of multiple model implementations
+#### Example 4. Table with _p_-values from comparison of focal measures from model implementations
 
 The [stats_compare_table](stats_compare_table.m) function produces publication
 quality tables of _p_-values in LaTeX. This function accepts four parameters:
@@ -146,6 +146,30 @@ items defining a comparison:
    * Item 2, a cell array of statistical summaries (given by the 
      [stats_gather](../simout/stats_gather.m) function) of the implementations 
      to be compared.
+
+The following command uses data from example 2 and outputs a table of _p_-values
+returned by the non-parametric, multi-sample Kruskal-Wallis test for individual
+focal measures:
+
+```matlab
+s800v2 = {sjst800v2, sjeq800v2, sjex800v2, sjer800v2, sjod800v2};
+stats_compare_table('np', 0.001, 0, {0, s800v2})
+```
+
+As we're only performing one comparison (for model size 800, parameter set 2),
+the third argument is set to 0. For many comparisons, it is preferable to set
+this parameter to 1, as it puts comparisons along columns and outputs along 
+rows.
+
+#### Example 5. Multiple comparisons and comparison names
+
+Table 2 from
+[Model-independent comparison of simulation output](http://arxiv.org/abs/1509.09174).
+
+#### Example 6. Comparison groups
+
+Table 8 from
+[Parallelization Strategies for Spatial Agent-Based Models](http://arxiv.org/abs/1507.04047),
 
 [siunitx]: https://www.ctan.org/pkg/siunitx
 [ulem]: https://www.ctan.org/pkg/ulem

@@ -18,7 +18,8 @@ function t = stats_compare_table(tests, pthresh, tformat, varargin)
 %            non-parametric test is applied instead.
 %  pthresh - Minimum value of p-values before truncation.
 %  tformat - Either 0 or 1. If 0, output names are placed in the table
-%            header. If 1, output names are placed in the first column.
+%            header (better for fewer comparisons). If 1, output names are
+%            placed in the first column (better for more comparisons).
 % varargin - Variable number of cell arrays containing the following two
 %            items defining a comparison:
 %            1 - Either: a) a string describing the comparison name; b) a 
@@ -214,7 +215,8 @@ elseif tformat == 1 % Output names in the first column
     if cmplvl == 0
         t = sprintf('%sOut. & ', t);
         t = sprintf('%sStat.', t);
-        t = sprintf('%s & \\multicolumn{%d}{c}{Comparisons}', t, ncomps);
+        t = sprintf('%s & \\multicolumn{%d}{c}{\\emph{p}-values}', ...
+            t, ncomps);
     elseif cmplvl == 1
         t = sprintf('%s\\multirow{2}{*}{Out.} & ', t);
         t = sprintf('%s\\multirow{2}{*}{Stat.}', t);
