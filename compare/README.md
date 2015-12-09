@@ -139,10 +139,10 @@ display "&lt; 0.001".
 column (1).
 4. `varargin` - Variable number of cell arrays containing the following two
 items defining a comparison: 
-   * Item 1 can take one of three formats: a) a string describing the comparison
-     name; b) a cell array of two strings, the first describing a comparison
-     group name, and the second describing a comparison name; or, c) zero, 0, 
-     which is an indication not to print any type of comparison name.
+   * Item 1 can take one of three formats: a) zero, 0, which is an indication 
+     not to print any type of comparison name; b) a string describing the 
+     comparison name; or, c) a cell array of two strings, the first describing a 
+     comparison group name, and the second describing a comparison name.
    * Item 2, a cell array of statistical summaries (given by the 
      [stats_gather](../simout/stats_gather.m) function) of the implementations 
      to be compared.
@@ -159,12 +159,16 @@ stats_compare_table('np', 0.001, 0, {0, s800v2})
 As we're only performing one comparison (for model size 800, parameter set 2),
 the third argument is set to 0. For many comparisons, it is preferable to set
 this parameter to 1, as it puts comparisons along columns and outputs along 
-rows.
+rows. The first item in the final argument is set to 0, such that the comparison
+name is not printed (which makes sense when the table comprises a single
+comparison).
 
 #### Example 5. Multiple comparisons and comparison names
 
-Table 2 from
-[Model-independent comparison of simulation output](http://arxiv.org/abs/1509.09174):
+In Table 2 of the [Model-independent comparison...](http://arxiv.org/abs/1509.09174),
+manuscript, three comparisons, I, II, and III, are performed. This is 
+appropriate for setting the third argument, `tformat`, to 0, as shown in the
+following code:
 
 ```matlab
 % Specify output names
@@ -180,33 +184,117 @@ sjexdiff400v1 = stats_gather('JEXDIFF', [datafolder2 '/j_ex_diff'], 'stats400v1*
 stats_compare_table({'p', 'np', 'p', 'np', 'p', 'p'}, 0.000001, 0, {'I', {snl400v1, sjexok400v1}}, {'II', {snl400v1, sjexns400v1 }}, {'III', {snl400v1, sjexdiff400v1}})
 ```
 
+Here we specify comparison names, I, II, and II, which will be printed in the
+table. Note that, each comparison tests two model implementations. As such the 
+resulting _p_-values come from two-sample tests, i.e. from the parametric 
+_t_-test and from the non-parametric Mann-Whitney test.
+
 #### Example 6. Comparison groups
 
-Table 8 from
-[Parallelization Strategies for Spatial Agent-Based Models](http://arxiv.org/abs/1507.04047):
+In Table 8 of the [Parallelization Strategies...](http://arxiv.org/abs/1507.04047)
+manuscript, ten comparisons are performed. Each comparison is associated with a
+model size and tests for differences between six model implementations. 
+Comparisons are divided into two groups, according to the parameter set used.
+This is accomplished by passing a cell array of two strings (comparison group
+and comparison name) to the first item of each comparison. The following code 
+outputs this table:
 
 ```matlab
 % Specify output names
 outputs = {'$P_i^s$', '$P_i^w$', '$P_i^c$', '$\overline{E}^s_i$', '$\overline{E}^w_i$', '$\overline{C}_i$'};
 
-% ...
+% Determine focal measures for NetLogo replications
+snl100v1 = stats_gather('NL', [datafolder1 '/simout/NL'], 'stats100v1*.txt', outputs, 1000);
+snl200v1 = stats_gather('NL', [datafolder1 '/simout/NL'], 'stats200v1*.txt', outputs, 1000);
+snl400v1 = stats_gather('NL', [datafolder1 '/simout/NL'], 'stats400v1*.txt', outputs, 1000);
+snl800v1 = stats_gather('NL', [datafolder1 '/simout/NL'], 'stats800v1*.txt', outputs, 1000);
+snl1600v1 = stats_gather('NL', [datafolder1 '/simout/NL'], 'stats1600v1*.txt', outputs, 1000);
+snl100v2 = stats_gather('NL', [datafolder1 '/simout/NL'], 'stats100v2*.txt', outputs, 2000);
+snl200v2 = stats_gather('NL', [datafolder1 '/simout/NL'], 'stats200v2*.txt', outputs, 2000);
+snl400v2 = stats_gather('NL', [datafolder1 '/simout/NL'], 'stats400v2*.txt', outputs, 2000);
+snl800v2 = stats_gather('NL', [datafolder1 '/simout/NL'], 'stats800v2*.txt', outputs, 2000);
+snl1600v2 = stats_gather('NL', [datafolder1 '/simout/NL'], 'stats1600v2*.txt', outputs, 2000);
 
-% Group same size/param.set focal measures
-s100v1 = {snl100v1, sjst100v1, sjeq100v1, sjex100v1, sjer100v1, jod100v1};
-s200v1 = {snl200v1, sjst200v1, sjeq200v1, sjex200v1, sjer200v1, jod200v1};
-s400v1 = {snl400v1, sjst400v1, sjeq400v1, sjex400v1, sjer400v1, jod400v1};
-s800v1 = {snl800v1, sjst800v1, sjeq800v1, sjex800v1, sjer800v1, jod800v1};
-s1600v1 = {snl1600v1, sjst1600v1, sjeq1600v1, sjex1600v1, sjer1600v1, jod1600v1};
-s100v2 = {snl100v2, sjst100v2, sjeq100v2, sjex100v2, sjer100v2, jod100v2};
-s200v2 = {snl200v2, sjst200v2, sjeq200v2, sjex200v2, sjer200v2, jod200v2};
-s400v2 = {snl400v2, sjst400v2, sjeq400v2, sjex400v2, sjer400v2, jod400v2};
-s800v2 = {snl800v2, sjst800v2, sjeq800v2, sjex800v2, sjer800v2, jod800v2};
-s1600v2 = {snl1600v2, sjst1600v2, sjeq1600v2, sjex1600v2, sjer1600v2, jod1600v2};
+% Determine focal measures for Java ST replications
+sjst100v1 = stats_gather('ST', [datafolder1 '/simout/ST'], 'stats100v1*.txt', outputs, 1000);
+sjst200v1 = stats_gather('ST', [datafolder1 '/simout/ST'], 'stats200v1*.txt', outputs, 1000);
+sjst400v1 = stats_gather('ST', [datafolder1 '/simout/ST'], 'stats400v1*.txt', outputs, 1000);
+sjst800v1 = stats_gather('ST', [datafolder1 '/simout/ST'], 'stats800v1*.txt', outputs, 1000);
+sjst1600v1 = stats_gather('ST', [datafolder1 '/simout/ST'], 'stats1600v1*.txt', outputs, 1000);
+sjst100v2 = stats_gather('ST', [datafolder1 '/simout/ST'], 'stats100v2*.txt', outputs, 2000);
+sjst200v2 = stats_gather('ST', [datafolder1 '/simout/ST'], 'stats200v2*.txt', outputs, 2000);
+sjst400v2 = stats_gather('ST', [datafolder1 '/simout/ST'], 'stats400v2*.txt', outputs, 2000);
+sjst800v2 = stats_gather('ST', [datafolder1 '/simout/ST'], 'stats800v2*.txt', outputs, 2000);
+sjst1600v2 = stats_gather('ST', [datafolder1 '/simout/ST'], 'stats1600v2*.txt', outputs, 2000);
+
+% Determine focal measures for Java EQ replications, 12 threads
+sjeq100v1 = stats_gather('EQ', [datafolder1 '/simout/EQ'], 'stats100v1pEQt12r*.txt', outputs, 1000);
+sjeq200v1 = stats_gather('EQ', [datafolder1 '/simout/EQ'], 'stats200v1pEQt12r*.txt', outputs, 1000);
+sjeq400v1 = stats_gather('EQ', [datafolder1 '/simout/EQ'], 'stats400v1pEQt12r*.txt', outputs, 1000);
+sjeq800v1 = stats_gather('EQ', [datafolder1 '/simout/EQ'], 'stats800v1pEQt12r*.txt', outputs, 1000);
+sjeq1600v1 = stats_gather('EQ', [datafolder1 '/simout/EQ'], 'stats1600v1pEQt12r*.txt', outputs, 1000);
+sjeq100v2 = stats_gather('EQ', [datafolder1 '/simout/EQ'], 'stats100v2pEQt12r*.txt', outputs, 2000);
+sjeq200v2 = stats_gather('EQ', [datafolder1 '/simout/EQ'], 'stats200v2pEQt12r*.txt', outputs, 2000);
+sjeq400v2 = stats_gather('EQ', [datafolder1 '/simout/EQ'], 'stats400v2pEQt12r*.txt', outputs, 2000);
+sjeq800v2 = stats_gather('EQ', [datafolder1 '/simout/EQ'], 'stats800v2pEQt12r*.txt', outputs, 2000);
+sjeq1600v2 = stats_gather('EQ', [datafolder1 '/simout/EQ'], 'stats1600v2pEQt12r*.txt', outputs, 2000);
+
+% Determine focal measures for Java EX replications, 12 threads
+sjex100v1 = stats_gather('EX', [datafolder1 '/simout/EX'], 'stats100v1pEXt12r*.txt', outputs, 1000);
+sjex200v1 = stats_gather('EX', [datafolder1 '/simout/EX'], 'stats200v1pEXt12r*.txt', outputs, 1000);
+sjex400v1 = stats_gather('EX', [datafolder1 '/simout/EX'], 'stats400v1pEXt12r*.txt', outputs, 1000);
+sjex800v1 = stats_gather('EX', [datafolder1 '/simout/EX'], 'stats800v1pEXt12r*.txt', outputs, 1000);
+sjex1600v1 = stats_gather('EX', [datafolder1 '/simout/EX'], 'stats1600v1pEXt12r*.txt', outputs, 1000);
+sjex100v2 = stats_gather('EX', [datafolder1 '/simout/EX'], 'stats100v2pEXt12r*.txt', outputs, 2000);
+sjex200v2 = stats_gather('EX', [datafolder1 '/simout/EX'], 'stats200v2pEXt12r*.txt', outputs, 2000);
+sjex400v2 = stats_gather('EX', [datafolder1 '/simout/EX'], 'stats400v2pEXt12r*.txt', outputs, 2000);
+sjex800v2 = stats_gather('EX', [datafolder1 '/simout/EX'], 'stats800v2pEXt12r*.txt', outputs, 2000);
+sjex1600v2 = stats_gather('EX', [datafolder1 '/simout/EX'], 'stats1600v2pEXt12r*.txt', outputs, 2000);
+
+% Determine focal measures for Java ER replications, 12 threads
+sjer100v1 = stats_gather('ER', [datafolder1 '/simout/ER'], 'stats100v1pERt12r*.txt', outputs, 1000);
+sjer200v1 = stats_gather('ER', [datafolder1 '/simout/ER'], 'stats200v1pERt12r*.txt', outputs, 1000);
+sjer400v1 = stats_gather('ER', [datafolder1 '/simout/ER'], 'stats400v1pERt12r*.txt', outputs, 1000);
+sjer800v1 = stats_gather('ER', [datafolder1 '/simout/ER'], 'stats800v1pERt12r*.txt', outputs, 1000);
+sjer1600v1 = stats_gather('ER', [datafolder1 '/simout/ER'], 'stats1600v1pERt12r*.txt', outputs, 1000);
+sjer100v2 = stats_gather('ER', [datafolder1 '/simout/ER'], 'stats100v2pERt12r*.txt', outputs, 2000);
+sjer200v2 = stats_gather('ER', [datafolder1 '/simout/ER'], 'stats200v2pERt12r*.txt', outputs, 2000);
+sjer400v2 = stats_gather('ER', [datafolder1 '/simout/ER'], 'stats400v2pERt12r*.txt', outputs, 2000);
+sjer800v2 = stats_gather('ER', [datafolder1 '/simout/ER'], 'stats800v2pERt12r*.txt', outputs, 2000);
+sjer1600v2 = stats_gather('ER', [datafolder1 '/simout/ER'], 'stats1600v2pERt12r*.txt', outputs, 2000);
+
+% Determine focal measures for Java OD replications, 12 threads, b = 500
+sjod100v1 = stats_gather('OD', [datafolder1 '/simout/OD'], 'stats100v1pODb500t12r*.txt', outputs, 1000);
+sjod200v1 = stats_gather('OD', [datafolder1 '/simout/OD'], 'stats200v1pODb500t12r*.txt', outputs, 1000);
+sjod400v1 = stats_gather('OD', [datafolder1 '/simout/OD'], 'stats400v1pODb500t12r*.txt', outputs, 1000);
+sjod800v1 = stats_gather('OD', [datafolder1 '/simout/OD'], 'stats800v1pODb500t12r*.txt', outputs, 1000);
+sjod1600v1 = stats_gather('OD', [datafolder1 '/simout/OD'], 'stats1600v1pODb500t12r*.txt', outputs, 1000);
+sjod100v2 = stats_gather('OD', [datafolder1 '/simout/OD'], 'stats100v2pODb500t12r*.txt', outputs, 2000);
+sjod200v2 = stats_gather('OD', [datafolder1 '/simout/OD'], 'stats200v2pODb500t12r*.txt', outputs, 2000);
+sjod400v2 = stats_gather('OD', [datafolder1 '/simout/OD'], 'stats400v2pODb500t12r*.txt', outputs, 2000);
+sjod800v2 = stats_gather('OD', [datafolder1 '/simout/OD'], 'stats800v2pODb500t12r*.txt', outputs, 2000);
+sjod1600v2 = stats_gather('OD', [datafolder1 '/simout/OD'], 'stats1600v2pODb500t12r*.txt', outputs, 2000);
+
+% Group same size/param.set focal measures into comparisons to be performed
+s100v1 = {snl100v1, sjst100v1, sjeq100v1, sjex100v1, sjer100v1, sjod100v1};
+s200v1 = {snl200v1, sjst200v1, sjeq200v1, sjex200v1, sjer200v1, sjod200v1};
+s400v1 = {snl400v1, sjst400v1, sjeq400v1, sjex400v1, sjer400v1, sjod400v1};
+s800v1 = {snl800v1, sjst800v1, sjeq800v1, sjex800v1, sjer800v1, sjod800v1};
+s1600v1 = {snl1600v1, sjst1600v1, sjeq1600v1, sjex1600v1, sjer1600v1, sjod1600v1};
+s100v2 = {snl100v2, sjst100v2, sjeq100v2, sjex100v2, sjer100v2, sjod100v2};
+s200v2 = {snl200v2, sjst200v2, sjeq200v2, sjex200v2, sjer200v2, sjod200v2};
+s400v2 = {snl400v2, sjst400v2, sjeq400v2, sjex400v2, sjer400v2, sjod400v2};
+s800v2 = {snl800v2, sjst800v2, sjeq800v2, sjex800v2, sjer800v2, sjod800v2};
+s1600v2 = {snl1600v2, sjst1600v2, sjeq1600v2, sjex1600v2, sjer1600v2, sjod1600v2};
 
 % Output comparison table
-stats_compare_table('np', 0.000001, 1, {{'Param. set 1', '100'}, s100v1}, , {{'Param. set 1', '200'}, s200v1}, {{'Param. set 1', '400'}, s400v1}, {{'Param. set 1', '800'}, s800v1}, {{'Param. set 1', '1600'}, s1600v1}, {{'Param. set 2', '100'}, s100v2}, , {{'Param. set 2', '200'}, s200v2}, {{'Param. set 2', '400'}, s400v2}, {{'Param. set 2', '800'}, s800v2}, {{'Param. set 2', '1600'}, s1600v2})
+stats_compare_table('np', 0.000001, 1, {{'Param. set 1', '100'}, s100v1}, {{'Param. set 1', '200'}, s200v1}, {{'Param. set 1', '400'}, s400v1}, {{'Param. set 1', '800'}, s800v1}, {{'Param. set 1', '1600'}, s1600v1}, {{'Param. set 2', '100'}, s100v2}, {{'Param. set 2', '200'}, s200v2}, {{'Param. set 2', '400'}, s400v2}, {{'Param. set 2', '800'}, s800v2}, {{'Param. set 2', '1600'}, s1600v2})
 
 ```
+
+We set the `tformat` parameter to 1, as this is more appropriate for larger
+number of comparisons.
+
 
 [siunitx]: https://www.ctan.org/pkg/siunitx
 [ulem]: https://www.ctan.org/pkg/ulem

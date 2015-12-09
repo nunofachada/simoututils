@@ -22,11 +22,11 @@ function t = stats_compare_table(tests, pthresh, tformat, varargin)
 %            placed in the first column (better for more comparisons).
 % varargin - Variable number of cell arrays containing the following two
 %            items defining a comparison:
-%            1 - Either: a) a string describing the comparison name; b) a 
-%                cell array of two strings, the first describing a 
-%                comparison group name, and the second describing a 
-%                comparison name; or, c) zero, 0, an indication not to 
-%                print any type of comparison name.
+%            1 - Can take one of three formats: a) zero, 0, which is an 
+%                indication not to print any type of comparison name; b) a 
+%                string describing the comparison name; or, c) a cell array 
+%                of two strings, the first describing a comparison group 
+%                name, and the second describing a comparison name.
 %            2 - A cell array of statistical summaries (given by the 
 %                stats_gather function) of the implementations to be 
 %                compared.
@@ -146,7 +146,7 @@ if tformat == 0 % Output names in the header
             else
                 print_comp_name = true;
             end;
-             Close
+            
             % Print a midrule
             if (i == 1) || print_comp_name
                 t = sprintf('%s\\midrule\n', t);
