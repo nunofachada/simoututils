@@ -27,40 +27,40 @@ function t = dist_table_per_setup(data)
 
 % Output names
 outputs = data.outputs;
+nout = numel(outputs);
 
-% Statistical summaries
-ssumm = {'\max', '\argmax', '\min', '\argmin', '\mean{X}^{\text{ss}}',...
-    'S^{\text{ss}}'};
+% Number of statistical summaries
+ssumms_struct = stats_get();
+ssumms = ssumms_struct.latex;
+nssumms = numel(ssumms);
 
 % Begin table
 t = sprintf('\\begin{tabular}{ccrrrrrr}\n');
 t = sprintf('%s\\toprule\n', t);
 
 % Table header
-t = sprintf(['%s Out. & Stat. & \\multicolumn{1}{c}{$%s$} & ' ...
-    '\\multicolumn{1}{c}{$%s$} & \\multicolumn{1}{c}{$%s$} & ' ...
-    '\\multicolumn{1}{c}{$%s$} & \\multicolumn{1}{c}{$%s$} & ' ...
-    '\\multicolumn{1}{c}{$%s$} \\\\ \n'], ...
-    t, ...
-    ssumm{1}, ssumm{2}, ssumm{3}, ...
-    ssumm{4}, ssumm{5}, ssumm{6});
+t = sprintf('%s Out. & Stat.', t);
+for i = 1:nssumms % Cycle through statistical summaries
+    t = sprintf('%s & \\multicolumn{1}{c}{$%s$}', t, ssumms{i});
+end;
+t = sprintf('%s \\\\ \n', t);
 
 % Cycle through all outputs
-for i=1:numel(outputs)
+for i = 1:nout
         
     % Initialize statistics 
-    ms = zeros(1, numel(ssumm));
-    vs = zeros(1, numel(ssumm));
-    sw = zeros(1, numel(ssumm));
-    s = zeros(1, numel(ssumm));
-    hists = cell(1, numel(ssumm));
-    qqs = cell(1, numel(ssumm));
+    ms = zeros(1, nssumms);
+    vs = zeros(1, nssumms);
+    sw = zeros(1, nssumms);
+    s = zeros(1, nssumms);
+    hists = cell(1, nssumms);
+    qqs = cell(1, nssumms);
     
     % Cycle through all statistical summaries
-    for j=1:numel(ssumm)
+    for j = 1:nssumms
         
         % What is the exact index of the focal measure being analyzed?
-        idx = (i - 1) * numel(ssumm) + j;
+        idx = (i - 1) * nssumms + j;
             
         % Analyze current data
         [ms(j), vs(j), ~, ~, sw(j), s(j)] = ...
@@ -83,49 +83,49 @@ for i=1:numel(outputs)
     % t = sprintf('%s\\multirow{6}{*}{$%s$}\n', t, outputs{i});
     
     % Print the means
-    t = sprintf(...
-        '%s & $\\mean{X}(n)$ & %s & %s & %s & %s & %s & %s \\\\ \n', ...
-        t, ...
-        ltxr(ms(1)), ltxr(ms(2)), ltxr(ms(3)), ...
-        ltxr(ms(4)), ltxr(ms(5)), ltxr(ms(6)));
+    t = sprintf('%s & $\\mean{X}(n)$', t);
+    for j = 1:nssumms % Cycle through statistical summaries
+        t = sprintf('%s & %s', t, ltxr(ms(j)));
+    end;
+    t = sprintf('%s \\\\ \n', t);
     
     % Print the variances
-    t = sprintf(...
-        '%s & $S^2(n)$      & %s & %s & %s & %s & %s & %s \\\\ \n', ...
-        t, ...
-        ltxr(vs(1)), ltxr(vs(2)), ltxr(vs(3)), ...
-        ltxr(vs(4)), ltxr(vs(5)), ltxr(vs(6)));
+    t = sprintf('%s & $S^2(n)$', t);
+    for j = 1:nssumms % Cycle through statistical summaries
+        t = sprintf('%s & %s', t, ltxr(vs(j)));
+    end;
+    t = sprintf('%s \\\\ \n', t);
+
     % Print the p-values from the Shapiro-Wilk test
-    t = sprintf(...
-        '%s & SW            & %s & %s & %s & %s & %s & %s \\\\ \n', ...
-        t, ...
-        ltxp(sw(1)), ltxp(sw(2)), ltxp(sw(3)),...
-        ltxp(sw(4)), ltxp(sw(5)), ltxp(sw(6)));
+    t = sprintf('%s & SW', t);
+    for j = 1:nssumms % Cycle through statistical summaries
+        t = sprintf('%s & %s', t, ltxp(sw(j)));
+    end;
+    t = sprintf('%s \\\\ \n', t);
     
     % Print the output variable here, before the Skewness
     t = sprintf('%s %s\n', t, outputs{i});
     
     % Print the skewness
-    t = sprintf(...
-        '%s & Skew.         & %s & %s & %s & %s & %s & %s \\\\ \n', ...
-        t, ...
-        ltxr(s(1)), ltxr(s(2)), ltxr(s(3)), ...
-        ltxr(s(4)), ltxr(s(5)), ltxr(s(6)));
+    t = sprintf('%s & Skew.', t);
+    for j = 1:nssumms % Cycle through statistical summaries
+        t = sprintf('%s & %s', t, ltxr(s(j)));
+    end;
+    t = sprintf('%s \\\\ \n', t);
     
     % Print the histograms
-    t = sprintf(...
-        '%s & Hist.         & %s & %s & %s & %s & %s & %s \\\\ \n', ...
-        t, ...
-        hw(tikhist(hists{1})), hw(tikhist(hists{2})), ...
-        hw(tikhist(hists{3})), hw(tikhist(hists{4})), ...
-        hw(tikhist(hists{5})), hw(tikhist(hists{6})));
+    t = sprintf('%s & Hist.', t);
+    for j = 1:nssumms % Cycle through statistical summaries
+        t = sprintf('%s & %s', t, hw(tikhist(hists{j})));
+    end;
+    t = sprintf('%s \\\\ \n', t);
     
     % Print the QQ-plots
-    t = sprintf(...
-        '%s & Q-Q           & %s & %s & %s & %s & %s & %s \\\\ \n', ...
-        t, ...
-        qw(tikqq(qqs{1})), qw(tikqq(qqs{2})), qw(tikqq(qqs{3})), ...
-        qw(tikqq(qqs{4})), qw(tikqq(qqs{5})), qw(tikqq(qqs{6})));
+    t = sprintf('%s & Q-Q', t);
+    for j = 1:nssumms % Cycle through statistical summaries
+        t = sprintf('%s & %s', t, qw(tikqq(qqs{j})));
+    end;
+    t = sprintf('%s \\\\ \n', t);
 
 end;
 

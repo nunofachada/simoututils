@@ -1,8 +1,8 @@
 function t = dist_table_per_fm(datas, output, stat, pre)
-% DIST_TABLE_PER_FM Outputs a LaTeX table with a distributional
-% analysis of a focal measure for a number of setups/configurations.
-% For each setup/configuration, the table shows the p-value of the 
-% Shapiro-Wilk test, skewness, histogram and QQ-plot.
+% DIST_TABLE_PER_FM Outputs a LaTeX table with a distributional analysis of
+% a focal measure for a number of setups/configurations. For each 
+% setup/configuration, the table shows the p-value of the Shapiro-Wilk 
+% test, skewness, histogram and QQ-plot.
 %
 %   t = DIST_TABLE_PER_FM(datas, output, stat, pre)
 %
@@ -10,8 +10,8 @@ function t = dist_table_per_fm(datas, output, stat, pre)
 %      datas - Cell array with stats to analyze, each cell containing stats 
 %              returned by the stats_gather function for one model 
 %              setup/configuration.
-%     output - Index of output to analyze (1 to 6).
-%       stat - Index of statistical summary to analyze (1 to 6).
+%     output - Index of output to analyze (1, 2, ...).
+%       stat - Index of statistical summary to analyze (1, 2, ...).
 %        pre - How many columns before data (optional, default is 0).
 %
 % Returns:
@@ -28,6 +28,10 @@ function t = dist_table_per_fm(datas, output, stat, pre)
 % at http://opensource.org/licenses/MIT)
 %
 
+% Number of statistical summaries
+ssumms = stats_get();
+nssumms = numel(ssumms.text);
+
 % if "pre" parameter not specified, set default value to 0
 if nargin < 4
     pre = 0;
@@ -43,10 +47,10 @@ end;
 table_info = cell(4, numel(datas));
 
 % What is the exact index of the focal measure being analyzed?
-idx = (output - 1) * 6 + stat;
+idx = (output - 1) * nssumms + stat;
 
 % Cycle through all setups/configurations
-for i=1:numel(datas)
+for i = 1:numel(datas)
 
     % Analyze current data set, keep SW and Skewness
     [~, ~, ~, ~, table_info{1, i}, table_info{2, i}] = ...

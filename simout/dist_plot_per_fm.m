@@ -10,7 +10,7 @@ function hout = dist_plot_per_fm(datas, output, stat)
 %           returned by the stats_gather function for a model 
 %           configuration.
 %  output - Index of output to analyze (1, 2, ...).
-%    stat - Index of statistical summary to analyze (1 to 6).
+%    stat - Index of statistical summary to analyze (1, 2, ...).
 %
 % Returns:
 %    hout - Figure handle.
@@ -34,13 +34,14 @@ function hout = dist_plot_per_fm(datas, output, stat)
 outname = datas{1}.outputs{output};
 
 % Statistical summaries
-stsumm = {'max','argmax','min','argmin','mean','std'};
+ssumms = datas{1}.ssnames.text;
+nssumms = numel(ssumms);
 
 % Figure containing all subplots
 hout = figure();
 
 % What is the exact index of the focal measure being analyzed?
-idx = (output - 1) * 6 + stat;
+idx = (output - 1) * nssumms + stat;
 
 % Cycle through all data sets
 for i=1:numel(datas)
@@ -84,7 +85,7 @@ for i=1:numel(datas)
 end;
 
 % Set global figure title
-figtitle([stsumm{stat} ' ( ' outname ' )']);
+figtitle([ssumms{stat} ' ( ' outname ' )']);
 
 % Helper function to print info text in subplot 1
 function print_text(h, name, m, v, d, s)

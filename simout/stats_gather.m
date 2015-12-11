@@ -1,8 +1,9 @@
-function stats = stats_gather(name, folder, files, outputs, ss_idx)
-% STATS_GATHER Get statistical summaries (max, argmax, min, argmin, mean,
-% std) taken from simulation outputs from multiple files.
+function stats = stats_gather(name, folder, files, outputs, varargin)
+% STATS_GATHER Get statistical summaries taken from simulation outputs from
+% multiple files. The exact statistical summaries depend on the
+% implementation of the stats_get function.
 %
-%   stats = STATS_GATHER(name, folder, files, outputs, ss_idx)
+%   stats = STATS_GATHER(name, folder, files, outputs, varargin)
 %
 % Parameters:
 %        name - Name with which to tag this data.
@@ -12,17 +13,19 @@ function stats = stats_gather(name, folder, files, outputs, ss_idx)
 %     outputs - Either an integer representing the number of outputs in 
 %               each file or a cell array of strings with the output names.
 %               In the former case, output names will be 'o1', 'o2', etc.
-%      ss_idx - Iteration after which outputs are in steady-state (for mean
-%               and std statistical summaries).
+%    varargin - Extra parameters for the stats_get function.
 %
 % Returns:
 %     stats - A struct containing the following fields:
 %              name - Contains the name with which the data was tagged.
 %           outputs - Cell array containing the output names.
+%           ssnames - A struct with two fields:
+%                     text - Cell array of strings containing the names of 
+%                            the statistical measures in plain text.
+%                     latex - Cell array of strings containing the names of 
+%                             the statistical measures in LaTeX format.
 %             sdata - A n x m matrix, with n observations (from n files) 
-%                     and m focal measures (such that m = 6 * number of 
-%                     outputs, where 6 is the number of statistical 
-%                     summaries).
+%                     and m is the number of statistical summaries.
 %
 % Details:
 %   The format of the data in each file is the following: columns 
@@ -34,6 +37,10 @@ function stats = stats_gather(name, folder, files, outputs, ss_idx)
 % Distributed under the MIT License (See accompanying file LICENSE or copy 
 % at http://opensource.org/licenses/MIT)
 %
+
+% Get names and number of statistical summaries
+ssnames = stats_get();
+ssnum = numel(ssnames.text);
 
 % Determine the type of the 'outputs' argument
 if iscellstr(outputs)
@@ -72,19 +79,20 @@ if numFiles == 0
 end;
 
 % Initialize stats
-sdata = zeros(numFiles, num_outputs * 6);
+sdata = zeros(numFiles, num_outputs * ssnum);
 
 % Read stats from files
 for i = 1:numFiles
     
     % Read stats from current file into a m x n matrix where m corresponds
-    % to stats and n to num_outputs.
-    s = stats_get([folder '/' listing(i).name], num_outputs, ss_idx);
+    % to number of statistical summaries and n to num_outputs.
+    s = stats_get([folder '/' listing(i).name], num_outputs, varargin{:});
     
-    % Reshape stats matrix into a vector and put it in global stats matrix
-    sdata(i,:) = reshape(s, 1, num_outputs * 6);
+    % Reshape stats matrix into a vector and put it in global stats matrix.
+    sdata(i, :) = reshape(s, 1, num_outputs * ssnum);
     
 end;
 
 % Put results in struct
-stats = struct('name', name, 'outputs', {outputs}, 'sdata', sdata);
+stats = struct('name', name, 'outputs', {outputs}, ...
+    'ssnames', ssnames, 'sdata', sdata);

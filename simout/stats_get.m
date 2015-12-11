@@ -5,15 +5,20 @@ function sdata = stats_get(file, num_outputs, ss_idx)
 %   stats = STATS_GET(file, num_outputs, ss_idx)
 %
 % Parameters:
-%       file  - file containing simulation outputs, columns correspond to 
+%       file  - File containing simulation outputs, columns correspond to 
 %               outputs, rows correspond to iterations.
-% num_outputs - number of outputs in file
-%      ss_idx - iteration after which outputs are in steady-state (for mean
+% num_outputs - Number of outputs in file.
+%      ss_idx - Iteration after which outputs are in steady-state (for mean
 %               and std statistical summaries).
 %
 % Returns:
-%       sdata - a 6 x num_outputs matrix, with 6 statistical summaries and
-%               num_outputs outputs.
+%       sdata - A 6 x num_outputs matrix, with 6 statistical summaries and
+%               num_outputs outputs. If no arguments are given, this
+%               function returns a struct with two fields:
+%               text - Cell array of strings containing the names of the
+%                      statistical measures in plain text.
+%               latex - Cell array of strings containing the names of the
+%                      statistical measures in LaTeX format.
 %
 % Details:
 %   The format of the data in each file is the following: columns 
@@ -23,6 +28,16 @@ function sdata = stats_get(file, num_outputs, ss_idx)
 % Distributed under the MIT License (See accompanying file LICENSE or copy 
 % at http://opensource.org/licenses/MIT)
 %
+
+% If no arguments are given...
+if nargin == 0
+    % ...return names of statistic summaries
+    sdata = struct(...
+        'text', {{'max', 'argmax', 'min', 'argmin', 'mean', 'std'}}, ...
+        'latex', {{'\max', '\argmax', '\min', '\argmin', ...
+            '\mean{X}^{\text{ss}}', 'S^{\text{ss}}'}});
+    return;
+end;
 
 % Read stats file
 data = dlmread(file);

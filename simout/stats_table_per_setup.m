@@ -30,13 +30,16 @@ function t = stats_table_per_setup(data, alpha, format)
 % Output names
 outputs = data.outputs;
 
+% Statistical summaries structure
+ssumms_struct = stats_get();
+
 % What type of table to print?
 if format == 0
     
     % Matlab format
     
-    ssumms = {'max','argmax','min','argmin','mean','std'};
-    numssum = numel(ssumms);
+    ssumms = ssumms_struct.text;
+    nssums = numel(ssumms);
     idx = 0;
     
     t = sprintf('-----------------------------------------------------------------------------------------\n');
@@ -45,7 +48,7 @@ if format == 0
     for outp = outputs
         for ssumm = ssumms
             idx = idx + 1;
-            if rem(idx, numssum) == 1
+            if rem(idx, nssums) == 1
                 t = sprintf('%s|------------|----------|------------|------------|---------------------------|---------|\n',...
                     t);
                 t = sprintf('%s| % 10s ', t, outp{1});
@@ -63,9 +66,8 @@ else
     
     % Latex format
     
-    ssumms = {'\max', '\argmax', '\min', '\argmin', ...
-        '\mean{X}^{\text{ss}}', 'S^{\text{ss}}'};
-    numssum = numel(ssumms);
+    ssumms = ssumms_struct.latex;
+    nssums = numel(ssumms);
     idx = 0;
     
     t = sprintf('\\begin{tabular}{clrrcr}\n');
@@ -75,9 +77,10 @@ else
     for outp = outputs
         for ssumm = ssumms
             idx = idx + 1;
-            if rem(idx, numssum) == 1
+            if rem(idx, nssums) == 1
                 t = sprintf('%s\\midrule\n', t);
-                t = sprintf('%s\\multirow{6}{*}{%s}\n', t, outp{1});
+                t = sprintf('%s\\multirow{%d}{*}{%s}\n', ...
+                    t, nssums, outp{1});
             end;
             
             if c(idx, 2) == c(idx, 1)

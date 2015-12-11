@@ -23,18 +23,18 @@ function [m, v, cit, ciw, sw, sk] = stats_analyze(data, alpha)
 %
 
 % How many statistical summaries?
-numStats = size(data, 2);
+nssumms = size(data, 2);
 
 % Allocate space for function outputs
-m = zeros(numStats, 1);
-v = zeros(numStats, 1);
-cit = zeros(numStats, 2);
-ciw = zeros(numStats, 2);
-sw = zeros(numStats, 1);
-sk = zeros(numStats, 1);
+m = zeros(nssumms, 1);
+v = zeros(nssumms, 1);
+cit = zeros(nssumms, 2);
+ciw = zeros(nssumms, 2);
+sw = zeros(nssumms, 1);
+sk = zeros(nssumms, 1);
 
 % Cycle through statistical summaries
-for i=1:numStats
+for i = 1:nssumms
     
     % Get all observations for current statistical summary
     cdat = data(:, i);
