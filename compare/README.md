@@ -29,7 +29,7 @@ model implementations.
 The examples use the following datasets:
 
 1. [![DOI](https://zenodo.org/badge/doi/10.5281/zenodo.34049.svg)](http://dx.doi.org/10.5281/zenodo.34049)
-2. [![DOI](https://zenodo.org/badge/doi/10.5281/zenodo.34049.svg)](http://dx.doi.org/10.5281/zenodo.34049)
+2. [![DOI](https://zenodo.org/badge/doi/10.5281/zenodo.35240.svg)](http://dx.doi.org/10.5281/zenodo.35240)
 
 Dataset 1 corresponds to the results presented in the manuscript
 [Parallelization Strategies for Spatial Agent-Based Models](http://arxiv.org/abs/1507.04047),
