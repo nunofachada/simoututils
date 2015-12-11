@@ -8,11 +8,12 @@ The simulation output file format is the same as in the case of the
 
 ### Utilities
 
-* [stats_compare](stats_compare.m) -  Compare focal measures from two or more 
+* [stats_compare](stats_compare.m) - Compare focal measures from two or more 
 model implementations by applying the specified statistical tests.
 
-* [stats_compare_plot](stats_compare_plot.m) - Plot statistical distributions
-of focal measures.
+* [stats_compare_plot](stats_compare_plot.m) - Plot the probability density 
+function (PDF) and cumulative distribution function (CDF) of focal measures from
+a number of model implementations.
 
 * [stats_compare_pw](stats_compare_pw.m) - Compare focal measures from 
 multiple model implementations, pair-wise, by applying the specified two-sample
@@ -128,7 +129,23 @@ data used in the previous example:
 stats_compare_pw(0.05, {'p', 'np', 'p', 'np', 'p', 'p'}, sjst800v2, sjeq800v2, sjex800v2, sjer800v2, sjod800v2)
 ```
 
-#### Example 4. Table with _p_-values from comparison of focal measures from model implementations
+#### Example 4: Plot the PDF and CDF of focal measures from one or more model implementations
+
+```matlab
+% Specify output names
+outputs = {'SheepPop', 'WolfPop', 'GrassQty', 'SheepEnergy', 'WolfEnergy', 'GrassEnergy'};
+
+% Determine focal measures of four PPHPC implementations
+snl800v2 = stats_gather('NL', [datafolder2 '/nl_ok'], 'stats800v2*.txt', outputs, 2000);
+sjexok800v2 = stats_gather('JEXOK', [datafolder2 '/j_ex_ok'], 'stats800v2*.txt', outputs, 2000);
+sjexns800v2 = stats_gather('JEXNS', [datafolder2 '/j_ex_noshuff'], 'stats800v2*.txt', outputs, 2000);
+sjexdiff800v2 = stats_gather('JEXDIFF', [datafolder2 '/j_ex_diff'], 'stats800v2*.txt', outputs, 2000);
+
+% Plot PDF and CDF of focal measures
+stats_compare_plot(snl800v2, sjexok800v2, sjexns800v2, sjexdiff800v2);
+```
+
+#### Example 5. Table with _p_-values from comparison of focal measures from model implementations
 
 The [stats_compare_table](stats_compare_table.m) function produces publication
 quality tables of _p_-values in LaTeX. This function accepts four parameters:
@@ -166,7 +183,7 @@ rows. The first item in the final argument is set to 0, such that the comparison
 name is not printed (which makes sense when the table comprises a single
 comparison).
 
-#### Example 5. Multiple comparisons and comparison names
+#### Example 6. Multiple comparisons and comparison names
 
 In Table 2 of the [Model-independent comparison...](http://arxiv.org/abs/1509.09174),
 manuscript, three comparisons, I, II, and III, are performed. This is 
@@ -192,7 +209,7 @@ table. Note that, each comparison tests two model implementations. As such the
 resulting _p_-values come from two-sample tests, i.e. from the parametric 
 _t_-test and from the non-parametric Mann-Whitney test.
 
-#### Example 6. Comparison groups
+#### Example 7. Comparison groups
 
 In Table 8 of the [Parallelization Strategies...](http://arxiv.org/abs/1507.04047)
 manuscript, ten comparisons are performed. Each comparison is associated with a
