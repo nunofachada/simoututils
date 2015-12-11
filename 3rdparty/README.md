@@ -9,6 +9,9 @@ figure, used to add a title to a figure with several subplots
 * [fill_between](fill_between.m) - Fill selected areas in plots
 ([License](fill_between_LICENSE.txt)).
 
+* [homemade_ecdf](homemade_ecdf.m) - Returns the empirical cumulative 
+distribution function from a vector ([License](homemade_ecdf_LICENSE.txt)).
+
 * [kde](kde.m) - Kernel density estimator ([License](kde_LICENSE.txt)).
 
 * [swtest](swtest.m) - Shapiro-Wilk parametric hypothesis test of 
