@@ -28,8 +28,9 @@ markers = [{'b'} {'r'} {'g'} {'c'} {'m'} {'k'} ...
 % Get output names
 outputs = varargin{1}.outputs;
 
-% Get names of focal measures
-ssumms = {'max', 'argmax', 'min', 'argmin', 'mean', 'std'};
+% Get names of statistical summaries
+ssumms_struct = stats_get();
+ssumms = ssumms_struct.text;
 
 % Get handles for figures and subplots
 h = get_plot_handles(outputs, ssumms);

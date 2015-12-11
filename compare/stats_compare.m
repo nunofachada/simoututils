@@ -12,11 +12,7 @@ function [ps, h_all] = stats_compare(alpha, tests, varargin)
 %            non-parametric tests are Mann-Whitney or Kruskal-Wallis when
 %            comparing two or more models, respectively. Can also be a 
 %            cell array of strings, each string corresponding to the test 
-%            to apply to each of the six statistical summaries, namely max, 
-%            argmax, min, argmin, ss-mean and ss-std. For example, 
-%            {'p', 'np', 'p', 'np', 'p', 'p'} will apply a parametric test
-%            to all summaries except argmax and argmin, to which a
-%            non-parametric test is applied instead.
+%            to apply to each statistical summary returned by stats_get.
 % varargin - Statistical summaries (given by the stats_gather function) 
 %            for each implementation.
 %
@@ -47,6 +43,10 @@ end;
 % Number of outputs
 nout = numel(varargin{1}.outputs);
 
+% Number of statistical summaries
+ssumms = stats_get();
+nssumms = numel(ssumms.text);
+
 % Vector of p-values (will be reshaped into a matrix later)
 ps = zeros(1, 6 * nout);
 
@@ -54,7 +54,7 @@ ps = zeros(1, 6 * nout);
 h_all = 0;
 
 % Cycle through focal measures
-for i = 1:(6 * nout)
+for i = 1:(nssumms * nout)
     
     % Get sample from each implementation for current focal measure
     cmpdata = zeros(size(varargin{1}.sdata, 1), nimpl);
@@ -72,7 +72,7 @@ end;
 
 % Convert vector of p-values to matrix (rows correspond to outputs, columns
 % to statistical summaries).
-ps = reshape(ps, 6, nout)';
+ps = reshape(ps, nssumms, nout)';
 
 % %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% %
 % Helper function to perform the actual tests %
