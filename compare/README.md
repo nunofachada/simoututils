@@ -131,6 +131,15 @@ stats_compare_pw(0.05, {'p', 'np', 'p', 'np', 'p', 'p'}, sjst800v2, sjeq800v2, s
 
 #### Example 4: Plot the PDF and CDF of focal measures from one or more model implementations
 
+In this example we have two PPHPC implementations which produce equivalent
+results (NLOK and JEXOK), and two other which display slightly different
+behavior (JEXNS and JEXDIFF). The following code loads simulation output data
+from these four implementations, and plots, using the 
+[stats_compare_plot](stats_compare_plot.m) function, the PDF and CDF of the
+respective focal measures. Plots for each focal measure are overlaid, allowing 
+the modeler to clearly observe distributional output differences between the 
+various implementations.
+
 ```matlab
 % Specify output names
 outputs = {'SheepPop', 'WolfPop', 'GrassQty', 'SheepEnergy', 'WolfEnergy', 'GrassEnergy'};
@@ -144,6 +153,10 @@ sjexdiff800v2 = stats_gather('JEXDIFF', [datafolder2 '/j_ex_diff'], 'stats800v2*
 % Plot PDF and CDF of focal measures
 stats_compare_plot(snl800v2, sjexok800v2, sjexns800v2, sjexdiff800v2);
 ```
+
+More details regarding these four implementations and the specific differences
+between them are available in the manuscript 
+[Model-independent comparison of simulation output](http://arxiv.org/abs/1509.09174).
 
 #### Example 5. Table with _p_-values from comparison of focal measures from model implementations
 
