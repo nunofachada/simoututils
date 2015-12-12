@@ -1,6 +1,7 @@
 function t = stats_compare_table(tests, pthresh, tformat, varargin)
 % STATS_COMPARE_TABLE Output a LaTeX table with p-values resulting from
-% statistical tests used to evaluate the alignment of model implementations.
+% statistical tests used to evaluate the alignment of model 
+% implementations.
 %
 %   t = STATS_COMPARE_TABLE(tests, pthresh, tformat, varargin)
 %
@@ -11,11 +12,8 @@ function t = stats_compare_table(tests, pthresh, tformat, varargin)
 %            non-parametric tests are Mann-Whitney or Kruskal-Wallis when
 %            comparing two or more models, respectively. Can also be a 
 %            cell array of strings, each string corresponding to the test 
-%            to apply to each of the six statistical summaries, namely max, 
-%            argmax, min, argmin, ss-mean and ss-std. For example, 
-%            {'p', 'np', 'p', 'np', 'p', 'p'} will apply a parametric test
-%            to all summaries except argmax and argmin, to which a
-%            non-parametric test is applied instead.
+%            to apply to each of the statistical summaries produced by the
+%            stats_get function.
 %  pthresh - Minimum value of p-values before truncation.
 %  tformat - Either 0 or 1. If 0, output names are placed in the table
 %            header (better for fewer comparisons). If 1, output names are
@@ -44,6 +42,11 @@ ncomps = nargin - 3;
 if ncomps < 1
     error('At least one comparison must be specified.');
 end;
+
+% Names and number of statistical summaries 
+ssumms_struct = stats_get();
+ssumms = ssumms_struct.latex;
+nsumms = numel(ssumms);
 
 % Perform statistical comparison
 cmp_pvals = cell(1, ncomps);
@@ -86,10 +89,6 @@ elseif iscellstr(varargin{1}{1})
 else
     error('Invalid argument.');
 end;
-
-% Names of statistical summaries 
-ssumms = {'$\max$', '$\argmax$', '$\min$', '$\argmin$', ...
-                '$\mean{X}^{\text{ss}}$', '$S^{\text{ss}}$'};
             
 % Determine number of outputs and output names
 outputs = varargin{1}{2}{1}.outputs;
@@ -157,12 +156,12 @@ if tformat == 0 % Output names in the header
             % Print comparison group name
             if print_comp_name
                 t = sprintf('%s\\multirow{%d}{*}{%s}', ...
-                    t, 6 * grps(g).ncomps, varargin{i}{1}{1}); 
+                    t, nsumms * grps(g).ncomps, varargin{i}{1}{1}); 
             end;
             
             % Comparison name
-            t = sprintf('%s & \\multirow{6}{*}{%s} & \n', ...
-                t, varargin{i}{1}{2}); 
+            t = sprintf('%s & \\multirow{%d}{*}{%s} & \n', ...
+                t, nsumms, varargin{i}{1}{2}); 
             
         elseif cmplvl == 1
             
@@ -170,7 +169,8 @@ if tformat == 0 % Output names in the header
             t = sprintf('%s\\midrule\n', t);
 
             % Comparison name
-            t = sprintf('%s\\multirow{6}{*}{%s} & \n', t, varargin{i}{1});
+            t = sprintf('%s\\multirow{%d}{*}{%s} & \n', ...
+                t, nsumms, varargin{i}{1});
 
         else
             
@@ -180,13 +180,13 @@ if tformat == 0 % Output names in the header
         end;
         
         % Cycle through statistical summaries
-        for j = 1:6
+        for j = 1:nsumms
             
             % Space for comparison and comparison group names
             if j > 1, t = sprintf('%s%s', t, repmat('& ', 1, cmplvl)); end;
             
             % Print statistical summary name
-            t = sprintf('%s%s', t, ssumms{j});
+            t = sprintf('%s$%s$', t, ssumms{j});
             
             % Cycle through outputs
             for k = 1:nout
@@ -251,9 +251,9 @@ elseif tformat == 1 % Output names in the first column
     % Print p-values
     for i = 1:nout
         t = sprintf('%s\\midrule\n', t);
-        t = sprintf('%s\\multirow{6}{*}{%s}', t, outputs{i});
-        for j = 1:6
-            t = sprintf('%s & %s', t, ssumms{j});
+        t = sprintf('%s\\multirow{%d}{*}{%s}', t, nsumms, outputs{i});
+        for j = 1:nsumms
+            t = sprintf('%s & $%s$', t, ssumms{j});
             for k = 1:ncomps
 
                 % Print p-value for current focal measure

@@ -10,11 +10,8 @@ function [t, h_all] = stats_compare_pw(alpha, tests, varargin)
 %    alpha - Significante level for the tests.
 %    tests - 'p' - t-test, 'np' - Mann-Whitney. Can also be a cell array of
 %            strings, each string corresponding to the test to apply to 
-%            each of the six statistical summaries, namely max, argmax, 
-%            min, argmin, ss-mean and ss-std. For example, 
-%            {'p', 'np', 'p', 'np', 'p', 'p'} will apply the t-test to all
-%            summaries except argmax and argmin, to which the Mann-Whitney
-%            test is applied instead.
+%            each of the statistical summaries produced by the stats_get
+%            function.
 % varargin - Statistical summaries (given by the stats_gather function) 
 %            for each implementation.
 %
