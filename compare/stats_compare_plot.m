@@ -29,7 +29,7 @@ markers = [{'b'} {'r'} {'g'} {'c'} {'m'} {'k'} ...
 outputs = varargin{1}.outputs;
 
 % Get names of statistical summaries
-ssumms_struct = stats_get();
+ssumms_struct = varargin{1}.ssnames;
 ssumms = ssumms_struct.text;
 
 % Get handles for figures and subplots

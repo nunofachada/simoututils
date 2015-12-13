@@ -1,73 +1,39 @@
-function sdata = stats_get(file, num_outputs, ss_idx)
-% STATS_GET Get statistical summaries (max, argmax, min, argmin, mean,
-% std) taken from simulation outputs from one file.
+function sdata = stats_get(args, file, num_outputs)
+% STATS_GET Facade function for stats_get_* functions.
 %
-%   stats = STATS_GET(file, num_outputs, ss_idx)
+%   stats = STATS_GET(file, num_outputs, varargin)
 %
 % Parameters:
+%        args - Depends on the stats_get_* implementation.
 %       file  - File containing simulation outputs, columns correspond to 
 %               outputs, rows correspond to iterations.
 % num_outputs - Number of outputs in file.
-%      ss_idx - Iteration after which outputs are in steady-state (for mean
-%               and std statistical summaries).
 %
 % Returns:
-%       sdata - A 6 x num_outputs matrix, with 6 statistical summaries and
-%               num_outputs outputs. If no arguments are given, this
-%               function returns a struct with two fields:
+%       sdata - A n x num_outputs matrix, with n statistical summaries and
+%               num_outputs outputs. If only the first argument is given, 
+%               stats_get_* functions should return a struct with two 
+%               fields:
 %               text - Cell array of strings containing the names of the
 %                      statistical measures in plain text.
-%               latex - Cell array of strings containing the names of the
+%              latex - Cell array of strings containing the names of the
 %                      statistical measures in LaTeX format.
 %
-% Details:
-%   The format of the data in each file is the following: columns 
-%   correspond to outputs, while rows correspond to iterations.
+% Notes:
 %
 % Copyright (c) 2015 Nuno Fachada
 % Distributed under the MIT License (See accompanying file LICENSE or copy 
 % at http://opensource.org/licenses/MIT)
 %
 
-% If no arguments are given...
-if nargin == 0
-    % ...return names of statistic summaries
-    sdata = struct(...
-        'text', {{'max', 'argmax', 'min', 'argmin', 'mean', 'std'}}, ...
-        'latex', {{'\max', '\argmax', '\min', '\argmin', ...
-            '\mean{X}^{\text{ss}}', 'S^{\text{ss}}'}});
-    return;
-end;
+% Actual function to use - Edit this line to use another function
+sgfun = @stats_get_pphpc;
 
-% Read stats file
-data = dlmread(file);
-dataLen = size(data, 1);
-
-% Initialize stats matrix
-sdata = zeros(6, num_outputs);
-
-% Determine stats for each of the outputs
-for i=1:num_outputs
-    
-    % Iterations start at zero, but Matlab starts indexing at 1, so we have
-    % to subtract index by one.
-    
-    % Get current output
-    curOutput = data(:, i);
-    % Get maximum
-    curMax = max(curOutput);
-    % Get iteration where maximum occurs
-    curArgMax = find(curOutput == curMax, 1) - 1;
-    % Get minimum
-    curMin = min(curOutput);
-    % Get iteration where minimum occurs
-    curArgMin = find(curOutput == curMin, 1) - 1;
-    % Get steady-state mean
-    curMean = mean(curOutput((ss_idx + 1):dataLen));
-    % Get steady-state standard deviation
-    curStd = std(curOutput((ss_idx + 1):dataLen));
- 
-    % Place current output statistics in output variable
-    sdata(:, i) = [curMax; curArgMax; curMin; curArgMin; curMean; curStd];
-    
+% How many arguments were passed?
+if nargin == 1
+    % Return names of statistical summaries.
+    sdata = sgfun(args);
+else
+    % Return matrix of statistical summaries.
+    sdata = sgfun(args, file, num_outputs);
 end;

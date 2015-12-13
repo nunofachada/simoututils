@@ -30,8 +30,7 @@ outputs = data.outputs;
 nout = numel(outputs);
 
 % Number of statistical summaries
-ssumms_struct = stats_get();
-ssumms = ssumms_struct.latex;
+ssumms = data.ssnames.latex;
 nssumms = numel(ssumms);
 
 % Begin table

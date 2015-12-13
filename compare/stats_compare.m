@@ -44,7 +44,7 @@ end;
 nout = numel(varargin{1}.outputs);
 
 % Number of statistical summaries
-ssumms = stats_get();
+ssumms = varargin{1}.ssnames;
 nssumms = numel(ssumms.text);
 
 % Vector of p-values (will be reshaped into a matrix later)

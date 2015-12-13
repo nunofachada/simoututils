@@ -29,7 +29,7 @@ function t = dist_table_per_fm(datas, output, stat, pre)
 %
 
 % Number of statistical summaries
-ssumms = stats_get();
+ssumms = datas{1}.ssnames;
 nssumms = numel(ssumms.text);
 
 % if "pre" parameter not specified, set default value to 0

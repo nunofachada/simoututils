@@ -1,9 +1,9 @@
-function stats = stats_gather(name, folder, files, outputs, varargin)
+function stats = stats_gather(name, folder, files, outputs, args)
 % STATS_GATHER Get statistical summaries taken from simulation outputs from
 % multiple files. The exact statistical summaries depend on the
 % implementation of the stats_get function.
 %
-%   stats = STATS_GATHER(name, folder, files, outputs, varargin)
+%   stats = STATS_GATHER(name, folder, files, outputs, args)
 %
 % Parameters:
 %        name - Name with which to tag this data.
@@ -13,7 +13,7 @@ function stats = stats_gather(name, folder, files, outputs, varargin)
 %     outputs - Either an integer representing the number of outputs in 
 %               each file or a cell array of strings with the output names.
 %               In the former case, output names will be 'o1', 'o2', etc.
-%    varargin - Extra parameters for the stats_get function.
+%        args - Extra parameters for the stats_get_* function.
 %
 % Returns:
 %     stats - A struct containing the following fields:
@@ -39,7 +39,7 @@ function stats = stats_gather(name, folder, files, outputs, varargin)
 %
 
 % Get names and number of statistical summaries
-ssnames = stats_get();
+ssnames = stats_get(args);
 ssnum = numel(ssnames.text);
 
 % Determine the type of the 'outputs' argument
@@ -86,7 +86,7 @@ for i = 1:numFiles
     
     % Read stats from current file into a m x n matrix where m corresponds
     % to number of statistical summaries and n to num_outputs.
-    s = stats_get([folder '/' listing(i).name], num_outputs, varargin{:});
+    s = stats_get(args, [folder '/' listing(i).name], num_outputs);
     
     % Reshape stats matrix into a vector and put it in global stats matrix.
     sdata(i, :) = reshape(s, 1, num_outputs * ssnum);

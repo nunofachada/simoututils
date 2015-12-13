@@ -31,7 +31,7 @@ function t = stats_table_per_setup(data, alpha, format)
 outputs = data.outputs;
 
 % Statistical summaries structure
-ssumms_struct = stats_get();
+ssumms_struct = data.ssnames;
 
 % What type of table to print?
 if format == 0

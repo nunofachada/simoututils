@@ -44,7 +44,7 @@ if ncomps < 1
 end;
 
 % Names and number of statistical summaries 
-ssumms_struct = stats_get();
+ssumms_struct = varargin{1}{2}{1}.ssnames;
 ssumms = ssumms_struct.latex;
 nsumms = numel(ssumms);
 
