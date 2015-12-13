@@ -43,7 +43,7 @@ function sdata = stats_get_pphpc(args, file, num_outputs)
 % The first argument is the steady-state truncation point.
 ss_idx = args;
 
-% If only the first argument is given
+% If only the first argument is given...
 if nargin == 1
     % ...return names of statistic summaries
     sdata = struct(...
@@ -61,7 +61,7 @@ dataLen = size(data, 1);
 sdata = zeros(6, num_outputs);
 
 % Determine stats for each of the outputs
-for i=1:num_outputs
+for i = 1:num_outputs
     
     % Iterations start at zero, but Matlab starts indexing at 1, so we have
     % to subtract index by one.
