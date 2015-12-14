@@ -38,39 +38,12 @@ function stats = stats_gather(name, folder, files, outputs, args)
 % at http://opensource.org/licenses/MIT)
 %
 
-%<<<<<<< HEAD
 % Get names and number of statistical summaries
 ssnames = stats_get(args);
 ssnum = numel(ssnames.text);
 
-% Determine the type of the 'outputs' argument
-if iscellstr(outputs)
-    
-    % It's a cell array of strings, determine the number of outputs and
-    % keep this value in the num_outputs variable.
-    num_outputs = numel(outputs);
-    
-elseif isnumeric(outputs) && numel(outputs) == 1 && outputs >= 1
-    
-    % It's an integer, move number of outputs to the num_outputs variable
-    % and set default output names.
-    num_outputs = round(outputs);
-    outputs = cell(1, num_outputs);
-    for i = 1:num_outputs
-        outputs{i} = ['o' num2str(i)];
-    end;
-    
-else
-    
-    % Invalid type, throw error.
-    error(['The "outputs" argument must be an integer or a cell array' ...
-        ' of strings']);
-    
-end;
-%=======
 % Determine effective output names and number of outputs
-%[outputs, num_outputs] = parse_output_names(outputs);
-%>>>>>>> Attempt to have generic plot functions (in progress)
+[outputs, num_outputs] = parse_output_names(outputs);
 
 % Get file list
 listing = dir([folder '/' files]);
