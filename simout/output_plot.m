@@ -1,11 +1,13 @@
 function output_plot(...
-    folder, file, outputs, type, layout, scale, colors, iters)
+    folder, files, outputs, type, layout, scale, colors, iters)
 % OUTPUT_PLOT Plot time-series simulation output.
 %
 %   OUTPUT_PLOT(folder, file, outputs, type, layout, scale, colors, iters)
 %
 % Parameters:
-%        file - file containing output of one simulation run.
+%      folder - Folder containing simulation output files.
+%       files - Simulation output files (use wildcards for more than one
+%               file).
 %     outputs - Either an integer representing the number of outputs in 
 %               each file or a cell array of strings with the output names.
 %               In the former case, output names will be 'o1', 'o2', etc.
@@ -69,6 +71,19 @@ if nargin < 8
     iters = size(data, 1);
 end;
 
+% Initialize data vector
+all_data = zeros(num_outputs, iters, num_files);
+
+% Load data from files
+for i = 1:num_files
+            
+    data = dlmread([folder '/' listing(i).name]);
+    for j = 1:num_outputs
+        all_data(j, :, i) = data(1:iters, j);
+    end;
+    
+end;
+
 % Start plotting outputs
 i1 = 1;
 for l = layout
@@ -79,12 +94,11 @@ for l = layout
     hold on;
     grid on;
     
-    for i = i1:i2
-        
-        for j = 1:numFiles
+    for f = 1:num_files
             
-            data = dlmread([folder '/' listing(j).name]);
-            plot(data(:, i) * scale(i), colors{i - i1 + 1});
+        for i = i1:i2
+        
+            plot(all_data(i, 1:iters, f) * scale(i), colors{i - i1 + 1});
             
         end;    
     end;
