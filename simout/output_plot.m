@@ -1,4 +1,4 @@
-function output_plot(...
+function d = output_plot(...
     folder, files, outputs, type, layout, scale, colors, iters)
 % OUTPUT_PLOT Plot time-series simulation output.
 %
@@ -18,6 +18,14 @@ function output_plot(...
 %      layout -
 %       scale -
 %      colors -
+%
+% Outputs:
+%    d - Tri-dimensional matrix containing what was plotted. First 
+%        dimension corresponding to the replication number if type == 'a', 
+%        to the extremes (min and max) if type == 'f', or to the single
+%        moving average if type is numeric. Second dimension corresponds to
+%        iterations. Third dimension corresponds to outputs.
+%
 %
 % Copyright (c) 2015 Nuno Fachada
 % Distributed under the MIT License (See accompanying file LICENSE or copy 
@@ -98,7 +106,32 @@ for l = layout
             
         for i = i1:i2
         
-            plot(all_data(i, 1:iters, f) * scale(i), colors{i - i1 + 1});
+            if type == 'a' % All, superimposed
+                
+                plot(all_data(i, 1:iters, f) * scale(i), ...
+                    colors{i - i1 + 1});
+                
+            elseif type == 'f' % Filled
+                
+                % There are problems with the legends in octave
+                if is_octave()
+                    warning('Legends may not appear correctly in Octave');
+                end;
+
+                % Find extremes
+                
+                % Initialize output matrix
+                
+                % Fill
+                
+            elseif isnumeric(type) && type >= 0 % Moving average
+                
+                
+            else % Unknown type
+                
+                error('Unknown type');
+              
+            end;
             
         end;    
     end;
