@@ -21,10 +21,12 @@ function d = output_plot(...
 %
 % Outputs:
 %    d - Tri-dimensional matrix containing what was plotted. First 
-%        dimension corresponding to the replication number if type == 'a', 
-%        to the extremes (min and max) if type == 'f', or to the single
-%        moving average if type is numeric. Second dimension corresponds to
-%        iterations. Third dimension corresponds to outputs.
+%        dimension corresponding to number of outputs, second dimension to
+%        number of iterations, and third dimension depends on the type of
+%        plot. If plot is of type == 'a', third dimensions corresponds to
+%        number of files, else if plot is of type == 'f', third dimension
+%        is 2 (for minima and maxima, respectively), else if plot is of
+%        type moving average, third dimension is 1 (the averaged output).
 %
 %
 % Copyright (c) 2015 Nuno Fachada
@@ -92,59 +94,139 @@ for i = 1:num_files
     
 end;
 
-% Start plotting outputs
-i1 = 1;
-for l = layout
+if type == 'a' % All, superimposed
     
-    i2 = i1 + l - 1;
+    % In this case, the output matrix will be all_data
+    d = all_data;
     
-    figure();
-    hold on;
-    grid on;
-    
-    for f = 1:num_files
-            
-        for i = i1:i2
+    % Start plotting outputs
+    i1 = 1;
+    for l = layout
         
-            if type == 'a' % All, superimposed
+        i2 = i1 + l - 1;
+        
+        figure();
+        hold on;
+        grid on;
+        
+        for f = 1:num_files
+            
+            for i = i1:i2
                 
                 plot(all_data(i, 1:iters, f) * scale(i), ...
                     colors{i - i1 + 1});
-                
-            elseif type == 'f' % Filled
-                
-                % There are problems with the legends in octave
-                if is_octave()
-                    warning('Legends may not appear correctly in Octave');
-                end;
-
-                % Find extremes
-                
-                % Initialize output matrix
-                
-                % Fill
-                
-            elseif isnumeric(type) && type >= 0 % Moving average
-                
-                
-            else % Unknown type
-                
-                error('Unknown type');
-              
+    
             end;
             
-        end;    
+        end;
+        
+        xlim([0 size(data, 1)]);
+        h = legend(outputs(i1:i2));
+        %set(h,'interpreter','Latex','FontSize',14);
+        xlabel('Iterations');
+        ylabel('Value');
+        
+        i1 = i2 + 1;
+        
     end;
-
-    xlim([0 size(data, 1)]);
-    h = legend(outputs(i1:i2));
-    %set(h,'interpreter','Latex','FontSize',14);
-    xlabel('Iterations');
-    ylabel('Value');
     
-    i1 = i2 + 1;
+elseif type == 'f' % Filled
+    
+    % There are problems with the legends in octave
+    if is_octave()
+        warning('Legends may not appear correctly in Octave');
+    end;
+    
+    % Initialize output matrix
+    d = zeros(num_outputs, iters, 2);
+
+    % Find extremes
+    for i = 1:num_outputs
+        d(i, :, 1) = min(all_data(i, :, :), [], 3);
+        d(i, :, 2) = max(all_data(i, :, :), [], 3);
+    end;
+    
+    % Plot graphs
+    i1 = 1;
+    x = 1:iters;
+    for l = layout
+        
+        i2 = i1 + l - 1;
+        
+        figure();
+        hold on;
+        grid on;
+        
+        for i = i1:i2
+                
+            fill_between(x, squeeze(d(i, :, 1)) * scale(i), ...
+                squeeze(d(i, :, 2)) * scale(i), ...
+                1, 'FaceColor', colors{i - i1 + 1});
+    
+        end;
+        
+        xlim([0 size(data, 1)]);
+        h = legend(outputs(i1:i2));
+        %set(h,'interpreter','Latex','FontSize',14);
+        xlabel('Iterations');
+        ylabel('Value');
+        
+        i1 = i2 + 1;
+        
+    end;
+    
+    
+elseif isnumeric(type) && type >= 0 % Moving average
+    
+    % Window size
+    w = type;
+    
+    % Initialize output matrix
+    d = zeros(num_outputs, iters - w);
+    
+    % Find averages
+    for i = 1:num_outputs
+        
+        d(i, :) = mavg(mean(all_data(i, :, :), 3), w);
+
+    end;
+    
+    % Plot graphs
+    i1 = 1;
+    for l = layout
+        
+        i2 = i1 + l - 1;
+        
+        figure();
+        hold on;
+        grid on;
+        
+        for i = i1:i2
+                
+            plot(d(i, :) * scale(i), ...
+                colors{i - i1 + 1});
+    
+        end;
+        
+        xlim([0 size(data, 1)]);
+        h = legend(outputs(i1:i2));
+        %set(h,'interpreter','Latex','FontSize',14);
+        xlabel('Iterations');
+        ylabel('Value');
+        
+        i1 = i2 + 1;
+        
+    end;
+    
+   
+else % Unknown type
+    
+    error('Unknown type');
     
 end;
+
+
+
 
 
 

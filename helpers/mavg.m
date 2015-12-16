@@ -20,11 +20,22 @@ function y = mavg(x, w)
 % at http://opensource.org/licenses/MIT)
 %
 
-y = zeros(numel(x) - w, 1);
-for i = 1:numel(y)
-    if i <= w
-        y(i) = sum(x((i - (i - 1)):(i + (i - 1)))) / (2 * i - 1);
-    else
-        y(i) = sum(x((i - w):(i + w))) / (2 * w + 1);
+% If window size is 0...
+if w == 0
+    
+    % ... return vector as is.
+    y = x;
+    
+else
+    
+    % ... otherwise find moving average.
+    y = zeros(numel(x) - w, 1);
+    for i = 1:numel(y)
+        if i <= w
+            y(i) = sum(x((i - (i - 1)):(i + (i - 1)))) / (2 * i - 1);
+        else
+            y(i) = sum(x((i - w):(i + w))) / (2 * w + 1);
+        end;
     end;
+
 end;
