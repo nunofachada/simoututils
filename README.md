@@ -4,9 +4,9 @@ Simulation Model Analysis Utilities
 ## What are these utilities?
 
 A number of [MATLAB]/[Octave] functions and scripts for analyzing
-[output](simout) data from simulation models. These utilities were developed to
-analyze the [PPHPC] model, and while some are PPHPC-specific, most can be used 
-to study any model.
+[output](simout) data from simulation models. These utilities were originally
+developed to analyze the [PPHPC] model, and later generalized to be usable with
+any simulation model with time series outputs.
 
 ## How to use them
 

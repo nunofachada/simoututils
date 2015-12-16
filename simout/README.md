@@ -31,8 +31,6 @@ outputs:
 
 ### Utilities
 
-#### Generic utilities
-
 * [dist_plot_per_fm](dist_plot_per_fm.m) - Plot the distributional
 properties of one focal measure (i.e. of a statistical summary of a 
 single output), namely its probability density function (estimated), 
@@ -49,6 +47,10 @@ setup/configuration. For each focal measure, the table shows the mean,
 variance, p-value of the Shapiro-Wilk test, skewness, histogram and 
 QQ-plot.
 
+* [output_plot](output_plot.m) - Plot time-series simulation output from one or 
+more replications using one of three approaches: superimposed, extremes or
+moving average.
+
 * [stats_analyze](stats_analyze.m) - Analyze statistical summaries taken
 from simulation output.
 
@@ -62,14 +64,6 @@ min, argmin, mean, std) taken from simulation outputs from one file.
 * [stats_table_per_setup](stats_table_per_setup.m) - Outputs a plain 
 text or LaTeX table with the statistics returned by the [stats_analyze](stats_analyze.m) 
 function for all focal measures for one model setup/configuration.
-
-#### PPHPC-specific utilities
-
-* [pp_plot](pp_plot.m) - Plot PPHPC simulation output.
-
-* [pp_plot_many](pp_plot_many.m) - Plot PPHPC simulation output from a 
-number of runs, either 1) with superimposed outputs, 2) plot filled area 
-encompassed by output extremes, or, 3) moving average plot.
 
 ### Examples
 
@@ -87,48 +81,66 @@ These datasets correspond to the results presented in the article
 
 #### Example 1: Plot simulation output
 
-Use the [pp_plot](pp_plot.m) to plot one replication of the PPHPC model:
+Use the [output_plot](output_plot.m) to plot outputs from one replication of the
+PPHPC model:
 
 ```matlab
-pp_plot([datafolder '/v1/stats100v1r1.txt']);
+output_plot([datafolder '/v1'], 'stats100v1r1.txt');
 ```
 
-The [pp_plot_many](pp_plot_many.m) function can be used to plot outputs
-from multiple replications. It works in three modes. In first mode,
-outputs from multiple replications are simply superimposed. This mode is
-selected using the 'a' option as the last parameter, as follows:
+Outputs 4 to 6 are practically not visible, as they have a very different scale
+from outputs 1 to 3. Also, the legend does not show personalized output names.
+Both problems can be solved by invoking [output_plot](output_plot.m) in the
+following way:
 
 ```matlab
-pp_plot_many([datafolder '/v1'], 'stats100v1*.txt', 4001, 'a');
+outputs = {'SheepPop', 'WolfPop', 'GrassQty', 'SheepEnergy', 'WolfEnergy', 'GrassEnergy'};
+output_plot([datafolder '/v1'], 'stats100v1r1.txt', outputs, 'a', [3 3]);
 ```
 
-The first argument specifies the folder where the simulation output 
-files are located, and the second indicates, using wildcards, the 
-specific files which contain simulation output. The third argument is
-the number of iterations to plot.
-
-The second mode, selected using the 'f' option, allows to plot areas 
-limited by output extremes, offering a good perspective on the range of 
-values each output takes during simulation runs:
+Here we specify proper output names in the 3rd parameter, the type of plot in
+the 4th parameter (i.e. plot **a**ll available replications), and the layout
+of the figures in the 5th parameter (i.e. plot 3 outputs in one figure, and
+the remaining 3 in another figure). Much better now. However, the 3rd and 6th 
+outputs (GrassQty and GrassEnergy, respectively) are still somewhat out of scale
+with the remaining outputs. This can be solved by passing a scale vector as the 
+6th parameter:
 
 ```matlab
-pp_plot_many([datafolder '/v1'], 'stats100v1*.txt', 4001, 'f');
+outputs = {'SheepPop', 'WolfPop', 'GrassQty/4', 'SheepEnergy', 'WolfEnergy', '4*GrassEnergy'};
+output_plot([datafolder '/v1'], 'stats100v1r1.txt', outputs, 'a', [3 3], [1 1 1/4 1 1 4]);
 ```
 
-Finally, the third mode plots the moving average of each output over the 
-multiple replications. This mode is selected by passing a positive 
-integer as the last argument to the [pp_plot_many](pp_plot_many.m) 
-function. This positive integer is the window size with which to smooth
-the output. A value of zero is equivalent to no smoothing, i.e. the 
-function will simply plot the averaged outputs. A value of 10 offers a
-good balance between rough and overly smooth plots:
+The plot looks good now. In order to plot outputs from multiple replications, we
+simply use wildcards to load more than one file:
 
 ```matlab
-pp_plot_many([datafolder '/v1'], 'stats100v1*.txt', 4001, 10);
+output_plot([datafolder '/v1'], 'stats100v1r*.txt', outputs, 'a', [3 3], [1 1 1/4 1 1 4]);
 ```
 
-The third mode of the [pp_plot_many](pp_plot_many.m) function is useful
-for empirically selecting a steady-state truncation point.
+When plotting multiple replications in this way, the figures tend to look
+somewhat heavy and slow to manipulate. We could alternatively plot only the
+output extremes (minimum and maximum of individual outputs at each iteration),
+and fill the space between with the output color. This can be accomplished by 
+specifying type **f**ill as the 4th parameter:
+
+```matlab
+output_plot([datafolder '/v1'], 'stats100v1r*.txt', outputs, 'f', [3 3], [1 1 1/4 1 1 4]);
+```
+
+Finally, it's also possible to visualize the moving average of each output over
+multiple replications by passing a positive integer as the 4th parameter. This 
+positive integer is the window size with which to smooth the output. A value of 
+zero is equivalent to no smoothing, i.e. the function will simply plot the 
+averaged outputs. A value of 10 offers a good balance between rough and overly 
+smooth plots:
+
+```matlab
+output_plot([datafolder '/v1'], 'stats100v1r*.txt', outputs, 10, [3 3], [1 1 1/4 1 1 4]);
+```
+
+The moving average type of plot is useful for empirically selecting a 
+steady-state truncation point.
 
 #### Example 2: Get and analyze statistical summaries taken from simulation output
 
@@ -306,7 +318,7 @@ t = sprintf('%s%s', t, dist_table_per_fm(datas2, out, ssumm, 1));
 % Table footers and caption
 t = sprintf('%s\\bottomrule\n', t);
 t = sprintf('%s\n\\end{tabular}', t);
-t = sprintf('%s\n\\caption{Distributional analysis of Sheep Population for different model sizes and parameter sets.}\n', t);
+t = sprintf('%s\n\\caption{Distributional analysis of sheep population steady-state mean for different model sizes and parameter sets.}\n', t);
 t = sprintf('%s\n\\end{table}\n', t);
 
 % Show the table
