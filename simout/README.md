@@ -94,6 +94,8 @@ PPHPC model:
 output_plot([datafolder '/v1'], 'stats100v1r1.txt');
 ```
 
+![simout_ex01_01](https://cloud.githubusercontent.com/assets/3018963/11877081/0209605a-a4e5-11e5-8092-95dfe0bbcd5b.png)
+
 Outputs 4 to 6 are practically not visible, as they have a very different scale
 from outputs 1 to 3. Also, the legend does not show personalized output names.
 Both problems can be solved by invoking [output_plot](output_plot.m) in the
@@ -103,6 +105,9 @@ following way:
 outputs = {'SheepPop', 'WolfPop', 'GrassQty', 'SheepEnergy', 'WolfEnergy', 'GrassEnergy'};
 output_plot([datafolder '/v1'], 'stats100v1r1.txt', outputs, 'a', [3 3]);
 ```
+
+![simout_ex01_02](https://cloud.githubusercontent.com/assets/3018963/11877082/02217ffa-a4e5-11e5-9729-ed5678443c96.png)
+![simout_ex01_03](https://cloud.githubusercontent.com/assets/3018963/11877083/0230e2a6-a4e5-11e5-884f-fc6140e258af.png)
 
 Here we specify proper output names in the 3rd parameter, the type of plot in
 the 4th parameter (i.e. plot **a**ll available replications), and the layout
@@ -117,12 +122,18 @@ outputs = {'SheepPop', 'WolfPop', 'GrassQty/4', 'SheepEnergy', 'WolfEnergy', '4*
 output_plot([datafolder '/v1'], 'stats100v1r1.txt', outputs, 'a', [3 3], [1 1 1/4 1 1 4]);
 ```
 
+![simout_ex01_04](https://cloud.githubusercontent.com/assets/3018963/11877084/02356862-a4e5-11e5-8c79-06a85fda0a67.png)
+![simout_ex01_05](https://cloud.githubusercontent.com/assets/3018963/11877085/023607ea-a4e5-11e5-83e2-8807d9927253.png)
+
 The plot looks good now. In order to plot outputs from multiple replications, we
 simply use wildcards to load more than one file:
 
 ```matlab
 output_plot([datafolder '/v1'], 'stats100v1r*.txt', outputs, 'a', [3 3], [1 1 1/4 1 1 4]);
 ```
+
+![simout_ex01_06](https://cloud.githubusercontent.com/assets/3018963/11877088/023508a4-a4e5-11e5-91d0-1cc2274a3537.png)
+![simout_ex01_07](https://cloud.githubusercontent.com/assets/3018963/11877086/02362194-a4e5-11e5-889d-95f82bd69fac.png)
 
 When plotting multiple replications in this way, the figures tend to look
 somewhat heavy and slow to manipulate. We could alternatively plot only the
@@ -134,6 +145,9 @@ specifying type **f**ill as the 4th parameter:
 output_plot([datafolder '/v1'], 'stats100v1r*.txt', outputs, 'f', [3 3], [1 1 1/4 1 1 4]);
 ```
 
+![simout_ex01_08](https://cloud.githubusercontent.com/assets/3018963/11877087/0238c8b8-a4e5-11e5-9663-bf792e8a289e.png)
+![simout_ex01_09](https://cloud.githubusercontent.com/assets/3018963/11877089/0247e3b6-a4e5-11e5-9be5-aa0b073e185d.png)
+
 Finally, it's also possible to visualize the moving average of each output over
 multiple replications by passing a positive integer as the 4th parameter. This 
 positive integer is the window size with which to smooth the output. A value of 
@@ -144,6 +158,9 @@ smooth plots:
 ```matlab
 output_plot([datafolder '/v1'], 'stats100v1r*.txt', outputs, 10, [3 3], [1 1 1/4 1 1 4]);
 ```
+
+![simout_ex01_10](https://cloud.githubusercontent.com/assets/3018963/11877090/024d2362-a4e5-11e5-908f-533e5dca8d8a.png)
+![simout_ex01_11](https://cloud.githubusercontent.com/assets/3018963/11877091/025138f8-a4e5-11e5-88fb-ffa524459581.png)
 
 The moving average type of plot is useful for empirically selecting a 
 steady-state truncation point.
