@@ -58,8 +58,8 @@ on how the [stats_get](stats_get.m) function is configured.
 
 * [stats_get](stats_get.m) - This is a facade function for `stats_get_*` 
 functions. These functions extract statistical summaries from simulation outputs 
-from one file. The exact `stats_get_*` function to use is specified in the first
-line of this function. Two `stats_get_*` functions are included in this package:
+from one file. The exact `stats_get_*` function to use is specified within this
+function. Two `stats_get_*` functions are included in this package:
   * [stats_get_pphpc](stats_get_pphpc.m) - Obtain the **max**, **argmax**,
     **min**, **argmin**, **mean** and **std** statistical summaries from 
     simulation outputs given in a file (package default).
@@ -165,7 +165,11 @@ output_plot([datafolder '/v1'], 'stats100v1r*.txt', outputs, 10, [3 3], [1 1 1/4
 The moving average type of plot is useful for empirically selecting a 
 steady-state truncation point.
 
-#### Example 2: Get and analyze statistical summaries taken from simulation output
+#### Example 2: Get statistical summaries from one replication
+
+The [stats_get](stats_get.m) function is the elementary... TODO
+
+#### Example 3: Get and analyze statistical summaries from multiple replications
 
 First, get statistical summaries for 30 runs of the PPHPC model for size
 100 and parameter set 1, where 6 corresponds to the number of outputs of
@@ -229,7 +233,7 @@ stats_table_per_setup(s100v1, 0.05, 1)
 The produced LaTeX table requires the [siunitx], [multirow], [booktabs] 
 and [ulem] packages to compile.
 
-#### Example 3: Visually analyze the distributional properties of a focal measure
+#### Example 4: Visually analyze the distributional properties of a focal measure
 
 The [dist_plot_per_fm](dist_plot_per_fm.m) function offers a simple way of
 assessing the distributional properties of a focal measure for different
@@ -261,7 +265,7 @@ Note that in this example we explicitly specified the output names when
 calling the [stats_gather](stats_gather.m) function. Also, for parameter
 set 2, we set the steady-state truncation point to iteration 2000.
 
-#### Example 4: LaTeX table with distributional analysis of all focal measures for one setup
+#### Example 5: LaTeX table with distributional analysis of all focal measures for one setup
 
 In the article [Towards a standard model...](https://peerj.com/articles/cs-36/)
 a number of [tables](https://doi.org/10.7717/peerj-cs.36/supp-2) 
@@ -283,7 +287,7 @@ dist_table_per_setup(s1600v2)
 We specify the output names in LaTeX math mode so they appear in the
 produced table as they appear in the article.
 
-#### Example 5: LaTeX table with a distributional analysis of one focal measure for multiple setups
+#### Example 6: LaTeX table with a distributional analysis of one focal measure for multiple setups
 
 A distributional analysis of a focal measure for multiple setups is often
 useful for evaluating how its distributional properties vary with different
