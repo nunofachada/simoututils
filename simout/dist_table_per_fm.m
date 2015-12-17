@@ -89,13 +89,15 @@ t = sprintf('%s\\\\ \n', t);
 % Print histograms
 t = sprintf('%s%sHist. ', t, pretxt);
 for i=1:numel(datas)
-    t = sprintf('%s& \\multicolumn{1}{c}{\\resizebox {!} {0.5cm} {%s}} ', t, tikhist(table_info{3, i}));
+    t = sprintf('%s& \\multicolumn{1}{c}{\\resizebox {!} {0.5cm} {%s}} ', ...
+        t, tikhist(table_info{3, i}));
 end;
 t = sprintf('%s\\\\ \n', t);
 
 % Print QQ-plots
 t = sprintf('%s%sQ-Q ', t, pretxt);
 for i=1:numel(datas)
-    t = sprintf('%s& \\raisebox{-.5\\height}{\\resizebox {1.2cm} {1.2cm} {%s}} ', t, tikqq(table_info{4, i}));
+    t = sprintf('%s& \\raisebox{-.5\\height}{\\resizebox {1.2cm} {1.2cm} {%s}} ', ...
+        t, tikqq(table_info{4, i}));
 end;
 t = sprintf('%s\\\\ \n', t);

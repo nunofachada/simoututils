@@ -1,7 +1,7 @@
 function sdata = stats_get_iters(args, file, num_outputs)
-% STATS_GET_ITERS Obtain statistical summaries from simulation outputs 
-% given in a file which correspond to output values at user-specified 
-% iterations.
+% STATS_GET_ITERS Obtain statistical summaries corresponding to output 
+% values at user-specified iterations from simulation outputs given in a 
+% file.
 %
 %   stats = STATS_GET_ITERS(args, file, num_outputs)
 %

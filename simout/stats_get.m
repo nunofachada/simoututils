@@ -1,13 +1,17 @@
 function sdata = stats_get(args, file, num_outputs)
-% STATS_GET Facade function for stats_get_* functions.
+% STATS_GET This is a facade function for stats_get_* functions. These
+% functions extract statistical summaries from simulation outputs from one
+% file. The exact stats_get_* function to use is specified in the first
+% line of this function. The stats_get_pphpc function is specified by 
+% default.
 %
-%   stats = STATS_GET(file, num_outputs, varargin)
+%   stats = STATS_GET(args, file, num_outputs)
 %
 % Parameters:
-%        args - Depends on the stats_get_* implementation.
-%       file  - File containing simulation outputs, columns correspond to 
-%               outputs, rows correspond to iterations.
-% num_outputs - Number of outputs in file.
+%         args - Depends on the function passed in the 'sgfun' parameter.
+%        file  - File containing simulation outputs, columns correspond 
+%                to outputs, rows correspond to iterations.
+%  num_outputs - Number of outputs in file.
 %
 % Returns:
 %       sdata - A n x num_outputs matrix, with n statistical summaries and
@@ -20,6 +24,8 @@ function sdata = stats_get(args, file, num_outputs)
 %                      statistical measures in LaTeX format.
 %
 % Notes:
+%    The format of the data in each file is the following: columns 
+%    correspond to outputs, rows correspond to iterations.
 %
 % Copyright (c) 2015 Nuno Fachada
 % Distributed under the MIT License (See accompanying file LICENSE or copy 

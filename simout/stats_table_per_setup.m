@@ -3,7 +3,7 @@ function t = stats_table_per_setup(data, alpha, format)
 % statistics returned by the stats_analyze function for all focal measures
 % for one model setup/configuration.
 %
-%   STATS_TABLE_PER_SETUP(data, alpha, format)
+%   t = STATS_TABLE_PER_SETUP(data, alpha, format)
 %
 % Parameters:
 %   data - Object returned by the stats_gather function for one model 

@@ -21,10 +21,8 @@ function sdata = stats_get_pphpc(args, file, num_outputs)
 %                      statistical measures in LaTeX format.
 %
 % Notes:
-%   - The format of the data in each file is the following: columns 
-%     correspond to outputs, while rows correspond to iterations.
-%   - The names of the statistical summaries in LaTeX format assume the
-%     following LaTeX definitions:
+%   The names of the statistical summaries in LaTeX format assume the
+%   following LaTeX definitions:
 %       % For \argmax and \argmin
 %       \@ifpackageloaded{amsmath}{
 %           \DeclareMathOperator*{\argmax}{arg\,max}
