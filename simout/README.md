@@ -256,64 +256,110 @@ For the remainder of this discussion it is assumed that the
 
 #### Example 3: Get and analyze statistical summaries from multiple replications
 
-First, get statistical summaries for 30 runs of the PPHPC model for size
-100 and parameter set 1, where 6 corresponds to the number of outputs of
-the PPHPC model and 1000 to the iteration after which the outputs are in 
-steady-state.
+The [stats_gather](stats_gather.m) function extracts statistical summaries from 
+simulation outputs from multiple files. Lets get statistical summaries for 30 
+runs of the PPHPC model for size 100 and parameter set 1:
 
 ```matlab
 s100v1 = stats_gather('100v1', [datafolder '/v1'], 'stats100v1r*.txt', 6, 1000);
 ```
-Six statistical summaries are returned: maximum (**max**), iteration 
-where maximum occurs (**argmax**), minimum (**min**), iteration 
-where minimum occurs (**argmin**), mean (**mean**), and standard 
-deviation (**std**). The **mean** and **std** statistics are obtained
-during the steady-state phase of the output.
 
-The [stats_gather](stats_gather.m) returns a _struct_ containing three 
-fields: 1) `name` contains the name with which the data was tagged, 
-'100v1' in this case; 2) cell array containing the output names (which
-default to 'o1', 'o2', etc.); and, 3) `sdata`, a 30 x 36 matrix, with 30
-observations (from 30 files) and 36 focal measures (six statistical 
-summaries for each of the six outputs).
+The 4th parameter, 6, corresponds to the number of outputs of the PPHPC model.
+Instead of the number of outputs, the function alternatively accepts a cell 
+array of strings containing the output names, which can be useful for tables and
+plot. The 5th and last parameter, 1000 , corresponds to the iteration after 
+which the outputs are in steady-state. The [stats_gather](stats_gather.m)
+function returns a _struct_ with several fields, of which the following are
+important to this discussion:
 
-Instead of the number of outputs, the [stats_gather](stats_gather.m) 
-alternatively accepts a cell array of strings containing the output 
-names, which can be useful for latter producing publication quality
-tables.
+* `name` contains the name with which the data was tagged, '100v1' in this case;
+* `outputs` is a cell array containing the output names (which default to 'o1', 
+'o2', etc.); 
+* `sdata` is a 30 x 36 matrix, with 30 observations (from 30 files) and 36 focal
+measures (six statistical summaries for each of the six outputs).
 
-Let's now analyze the focal measures (i.e. statistical summaries for
-each output). The 0.05 value in the second parameter is the significance
-level for the confidence intervals and the Shapiro-Wilk test:
+Let's now analyze the focal measures (i.e. statistical summaries for each 
+output):
 
 ```matlab
 [m, v, cit, ciw, sw, sk] = stats_analyze(s100v1.sdata', 0.05);
 ```
 
-The variables returned by the [stats_analyze](stats_analyze.m) function
-have 36 rows, one per focal measure. The `m` (mean), `v` (variance), 
-`sw` (_p_-value of the Shapiro-Wilk test) and `sk` (skewness) variables
-have only one column, i.e. one value per focal measure, while the `cit`
-(_t_-confidence interval) and `ciw` (Willink confidence interval)
-variables have two columns, which correspond to the lower and upper
+The 0.05 value in the 2nd parameter is the significance level for the confidence
+intervals and the Shapiro-Wilk test. The variables returned by the 
+[stats_analyze](stats_analyze.m) function have 36 rows, one per focal measure. 
+The `m` (mean), `v` (variance), `sw` (_p_-value of the Shapiro-Wilk test) and
+`sk` (skewness) variables have only one column, i.e. one value per focal
+measure, while the `cit` (_t_-confidence interval) and `ciw` (Willink confidence
+interval) variables have two columns, which correspond to the lower and upper
 limits of the respective intervals.
 
-While the data returned by the [stats_analyze](stats_analyze.m) is in a 
-format adequate for further processing and/or analysis, it is not very
-human readable. To this purpose, one can use the [stats_table_per_setup](stats_table_per_setup.m) 
-function to output a nice plain text table (the last parameter, 0, 
-specifies plain text output):
+While the data returned by the [stats_analyze](stats_analyze.m) is in a format
+adequate for further processing and/or analysis, it is not very human readable.
+To this purpose, one can use the
+[stats_table_per_setup](stats_table_per_setup.m) function to output a nice plain
+text table:
 
 ```matlab
 stats_table_per_setup(s100v1, 0.05, 0)
 ```
 
-This function can also output a publication quality LaTeX table by 
-setting the last argument to 1:
+```
+-----------------------------------------------------------------------------------------
+|   Output   | F. meas. |    Mean    |  Variance  |   95% Confidence interval | SW test |
+|------------|----------|------------|------------|---------------------------|---------|
+|         o1 |      max |       2517 |       6699 | [       2486,       2547] |  0.8287 |
+|            |   argmax |      145.2 |      91.36 | [      141.7,      148.8] |  0.8255 |
+|            |      min |        317 |      204.9 | [      311.7,      322.3] |  0.8227 |
+|            |   argmin |        6.8 |       6.51 | [      5.847,      7.753] |  0.0326 |
+|            |     mean |       1186 |      65.54 | [       1183,       1189] |  0.9663 |
+|            |      std |      107.9 |      223.9 | [      102.3,      113.5] |  0.3534 |
+|------------|----------|------------|------------|---------------------------|---------|
+|         o2 |      max |      530.5 |      435.8 | [      522.7,      538.3] |  0.0026 |
+|            |   argmax |       2058 |  8.845e+05 | [       1707,       2409] |  0.1654 |
+|            |      min |       19.9 |      58.58 | [      17.04,      22.76] |  0.6423 |
+|            |   argmin |      71.93 |      105.7 | [       68.1,      75.77] |  0.1912 |
+|            |     mean |      390.5 |      6.518 | [      389.5,      391.4] |  0.1380 |
+|            |      std |      44.93 |       25.6 | [      43.04,      46.82] |  0.0737 |
+|------------|----------|------------|------------|---------------------------|---------|
+|         o3 |      max |       8624 |       4097 | [       8600,       8647] |  0.3778 |
+|            |   argmax |       11.7 |     0.2862 | [       11.5,       11.9] |  0.0000 |
+|            |      min |       3745 |   1.66e+04 | [       3697,       3793] |  0.5270 |
+|            |   argmin |      148.2 |      94.14 | [      144.5,      151.8] |  0.6463 |
+|            |     mean |       6216 |      285.7 | [       6210,       6222] |  0.6502 |
+|            |      std |      247.3 |       1128 | [      234.7,      259.8] |  0.0824 |
+|------------|----------|------------|------------|---------------------------|---------|
+|         o4 |      max |      19.74 |     0.5092 | [      19.47,         20] |  0.1594 |
+|            |   argmax |      53.07 |      36.96 | [       50.8,      55.34] |  0.3321 |
+|            |      min |      4.461 |    0.01765 | [      4.412,      4.511] |  0.9519 |
+|            |   argmin |          0 |          0 | [          0,          0] |    NaN |
+|            |     mean |      16.38 |   0.003763 | [      16.36,      16.41] |  0.9614 |
+|            |      std |      0.653 |   0.004133 | [      0.629,      0.677] |  0.4578 |
+|------------|----------|------------|------------|---------------------------|---------|
+|         o5 |      max |      41.86 |      41.39 | [      39.46,      44.26] |  0.0761 |
+|            |   argmax |      135.7 |       1075 | [      123.4,      147.9] |  0.0021 |
+|            |      min |      11.31 |     0.9338 | [      10.95,      11.67] |  0.1280 |
+|            |   argmin |      24.33 |      142.7 | [      19.87,      28.79] |  0.0000 |
+|            |     mean |      24.61 |    0.02589 | [      24.55,      24.67] |  0.6280 |
+|            |      std |      1.673 |    0.01815 | [      1.623,      1.723] |  0.0457 |
+|------------|----------|------------|------------|---------------------------|---------|
+|         o6 |      max |      3.455 |   0.005314 | [      3.428,      3.482] |  0.5257 |
+|            |   argmax |      148.9 |      109.8 | [        145,      152.8] |  0.5714 |
+|            |      min |     0.7595 |   0.001429 | [     0.7454,     0.7736] |  0.2921 |
+|            |   argmin |      10.33 |     0.2989 | [      10.13,      10.54] |  0.0000 |
+|            |     mean |      2.081 |  8.627e-05 | [      2.078,      2.085] |  0.6190 |
+|            |      std |     0.1371 |  0.0003382 | [     0.1302,      0.144] |  0.0794 |
+-----------------------------------------------------------------------------------------
+```
+
+The last parameter, 0, specifies plain text output. This function can also 
+output a publication quality LaTeX table by setting the last argument to 1:
 
 ```matlab
 stats_table_per_setup(s100v1, 0.05, 1)
 ```
+
+![simout_ex03](https://cloud.githubusercontent.com/assets/3018963/11901414/689d8b34-a5a3-11e5-803a-e5fc0688d09d.png)
 
 The produced LaTeX table requires the [siunitx], [multirow], [booktabs] 
 and [ulem] packages to compile.
