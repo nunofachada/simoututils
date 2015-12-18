@@ -2,9 +2,9 @@
 
 ### File format
 
-The simulation output file format is the same as in the case of the
-[distributional analysis of simulation output](../simout), i.e. TSV 
-(tab-separated values), one column per output, one row per iteration.
+The simulation output file format is the same as in the case of
+[analysis of simulation output](../simout), i.e. TSV (tab-separated values), one
+column per output, one row per iteration.
 
 ### Utilities
 
@@ -44,28 +44,18 @@ datafolder1 = 'path/to/dataset1';
 datafolder2 = 'path/to/dataset2';
 ```
 
-#### Example 1: Compare focal measures of the NetLogo and Java EX implementations of the PPHPC model
+#### Example 1: Compare focal measures of two model implementations
 
-Perform comparison using 10 replications of each implementation with model size
-400, parameter set 1. Replications of the Java EX variant were performed with 12
-threads. For the [stats_gather](stats_gather.m) function:
+The [stats_compare](stats_compare.m) function is used to compare focal measures
+from two or more model implementations by applying the specified statistical
+tests. For this purpose, it uses data obtained with the
+[stats_gather](../simout/stats_gather.m) function.
 
-* The third parameter, 6, corresponds to the number of model outputs. 
-Alternatively, a cell array of strings containing the output names could have
-been used.
-* The fourth parameter, 1000, is the steady-state truncation point.
-
-For the [stats_compare](stats_compare.m) function:
-
-* The first parameter specifies the significance level for the statistical
-  tests.
-* The second parameter specifies the tests to be performed to each of the six
-  statistical summaries for each output. In this case we're performing the
-  _t_-test to all summaries, except **argmax** and **argmin**, to which the
-  Mann-Whitney test is applied instead. The options 'p' and 'np' stand for 
-  parametric and non-parameteric, respectively.
-* The remaining parameters are the statistical summaries returned by the
-[stats_gather](stats_gather.m) function for the implementations to be compared.
+In this example we compare the NetLogo and Java EX implementations of the PPHPC
+model for model size 400, parameter set 1. Replications of the Java EX variant
+were performed with 12 threads. First, we need to obtain the focal measures
+(i.e. statistical summaries of simulation outputs) with the 
+[stats_gather](../simout/stats_gather.m) function:
 
 ```matlab
 % Get stats data for NetLogo implementation, parameter set 1, all sizes
@@ -73,17 +63,47 @@ snl400v1 = stats_gather('NL', [datafolder1 '/simout/NL'], 'stats400v1r*.txt', 6,
 
 % Get stats data for the Java implementation, EX strategy (12 threads), parameter set 1, all sizes
 sjex400v1 = stats_gather('JEX', [datafolder1 '/simout/EX'], 'stats400v1pEXt12r*.txt', 6, 1000);
-
-% Perform comparison
-[ps, h_all] = stats_compare(0.01, {'p', 'np', 'p', 'np', 'p', 'p'}, snl400v1, sjex400v1);
 ```
+
+As described in [analysis of simulation output](../simout), the 3rd parameter,
+6, corresponds to the number of model outputs, while 4th parameter, 1000, is the
+steady-state truncation point. We can now perform the comparison using the
+[stats_compare](stats_compare.m) function:
+
+```matlab
+% Perform comparison
+[ps, h_all] = stats_compare(0.01, {'p', 'np', 'p', 'np', 'p', 'p'}, snl400v1, sjex400v1)
+```
+
+The 1st parameter specifies the significance level for the statistical tests.
+The 2nd parameter specifies the tests to be performed to each of the six 
+statistical summaries for each output. In this case we're performing the
+_t_-test to all summaries, except **argmax** and **argmin**, to which the
+Mann-Whitney test is applied instead. The options 'p' and 'np' stand for
+parametric and non-parametric, respectively.
 
 The [stats_compare](stats_compare.m) function return `ps`, a matrix of 
 _p_-values for the requested tests (rows correspond to outputs, columns to 
 statistical summaries), and `h_all`, containing the number of tests failed for 
 the specified significance level.
 
-#### Example 2: Compare focal measures of all Java variants of the PPHPC model
+```
+ps =
+
+    0.1784    0.8491    0.4536    1.0000    0.9560    0.1666
+    0.0991    0.4727    0.5335    0.0752    0.7231    0.1859
+    0.2515    0.3006    0.2312    0.0852    0.8890    0.1683
+    0.4685    0.8496    0.9354    1.0000    0.8421    0.4394
+    0.7973    0.8796    0.0009    0.3534    0.2200    0.5757
+    0.2443    0.0750    0.1719    1.0000    0.9009    0.1680
+
+
+h_all =
+
+     1
+```
+
+#### Example 2: Compare focal measures of multiple model implementations
 
 The [stats_compare](stats_compare.m) function also allows to compare focal 
 measure from more than two model implementations. If more than two 
@@ -110,10 +130,21 @@ sjer800v2 = stats_gather('ER', [datafolder1 '/simout/ER'], 'stats800v2pERt12r*.t
 sjod800v2 = stats_gather('OD', [datafolder1 '/simout/OD'], 'stats800v2pODb500t12r*.txt', 6, 2000);
 
 % Perform comparison
-ps = stats_compare(0.05, {'p','np','p','np','p','p'}, sjst800v2, sjeq800v2, sjex800v2, sjer800v2, sjod800v2);
+ps = stats_compare(0.05, {'p','np','p','np','p','p'}, sjst800v2, sjeq800v2, sjex800v2, sjer800v2, sjod800v2)
 ```
 
-#### Example 3: Pairwise comparison of all Java variants of the PPHPC model
+```
+ps =
+
+    0.8735    0.5325    1.0000    1.0000    0.7132    0.7257
+    0.4476    0.9051    0.3624    0.5947    0.7011    0.6554
+    0.4227    0.6240    0.8860    0.2442    0.5945    0.6785
+    0.0124    0.5474    0.6447    0.5238    0.7038    0.6182
+    0.8888    0.9622    0.1410    0.1900    0.7182    0.6825
+    0.9306    0.6286    0.4479    0.8377    0.5785    0.6785
+```
+
+#### Example 3: Pairwise comparison of model implementations
 
 When comparing multiple model implementations, if one or more are misaligned, 
 the [stats_compare](stats_compare.m) function will detected a misalignment, but
@@ -121,12 +152,24 @@ will not provide information regarding which implementation is misaligned. The
 [stats_compare_pw](stats_compare_pw.m) function performs pair-wise comparisons 
 of multiple model implementations by outputting a table of failed tests for each
 pair of implementations, thus allowing to detect which implementation(s) is
-(are) misaligned. The following example outputs this table for the 
-data used in the previous example:
+(are) misaligned. The following instruction outputs this table for the data used
+in the previous example:
 
 ```matlab
 % Output table of pair-wise failed tests for significance level 0.05
 stats_compare_pw(0.05, {'p', 'np', 'p', 'np', 'p', 'p'}, sjst800v2, sjeq800v2, sjex800v2, sjer800v2, sjod800v2)
+```
+
+```
+             -----------------------------------------------------------------------
+             |          ST |          EQ |          EX |          ER |          OD |
+------------------------------------------------------------------------------------
+|         ST |           0 |           1 |           1 |           1 |           2 |
+|         EQ |           1 |           0 |           0 |           0 |           1 |
+|         EX |           1 |           0 |           0 |           0 |           0 |
+|         ER |           1 |           0 |           0 |           0 |           1 |
+|         OD |           2 |           1 |           0 |           1 |           0 |
+------------------------------------------------------------------------------------
 ```
 
 #### Example 4: Plot the PDF and CDF of focal measures from one or more model implementations
