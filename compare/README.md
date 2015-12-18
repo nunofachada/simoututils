@@ -197,6 +197,24 @@ sjexdiff800v2 = stats_gather('JEXDIFF', [datafolder2 '/j_ex_diff'], 'stats800v2*
 stats_compare_plot(snl800v2, sjexok800v2, sjexns800v2, sjexdiff800v2);
 ```
 
+_Sheep population_
+![compare_ex04_01](https://cloud.githubusercontent.com/assets/3018963/11904411/d91d552e-a5b7-11e5-8cb2-fcaa8687291d.png)
+
+_Wolf population_
+![compare_ex04_02](https://cloud.githubusercontent.com/assets/3018963/11904410/d9180984-a5b7-11e5-9cf2-15d8eeb50a3a.png)
+
+_Quantity of available grass_
+![compare_ex04_03](https://cloud.githubusercontent.com/assets/3018963/11904409/d915f0fe-a5b7-11e5-87d8-0577c57265bf.png)
+
+_Mean sheep energy_
+![compare_ex04_04](https://cloud.githubusercontent.com/assets/3018963/11904408/d9155f18-a5b7-11e5-9570-95488f6f7642.png)
+
+_Mean wolves energy_
+![compare_ex04_05](https://cloud.githubusercontent.com/assets/3018963/11904406/d914c22e-a5b7-11e5-9de4-4226eb2789e4.png)
+
+_Mean value of the countdown parameter in all cells_
+![compare_ex04_06](https://cloud.githubusercontent.com/assets/3018963/11904407/d915052c-a5b7-11e5-927a-f8fdc73ac497.png)
+
 More details regarding these four implementations and the specific differences
 between them are available in the manuscript 
 [Model-independent comparison of simulation output](http://arxiv.org/abs/1509.09174).
