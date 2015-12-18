@@ -367,14 +367,15 @@ and [ulem] packages to compile.
 #### Example 4: Visually analyze the distributional properties of a focal measure
 
 The [dist_plot_per_fm](dist_plot_per_fm.m) function offers a simple way of
-assessing the distributional properties of a focal measure for different
-model configurations (i.e. different model sizes, different parameter
-set, etc). It works with the data returned by the [stats_gather](stats_gather.m)
-function. 
+assessing the distributional properties of a focal measure for different model
+configurations (i.e. different model sizes, different parameter set, etc). For
+each configuration the function shows an aproximate probability density function
+(PDF), a histogram, and a QQ-plot. The [dist_plot_per_fm](dist_plot_per_fm.m)
+function works with the data returned by [stats_gather](stats_gather.m). 
 
-* For example, lets assess the distributional properties of the PPHPC
-focal measure given by the **argmin** of the _grass quantity_ output for
-parameter set 2 and a number of different model sizes:
+For example, lets assess the distributional properties of the PPHPC focal
+measure given by the **argmin** of the _grass quantity_ output for parameter set
+2 and a number of different model sizes:
 
 ```matlab
 % Get statistical summaries for different model sizes, parameter set 2
@@ -392,9 +393,11 @@ sv2 = {s100v2, s200v2, s400v2, s800v2, s1600v2};
 dist_plot_per_fm(sv2, 3, 4);
 ```
 
-Note that in this example we explicitly specified the output names when
-calling the [stats_gather](stats_gather.m) function. Also, for parameter
-set 2, we set the steady-state truncation point to iteration 2000.
+![simout_ex04](https://cloud.githubusercontent.com/assets/3018963/11901760/3e835fd4-a5a5-11e5-8198-c4658df94629.png)
+
+Note that in this example we explicitly specified the output names when calling
+the [stats_gather](stats_gather.m) function. Also, for parameter set 2, we set
+the steady-state truncation point to iteration 2000.
 
 #### Example 5: LaTeX table with distributional analysis of all focal measures for one setup
 
