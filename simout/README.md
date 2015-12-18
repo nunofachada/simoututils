@@ -401,34 +401,36 @@ the steady-state truncation point to iteration 2000.
 
 #### Example 5: LaTeX table with distributional analysis of all focal measures for one setup
 
-In the article [Towards a standard model...](https://peerj.com/articles/cs-36/)
-a number of [tables](https://doi.org/10.7717/peerj-cs.36/supp-2) 
-containing a detailed distributional analysis of all PPHPC focal 
-measures are provided as supplemental information. Each table displays a
-distributional analysis for one setup, i.e. for one size/parameter set
-combination. The [dist_table_per_setup](dist_table_per_setup.m) 
-returns these tables, accepting a single parameter which corresponds to
-the output of the [stats_gather](stats_gather.m) function. For example,
-to get a table with the distributional analysis of all PPHPC focal
-measures for model size 1600, parameter set 2, only two commands are
-required:
+In the [Towards a standard model...](https://peerj.com/articles/cs-36/) article,
+a number of [tables](https://doi.org/10.7717/peerj-cs.36/supp-2) containing a
+detailed distributional analysis of all PPHPC focal measures are provided as
+supplemental information. Each table displays a distributional analysis for one
+setup, i.e. for one size/parameter set combination. The
+[dist_table_per_setup](dist_table_per_setup.m) produces these tables, accepting
+a single parameter which corresponds to the output of the
+[stats_gather](stats_gather.m) function. For example, to get a table with the
+distributional analysis of all PPHPC focal measures for model size 1600, 
+parameter set 2, only two commands are required:
 
 ```matlab
 outputs = {'$P^s_i$', '$P^w_i$', '$P^c_i$', '$\bar{E}^s_i$', '$\bar{E}^w_i$', '$\bar{C}_i$'};
 s1600v2 = stats_gather('1600v2', [datafolder '/v2'], 'stats1600v2r*.txt', outputs, 2000);
 dist_table_per_setup(s1600v2)
 ```
+
+![simout_ex05](https://cloud.githubusercontent.com/assets/3018963/11902078/432d565a-a5a7-11e5-877f-9e1fe65bfc62.png)
+
 We specify the output names in LaTeX math mode so they appear in the produced
 table as they appear in the article.
 
 #### Example 6: LaTeX table with a distributional analysis of one focal measure for multiple setups
 
-A distributional analysis of a focal measure for multiple setups is often
-useful for evaluating how its distributional properties vary with different
-model configurations/setups. The [dist_table_per_fm](dist_table_per_fm.m)
-function fits this purpose. However, this function returns a partial table, 
-which can have additional columns (specified with the 'pre' parameter) prior to
-the distributional data itself, as well as additional rows, such as headers, 
+A distributional analysis of a focal measure for multiple setups is often useful
+for evaluating how its distributional properties vary with different model
+configurations/setups. The [dist_table_per_fm](dist_table_per_fm.m) function
+fits this purpose. However, this function returns a partial table, which can
+have additional columns (specified with the 'pre' parameter) prior to the
+distributional data itself, as well as additional rows, such as headers,
 footers, similar partial tables for other focal measures, and so on.
 
 Using the PPHPC model as an example, lets output a table with the distributional
@@ -438,7 +440,6 @@ parameter sets are obtained with two separate partial tables, which together
 form the final table:
 
 ```matlab
-
 % Get stats data for parameter set 1, all sizes
 s100v1 = stats_gather('100v1', [datafolder '/v1'], 'stats100v1r*.txt', outputs, 1000);
 s200v1 = stats_gather('200v1', [datafolder '/v1'], 'stats200v1r*.txt', outputs, 1000);
@@ -485,6 +486,8 @@ t = sprintf('%s\n\\end{table}\n', t);
 % Show the table
 t
 ```
+
+![simout_ex06](https://cloud.githubusercontent.com/assets/3018963/11902170/d16d1e46-a5a7-11e5-82a7-f97f74a2982a.png)
 
 [siunitx]: https://www.ctan.org/pkg/siunitx
 [ulem]: https://www.ctan.org/pkg/ulem
