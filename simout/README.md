@@ -167,7 +167,92 @@ steady-state truncation point.
 
 #### Example 2: Get statistical summaries from one replication
 
-The [stats_get](stats_get.m) function is the elementary... TODO
+The [stats_get](stats_get.m) function is the elementary building block of 
+_SiMoAnUtils_ for analyzing simulation output. It is indirectly used by
+practically all distributional analysis functions (via the higher-level
+[stats_gather](stats_gather.m) function). The goal of [stats_get](stats_get.m)
+is to extract statistical summaries from simulation outputs from one file. It
+does this through ancillary `stats_get_*` functions which perform the actual
+extraction. The exact function to use (and consequently, the exact statistical
+summaries to extract) is specified in the first instruction of
+[stats_get](stats_get.m):
+
+```matlab
+sgfun = @stats_get_pphpc;
+```
+
+As shown in the above instruction, the [stats_get_pphpc](stats_get_pphpc.m) is
+the package default. This function returns six statistical summaries, namely the
+maximum (**max**), iteration where maximum occurs (**argmax**), minimum 
+(**min**), iteration where minimum occurs (**argmin**), mean (**mean**), and 
+standard deviation (**std**). The **mean** and **std** summaries are obtained
+during the (user-specified) steady-state phase of the output. These summaries
+[were selected for the PPHPC model](https://peerj.com/articles/cs-36/), but are
+appropriate for any model with tendentiously stable time-series outputs.
+
+In order to use alternative statistical summaries, the user should specify
+another function by editing the above instruction. _SiMoAnUtils_ includes a
+second `stats_get_*` function, [stats_get_iters](stats_get_iters.m), in which
+statistical summaries correspond to output values at user-specified iterations.
+
+Lets get the statistical summaries of the first replication of the PPHPC model
+for size 100 and parameter set 1:
+
+```matlab
+sdata = stats_get(1000, [datafolder '/v1/stats100v1r1.txt'], 6)
+```
+
+The first argument is dependent on the actual `stats_get_*` being used. In this
+case, we're using the package default [stats_get_pphpc](stats_get_pphpc.m)
+function, which requires the user to specify the steady-state truncation point
+(i.e. 1000). The last argument specifies the number of outputs. The function
+returns a _n_ x _m_ matrix of focal measures, with _n_=6 statistical summaries
+and _m_=6 outputs:
+
+```
+sdata =
+
+   1.0e+03 *
+
+    2.5160    0.5260    8.6390    0.0190    0.0331    0.0035
+    0.1530    3.3130    0.0120    0.0690    0.2550    0.1590
+    0.3050    0.0180    3.6530    0.0045    0.0122    0.0007
+    0.0070    0.0860    0.1590         0    0.0150    0.0100
+    1.1854    0.3880    6.2211    0.0164    0.0244    0.0021
+    0.1211    0.0487    0.2731    0.0007    0.0016    0.0002
+```
+
+Changin the `stats_get_*` being used is simple. Lets edit the first instruction
+of the [stats_get](stats_get.m) function, and specify the 
+[stats_get_iters](stats_get_iters.m) function instead:
+
+```matlab
+sgfun = @stats_get_iters;
+```
+
+We can now call [stats_get](stats_get.m) again. Note that the first argument
+now specifies the iterations at which to get output values:
+
+```matlab
+sdata = stats_get([10 100 1000], [datafolder '/v1/stats100v1r1.txt'], 6)
+```
+
+The returned _n_ x _m_ matrix of focal measure now has _n_=3 statistical 
+summaries and _m_=6 outputs:
+
+```
+
+sdata =
+
+   1.0e+03 *
+
+    0.3180    0.2160    8.5940    0.0115    0.0139    0.0007
+    1.9110    0.0240    4.9280    0.0160    0.0246    0.0028
+    1.0060    0.4690    6.6110    0.0170    0.0207    0.0018
+```
+
+For the remainder of this discussion it is assumed that the
+[stats_get_pphpc](stats_get_pphpc.m) function is being used.
 
 #### Example 3: Get and analyze statistical summaries from multiple replications
 
@@ -284,8 +369,8 @@ outputs = {'$P^s_i$', '$P^w_i$', '$P^c_i$', '$\bar{E}^s_i$', '$\bar{E}^w_i$', '$
 s1600v2 = stats_gather('1600v2', [datafolder '/v2'], 'stats1600v2r*.txt', outputs, 2000);
 dist_table_per_setup(s1600v2)
 ```
-We specify the output names in LaTeX math mode so they appear in the
-produced table as they appear in the article.
+We specify the output names in LaTeX math mode so they appear in the produced
+table as they appear in the article.
 
 #### Example 6: LaTeX table with a distributional analysis of one focal measure for multiple setups
 
