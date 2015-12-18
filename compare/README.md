@@ -224,7 +224,7 @@ between them are available in the manuscript
 The [stats_compare_table](stats_compare_table.m) function produces publication
 quality tables of _p_-values in LaTeX. This function accepts four parameters:
 
-1. `tests` - Type of statistical tests to perform (parametric or 
+1. `tests` - Type of statistical tests to perform (parametric or
 non-parametric).
 2. `pthresh` - Minimum value of _p_-values before truncation (e.g. if this value
 is set to 0.001 and a certain _p_-value is less than that, the table will
@@ -250,6 +250,8 @@ s800v2 = {sjst800v2, sjeq800v2, sjex800v2, sjer800v2, sjod800v2};
 stats_compare_table('np', 0.001, 0, {0, s800v2})
 ```
 
+![compare_ex05](https://cloud.githubusercontent.com/assets/3018963/11904709/e54bee80-a5b9-11e5-9c18-feab61382675.png)
+
 As we're only performing one comparison (for model size 800, parameter set 2),
 the third argument is set to 0. For many comparisons, it is preferable to set
 this parameter to 1, as it puts comparisons along columns and outputs along 
@@ -260,7 +262,7 @@ comparison).
 #### Example 6. Multiple comparisons and comparison names
 
 In Table 2 of the [Model-independent comparison...](http://arxiv.org/abs/1509.09174),
-manuscript, three comparisons, I, II, and III, are performed. This is 
+manuscript, three comparisons, I, II, and III, are performed. This is
 appropriate for setting the third argument, `tformat`, to 0, as shown in the
 following code:
 
@@ -278,8 +280,10 @@ sjexdiff400v1 = stats_gather('JEXDIFF', [datafolder2 '/j_ex_diff'], 'stats400v1*
 stats_compare_table({'p', 'np', 'p', 'np', 'p', 'p'}, 0.000001, 0, {'I', {snl400v1, sjexok400v1}}, {'II', {snl400v1, sjexns400v1 }}, {'III', {snl400v1, sjexdiff400v1}})
 ```
 
+![compare_ex06](https://cloud.githubusercontent.com/assets/3018963/11904749/39f23ba6-a5ba-11e5-9f10-d1d42fbd39f8.png)
+
 Here we specify comparison names, I, II, and II, which will be printed in the
-table. Note that, each comparison tests two model implementations. As such the 
+table. Note that each comparison tests two model implementations. As such the 
 resulting _p_-values come from two-sample tests, i.e. from the parametric 
 _t_-test and from the non-parametric Mann-Whitney test.
 
@@ -383,12 +387,12 @@ s1600v2 = {snl1600v2, sjst1600v2, sjeq1600v2, sjex1600v2, sjer1600v2, sjod1600v2
 
 % Output comparison table
 stats_compare_table('np', 0.000001, 1, {{'Param. set 1', '100'}, s100v1}, {{'Param. set 1', '200'}, s200v1}, {{'Param. set 1', '400'}, s400v1}, {{'Param. set 1', '800'}, s800v1}, {{'Param. set 1', '1600'}, s1600v1}, {{'Param. set 2', '100'}, s100v2}, {{'Param. set 2', '200'}, s200v2}, {{'Param. set 2', '400'}, s400v2}, {{'Param. set 2', '800'}, s800v2}, {{'Param. set 2', '1600'}, s1600v2})
-
 ```
+
+![compare_ex07](https://cloud.githubusercontent.com/assets/3018963/11904817/a80b1860-a5ba-11e5-9bb0-38a9ce329b85.png)
 
 We set the `tformat` parameter to 1, as this is more appropriate for larger
 number of comparisons.
-
 
 [siunitx]: https://www.ctan.org/pkg/siunitx
 [ulem]: https://www.ctan.org/pkg/ulem
