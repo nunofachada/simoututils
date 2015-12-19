@@ -28,6 +28,9 @@ function used by other functions, requires LaTeX [siunitx] package)
 * [mavg](mavg.m) - Applies a moving average (low-pass) filter to vector
 _x_ using a window of size _w_.
 
+* [parse_output_names](parse_output_names.m) - Determine effective output names
+and number of outputs.
+
 * [qqcalc](qqcalc.m) - Calculates the (normalized) points for a QQ-plot 
 of the specified sample data versus the normal distribution.
 

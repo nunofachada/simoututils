@@ -2,7 +2,7 @@ function [outputs, num_outputs] = parse_output_names(outputs)
 % PARSE_OUTPUT_NAMES Determine effective output names and number of 
 % outputs.
 %
-%   PARSE_OUTPUT_NAMES(outputs)
+%   [outputs, num_outputs] = PARSE_OUTPUT_NAMES(outputs)
 %
 % Parameters:
 %     outputs - Either an integer representing the number of outputs in 
