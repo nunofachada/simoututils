@@ -1,4 +1,6 @@
-### Core functions
+### Simulation Model Analysis Utilities
+
+#### Core functions
 
 * [output_plot](output_plot.m) - Plot time-series simulation output from one or 
 more replications using one of three approaches: superimposed, extremes or

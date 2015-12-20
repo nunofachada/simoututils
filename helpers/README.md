@@ -1,6 +1,6 @@
 ### Simulation Model Analysis Utilities
 
-#### List of helper functions
+#### Helper functions
 
 * [ci_t](ci_t.m) - Obtain a t-confidence interval.
 

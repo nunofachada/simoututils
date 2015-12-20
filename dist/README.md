@@ -1,4 +1,6 @@
-## Functions for distributional analysis of output
+### Simulation Model Analysis Utilities
+
+#### Functions for distributional analysis of output
 
 * [dist_plot_per_fm](dist_plot_per_fm.m) - Plot the distributional properties of 
 one focal measure (i.e. of a statistical summary of a single output), namely its

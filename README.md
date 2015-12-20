@@ -6,13 +6,13 @@ Simulation Model Analysis Utilities
 A number of [MATLAB]/[Octave] functions and scripts for analyzing
 [output](simout) data from simulation models. These utilities were originally
 developed to analyze the [PPHPC] model, and later generalized to be usable with
-any simulation model with time series outputs.
+stochastic simulation models with time series-like outputs.
 
 These utilities are compatible with GNU Octave. However, note that a number of 
 statistical tests provided by Octave return slightly different _p_-values from
 those returned by the equivalent MATLAB functions.
 
-The following links describe the available functions:
+The following links list the available functions:
 
 * [Core functions](core)
 * [Distributional analysis of output](dist)
@@ -58,8 +58,8 @@ datafolder2 = 'path/to/dataset2';
 datafolder3 = 'path/to/dataset3';
 ```
 
-All the datasets contain output from several implementations of the [PPHPC]
-conceptual model. This model produces six outputs: 
+The datasets contain output from several implementations of the [PPHPC]
+conceptual model, which produces six outputs: 
 
 1. Sheep population
 2. Wolves population
@@ -276,9 +276,10 @@ intervals and the Shapiro-Wilk test. The variables returned by the
 [stats_analyze](core/stats_analyze.m) function have 36 rows, one per focal
 measure. The `m` (mean), `v` (variance), `sw` (_p_-value of the Shapiro-Wilk
 test) and `sk` (skewness) variables have only one column, i.e. one value per
-focal measure, while the `cit` (_t_-confidence interval) and `ciw` (Willink
-confidence interval) variables have two columns, which correspond to the lower
-and upper limits of the respective intervals.
+focal measure, while the `cit` (_t_-confidence interval) and `ciw`
+([Willink confidence interval](https://doi.org/10.1081%2FSTA-200054419))
+variables have two columns, which correspond to the lower and upper limits of
+the respective intervals.
 
 ### Distributional analysis of output
 
@@ -676,7 +677,7 @@ items defining a comparison:
      comparison name; or, c) a cell array of two strings, the first describing a 
      comparison group name, and the second describing a comparison name.
    * Item 2, a cell array of statistical summaries (given by the 
-     [stats_gather](dist/stats_gather.m) function) of the implementations 
+     [stats_gather](core/stats_gather.m) function) of the implementations 
      to be compared.
 
 The following command uses data from example 2 and outputs a table of _p_-values
@@ -838,7 +839,7 @@ number of comparisons.
 
 [Matlab]: http://www.mathworks.com/products/matlab/
 [Octave]: https://gnu.org/software/octave/
-[PPHPC]: https://peerj.com/articles/cs-36/ 
+[PPHPC]: https://github.com/fakenmc/pphpc
 [siunitx]: https://www.ctan.org/pkg/siunitx
 [ulem]: https://www.ctan.org/pkg/ulem
 [multirow]: https://www.ctan.org/pkg/multirow

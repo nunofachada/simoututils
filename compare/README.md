@@ -1,4 +1,6 @@
-## Functions for comparing two or more model implementations
+### Simulation Model Analysis Utilities
+
+#### Functions for comparing two or more model implementations
 
 * [stats_compare](stats_compare.m) - Compare focal measures from two or more 
 model implementations by applying the specified statistical tests.
