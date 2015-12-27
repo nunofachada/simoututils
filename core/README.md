@@ -1,4 +1,4 @@
-### Simulation Model Analysis Utilities
+### Utilities for analyzing simulation output
 
 #### Core functions
 

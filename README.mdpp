@@ -1,32 +1,9 @@
 Utilities for analyzing simulation output
 =========================================
 
-1\.  [What are these utilities?](#whataretheseutilities?)  
-2\.  [File format](#fileformat)  
-3\.  [How to use the utilities](#howtousetheutilities)  
-4\.  [Examples](#examples)  
-4.1\.  [Core functionality](#corefunctionality)  
-4.1.1\.  [Plot simulation output](#plotsimulationoutput)  
-4.1.2\.  [Get statistical summaries from one replication](#getstatisticalsummariesfromonereplication)  
-4.1.3\.  [Get and analyze statistical summaries from multiple replications](#getandanalyzestatisticalsummariesfrommultiplereplications)  
-4.2\.  [Distributional analysis of output](#distributionalanalysisofoutput)  
-4.2.1\.  [Distributional analysis tables](#distributionalanalysistables)  
-4.2.2\.  [Visually analyze the distributional properties of a focal measure](#visuallyanalyzethedistributionalpropertiesofafocalmeasure)  
-4.2.3\.  [LaTeX table with distributional analysis of all focal measures for one setup](#latextablewithdistributionalanalysisofallfocalmeasuresforonesetup)  
-4.2.4\.  [LaTeX table with a distributional analysis of one focal measure for multiple setups](#latextablewithadistributionalanalysisofonefocalmeasureformultiplesetups)  
-4.3\.  [Comparison of model implementations](#comparisonofmodelimplementations)  
-4.3.1\.  [Compare focal measures of two model implementations](#comparefocalmeasuresoftwomodelimplementations)  
-4.3.2\.  [Compare focal measures of multiple model implementations](#comparefocalmeasuresofmultiplemodelimplementations)  
-4.3.3\.  [Pairwise comparison of model implementations](#pairwisecomparisonofmodelimplementations)  
-4.3.4\.  [Plot the PDF and CDF of focal measures from one or more model implementations](#plotthepdfandcdfoffocalmeasuresfromoneormoremodelimplementations)  
-4.3.5\.  [Table with _p_-values from comparison of focal measures from model implementations](#tablewith_p_-valuesfromcomparisonoffocalmeasuresfrommodelimplementations)  
-4.3.6\.  [Example 6. Multiple comparisons and comparison names](#example6.multiplecomparisonsandcomparisonnames)  
-4.3.7\.  [Example 7. Comparison groups](#example7.comparisongroups)  
-5\.  [License](#license)  
+!TOC
 
-<a name="whataretheseutilities?"></a>
-
-## 1\. What are these utilities?
+## What are these utilities?
 
 A number of [MATLAB]/[Octave] functions and scripts for analyzing
 [output](simout) data from simulation models. These utilities were originally
@@ -45,16 +22,12 @@ The following links list the available functions:
 * [Helper functions](helpers)
 * [Third-party functions](3rdparty)
 
-<a name="fileformat"></a>
-
-## 2\. File format
+## File format
 
 These utilities expect files in the TSV (tab-separated values) format, one
 column per output, one row per iteration.
 
-<a name="howtousetheutilities"></a>
-
-## 3\. How to use the utilities
+## How to use the utilities
 
 Start [MATLAB]/[Octave] directly in this folder, or `cd` into this folder and
 execute the [startup](startup.m) script:
@@ -63,9 +36,7 @@ execute the [startup](startup.m) script:
 startup
 ```
 
-<a name="examples"></a>
-
-## 4\. Examples
+## Examples
 
 These examples use the following datasets:
 
@@ -99,13 +70,9 @@ conceptual model, which produces six outputs:
 5. Mean wolves energy
 6. Mean value of the countdown parameter in all cells.
 
-<a name="corefunctionality"></a>
+### Core functionality
 
-### 4.1\. Core functionality
-
-<a name="plotsimulationoutput"></a>
-
-#### 4.1.1\. Plot simulation output
+#### Plot simulation output
 
 Use the [output_plot](core/output_plot.m) to plot outputs from one replication of the
 PPHPC model:
@@ -185,9 +152,7 @@ output_plot([datafolder1 '/v1'], 'stats100v1r*.txt', outputs, 10, [3 3], [1 1 1/
 The moving average type of plot is useful for empirically selecting a 
 steady-state truncation point.
 
-<a name="getstatisticalsummariesfromonereplication"></a>
-
-#### 4.1.2\. Get statistical summaries from one replication
+#### Get statistical summaries from one replication
 
 The [stats_get](core/stats_get.m) function is the elementary building block of 
 _SimOutUtils_ for analyzing simulation output. It is indirectly used by
@@ -277,9 +242,7 @@ sdata =
 For the remainder of this discussion it is assumed that the
 [stats_get_pphpc](core/stats_get_pphpc.m) function is being used.
 
-<a name="getandanalyzestatisticalsummariesfrommultiplereplications"></a>
-
-#### 4.1.3\. Get and analyze statistical summaries from multiple replications
+#### Get and analyze statistical summaries from multiple replications
 
 The [stats_gather](core/stats_gather.m) function extracts statistical summaries
 from simulation outputs from multiple files. Lets get statistical summaries for
@@ -320,13 +283,9 @@ focal measure, while the `cit` (_t_-confidence interval) and `ciw`
 variables have two columns, which correspond to the lower and upper limits of
 the respective intervals.
 
-<a name="distributionalanalysisofoutput"></a>
+### Distributional analysis of output
 
-### 4.2\. Distributional analysis of output
-
-<a name="distributionalanalysistables"></a>
-
-#### 4.2.1\. Distributional analysis tables
+#### Distributional analysis tables
 
 While the data returned by the [stats_analyze](core/stats_analyze.m) is in a
 format adequate for further processing and/or analysis, it is not very human
@@ -398,9 +357,7 @@ stats_table_per_setup(s100v1, 0.05, 1)
 The produced LaTeX table requires the [siunitx], [multirow], [booktabs] 
 and [ulem] packages to compile.
 
-<a name="visuallyanalyzethedistributionalpropertiesofafocalmeasure"></a>
-
-#### 4.2.2\. Visually analyze the distributional properties of a focal measure
+#### Visually analyze the distributional properties of a focal measure
 
 The [dist_plot_per_fm](dist/dist_plot_per_fm.m) function offers a simple way of
 assessing the distributional properties of a focal measure for different model
@@ -436,9 +393,7 @@ Note that in this example we explicitly specified the output names when calling
 the [stats_gather](core/stats_gather.m) function. Also, for parameter set 2, we
 set the steady-state truncation point to iteration 2000.
 
-<a name="latextablewithdistributionalanalysisofallfocalmeasuresforonesetup"></a>
-
-#### 4.2.3\. LaTeX table with distributional analysis of all focal measures for one setup
+#### LaTeX table with distributional analysis of all focal measures for one setup
 
 In the "[Towards a standard model...](https://peerj.com/articles/cs-36/)"
 article, a number of [tables](https://doi.org/10.7717/peerj-cs.36/supp-2)
@@ -462,9 +417,7 @@ dist_table_per_setup(s1600v2)
 We specify the output names in LaTeX math mode so they appear in the produced
 table as they appear in the article.
 
-<a name="latextablewithadistributionalanalysisofonefocalmeasureformultiplesetups"></a>
-
-#### 4.2.4\. LaTeX table with a distributional analysis of one focal measure for multiple setups
+#### LaTeX table with a distributional analysis of one focal measure for multiple setups
 
 A distributional analysis of a focal measure for multiple setups is often useful
 for evaluating how its distributional properties vary with different model
@@ -530,13 +483,9 @@ t
 
 ![simout_ex06](https://cloud.githubusercontent.com/assets/3018963/11902170/d16d1e46-a5a7-11e5-82a7-f97f74a2982a.png)
 
-<a name="comparisonofmodelimplementations"></a>
+### Comparison of model implementations
 
-### 4.3\. Comparison of model implementations
-
-<a name="comparefocalmeasuresoftwomodelimplementations"></a>
-
-#### 4.3.1\. Compare focal measures of two model implementations
+#### Compare focal measures of two model implementations
 
 The [stats_compare](compare/stats_compare.m) function is used to compare focal
 measures from two or more model implementations by applying the specified
@@ -594,9 +543,7 @@ h_all =
      1
 ```
 
-<a name="comparefocalmeasuresofmultiplemodelimplementations"></a>
-
-#### 4.3.2\. Compare focal measures of multiple model implementations
+#### Compare focal measures of multiple model implementations
 
 The [stats_compare](compare/stats_compare.m) function also allows to compare
 focal measure from more than two model implementations. If more than two 
@@ -637,9 +584,7 @@ ps =
     0.9306    0.6286    0.4479    0.8377    0.5785    0.6785
 ```
 
-<a name="pairwisecomparisonofmodelimplementations"></a>
-
-#### 4.3.3\. Pairwise comparison of model implementations
+#### Pairwise comparison of model implementations
 
 When comparing multiple model implementations, if one or more are misaligned, 
 the [stats_compare](compare/stats_compare.m) function will detected a
@@ -667,9 +612,7 @@ stats_compare_pw(0.05, {'p', 'np', 'p', 'np', 'p', 'p'}, sjst800v2, sjeq800v2, s
 ------------------------------------------------------------------------------------
 ```
 
-<a name="plotthepdfandcdfoffocalmeasuresfromoneormoremodelimplementations"></a>
-
-#### 4.3.4\. Plot the PDF and CDF of focal measures from one or more model implementations
+#### Plot the PDF and CDF of focal measures from one or more model implementations
 
 In this example we have two PPHPC implementations which produce equivalent
 results (NLOK and JEXOK), and two other which display slightly different
@@ -716,9 +659,7 @@ More details regarding these four implementations and the specific differences
 between them are available in the manuscript 
 "[Model-independent comparison of simulation output](http://arxiv.org/abs/1509.09174)".
 
-<a name="tablewith_p_-valuesfromcomparisonoffocalmeasuresfrommodelimplementations"></a>
-
-#### 4.3.5\. Table with _p_-values from comparison of focal measures from model implementations
+#### Table with _p_-values from comparison of focal measures from model implementations
 
 The [stats_compare_table](compare/stats_compare_table.m) function produces
 publication quality tables of _p_-values in LaTeX. This function accepts four
@@ -759,9 +700,7 @@ rows. The first item in the final argument is set to 0, such that the comparison
 name is not printed (which makes sense when the table comprises a single
 comparison).
 
-<a name="example6.multiplecomparisonsandcomparisonnames"></a>
-
-#### 4.3.6\. Example 6. Multiple comparisons and comparison names
+#### Example 6. Multiple comparisons and comparison names
 
 In Table 2 of the "[Model-independent comparison...](http://arxiv.org/abs/1509.09174)",
 manuscript, three comparisons, I, II, and III, are performed. This is
@@ -789,9 +728,7 @@ table. Note that each comparison tests two model implementations. As such the
 resulting _p_-values come from two-sample tests, i.e. from the parametric 
 _t_-test and from the non-parametric Mann-Whitney test.
 
-<a name="example7.comparisongroups"></a>
-
-#### 4.3.7\. Example 7. Comparison groups
+#### Example 7. Comparison groups
 
 In Table 8 of the "[Parallelization Strategies...](http://arxiv.org/abs/1507.04047)"
 manuscript, ten comparisons are performed. Each comparison is associated with a
@@ -898,9 +835,7 @@ stats_compare_table('np', 0.000001, 1, {{'Param. set 1', '100'}, s100v1}, {{'Par
 We set the `tformat` parameter to 1, as this is more appropriate for larger
 number of comparisons.
 
-<a name="license"></a>
-
-## 5\. License
+## License
 
 [MIT License](LICENSE)
 
