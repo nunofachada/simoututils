@@ -1,5 +1,6 @@
 function [m, v, cit, ciw, sw, sk] = stats_analyze(data, alpha)
-% STATS_ANALYZE Analyze statistical summaries taken from simulation output.
+% STATS_ANALYZE Statistically analyze samples of focal measures, i.e. samples of
+% statistical summaries taken from simulation output.
 %
 %   [m, v, cit, ciw, sw, sk] = STATS_ANALYZE(data, alpha)
 %
