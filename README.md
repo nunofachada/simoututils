@@ -29,9 +29,11 @@ Utilities for analyzing simulation output
 ## 1\. What are these utilities?
 
 A number of [MATLAB]/[Octave] functions and scripts for analyzing
-[output](simout) data from simulation models. These utilities were originally
-developed to analyze the [PPHPC] model, and later generalized to be usable with
-stochastic simulation models with time series-like outputs.
+output data from simulation models, as well as for producing publication quality
+tables and figures (the latter via the excelent [matlab2tikz] script). These
+utilities were originally developed to analyze the [PPHPC] model, and later
+generalized to be usable with stochastic simulation models with time series-like
+outputs.
 
 These utilities are compatible with GNU Octave. However, note that a number of 
 statistical tests provided by Octave return slightly different _p_-values from
@@ -56,8 +58,9 @@ column per output, one row per iteration.
 
 ## 3\. How to use the utilities
 
-Start [MATLAB]/[Octave] directly in this folder, or `cd` into this folder and
-execute the [startup](startup.m) script:
+Clone or download the utilities to any folder. Then, either start 
+[MATLAB]/[Octave] directly in this folder, or `cd` into this folder and execute
+the [startup](startup.m) script:
 
 ```
 startup
@@ -907,6 +910,7 @@ number of comparisons.
 [Matlab]: http://www.mathworks.com/products/matlab/
 [Octave]: https://gnu.org/software/octave/
 [PPHPC]: https://github.com/fakenmc/pphpc
+[matlab2tikz]: http://www.mathworks.com/matlabcentral/fileexchange/22022-matlab2tikz-matlab2tikz
 [siunitx]: https://www.ctan.org/pkg/siunitx
 [ulem]: https://www.ctan.org/pkg/ulem
 [multirow]: https://www.ctan.org/pkg/multirow

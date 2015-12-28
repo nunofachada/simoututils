@@ -25,7 +25,7 @@ function stats = stats_gather(name, folder, files, outputs, args)
 %                     latex - Cell array of strings containing the names of 
 %                             the statistical measures in LaTeX format.
 %             sdata - A n x m matrix, with n observations (from n files) 
-%                     and m is the number of statistical summaries.
+%                     and m focal measures.
 %
 % Details:
 %   The format of the data in each file is the following: columns 
