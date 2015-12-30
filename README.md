@@ -126,23 +126,22 @@ following way:
 
 ```matlab
 outputs = {'SheepPop', 'WolfPop', 'GrassQty', 'SheepEnergy', 'WolfEnergy', 'GrassEnergy'};
-output_plot([datafolder1 '/v1'], 'stats100v1r1.txt', outputs, 'a', [3 3]);
+output_plot([datafolder1 '/v1'], 'stats100v1r1.txt', outputs, 'layout', [3 3], 'Colors', {'b', 'r', 'g'});
 ```
 
 ![simout_ex01_02](https://cloud.githubusercontent.com/assets/3018963/11877082/02217ffa-a4e5-11e5-9729-ed5678443c96.png)
 ![simout_ex01_03](https://cloud.githubusercontent.com/assets/3018963/11877083/0230e2a6-a4e5-11e5-884f-fc6140e258af.png)
 
-Here we specify proper output names in the 3rd parameter, the type of plot in
-the 4th parameter (i.e. plot **a**ll available replications), and the layout
-of the figures in the 5th parameter (i.e. plot 3 outputs in one figure, and
-the remaining 3 in another figure). Much better now. However, the 3rd and 6th 
-outputs (GrassQty and GrassEnergy, respectively) are still somewhat out of scale
-with the remaining outputs. This can be solved by passing a scale vector as the 
-6th parameter:
+Here we specify proper output names in the 3rd parameter, and a number of
+optional key-value arguments, namely the 'layout' of the figures (i.e. plot 3
+outputs in one figure, and the remaining 3 in another figure), and the 'Colors'
+to use for each output. Much better now. However, the 3rd and 6th outputs
+(GrassQty and GrassEnergy, respectively) are still somewhat out of scale with
+the remaining outputs. This can be solved by specifying the 'scale' option:
 
 ```matlab
 outputs = {'SheepPop', 'WolfPop', 'GrassQty/4', 'SheepEnergy', 'WolfEnergy', '4*GrassEnergy'};
-output_plot([datafolder1 '/v1'], 'stats100v1r1.txt', outputs, 'a', [3 3], [1 1 1/4 1 1 4]);
+output_plot([datafolder1 '/v1'], 'stats100v1r1.txt', outputs, 'layout', [3 3], 'Colors', {'b', 'r', 'g'}, 'scale', [1 1 1/4 1 1 4]);
 ```
 
 ![simout_ex01_04](https://cloud.githubusercontent.com/assets/3018963/11877084/02356862-a4e5-11e5-8c79-06a85fda0a67.png)
@@ -152,7 +151,7 @@ The plot looks good now. In order to plot outputs from multiple replications, we
 simply use wildcards to load more than one file:
 
 ```matlab
-output_plot([datafolder1 '/v1'], 'stats100v1r*.txt', outputs, 'a', [3 3], [1 1 1/4 1 1 4]);
+output_plot([datafolder1 '/v1'], 'stats100v1r*.txt', outputs, 'layout', [3 3], 'Colors', {'b', 'r', 'g'}, 'scale', [1 1 1/4 1 1 4]);
 ```
 
 ![simout_ex01_06](https://cloud.githubusercontent.com/assets/3018963/11877088/023508a4-a4e5-11e5-91d0-1cc2274a3537.png)
@@ -162,24 +161,24 @@ When plotting multiple replications in this way, the figures tend to look
 somewhat heavy and slow to manipulate. We could alternatively plot only the
 output extremes (minimum and maximum of individual outputs at each iteration),
 and fill the space between with the output color. This can be accomplished by 
-specifying type **f**ill as the 4th parameter:
+specifying the **f**ill 'type':
 
 ```matlab
-output_plot([datafolder1 '/v1'], 'stats100v1r*.txt', outputs, 'f', [3 3], [1 1 1/4 1 1 4]);
+output_plot([datafolder1 '/v1'], 'stats100v1r*.txt', outputs, 'type', 'f', 'layout', [3 3], 'Colors', {'b', 'r', 'g'}, 'scale', [1 1 1/4 1 1 4]);
 ```
 
 ![simout_ex01_08](https://cloud.githubusercontent.com/assets/3018963/11877087/0238c8b8-a4e5-11e5-9663-bf792e8a289e.png)
 ![simout_ex01_09](https://cloud.githubusercontent.com/assets/3018963/11877089/0247e3b6-a4e5-11e5-9be5-aa0b073e185d.png)
 
 Finally, it's also possible to visualize the moving average of each output over
-multiple replications by passing a positive integer as the 4th parameter. This 
+multiple replications by passing a positive integer as the 'type' option. This 
 positive integer is the window size with which to smooth the output. A value of 
 zero is equivalent to no smoothing, i.e. the function will simply plot the 
 averaged outputs. A value of 10 offers a good balance between rough and overly 
 smooth plots:
 
 ```matlab
-output_plot([datafolder1 '/v1'], 'stats100v1r*.txt', outputs, 10, [3 3], [1 1 1/4 1 1 4]);
+output_plot([datafolder1 '/v1'], 'stats100v1r*.txt', outputs, 'type', 10, 'layout', [3 3], 'Colors', {'b', 'r', 'g'}, 'scale', [1 1 1/4 1 1 4]);
 ```
 
 ![simout_ex01_10](https://cloud.githubusercontent.com/assets/3018963/11877090/024d2362-a4e5-11e5-908f-533e5dca8d8a.png)
