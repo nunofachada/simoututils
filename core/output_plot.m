@@ -6,31 +6,39 @@ function [d, h] = output_plot(folder, files, outputs, varargin)
 %   [d, h] = OUTPUT_PLOT(folder, files, outputs, varargin)
 %
 % Parameters:
-%      folder - Folder containing simulation output files.
-%       files - Simulation output files (use wildcards for more than one
-%               file).
-%     outputs - Either an integer representing the number of outputs in 
-%               each file or a cell array of strings with the output names.
-%               In the former case, output names will be 'o1', 'o2', etc.
-%        type - Type of plot:
-%               'a' - Superimposed outputs (default).
-%               'f' - Plot filled area encompassed by output extremes.
-%               0...w - Moving average, window size w.
-%      layout - Vector of integers specifying how many outputs to plot in
-%               each figure. Number of elements in vector will correspond
-%               to the number of figures, while the value of each element
-%               in vector will correspond to the number of outputs plotted 
-%               in each figure. By default all outputs are plotted in the 
-%               same figure.
-%       scale - Values in this vector are element-wise multiplied by the
-%               corresponding outputs, and are used to scale outputs. If
-%               only one element is given, all outputs are multiplied by
-%               this element. Default is 1.
-%       iters - Number of iterations to plot (default is 0, i.e., plot all
-%               iterations).
-%      colors - Cell array of strings specifying colors with which to plot 
-%               each output within each figure. Default is 
-%               {'b', 'r', 'g', 'c', 'm', 'y', 'k'}.
+%   folder - Folder containing simulation output files.
+%    files - Simulation output files (use wildcards for more than one
+%            file).
+%  outputs - Either an integer representing the number of outputs in 
+%            each file or a cell array of strings with the output names.
+%            In the former case, output names will be 'o1', 'o2', etc.
+% varargin - Optional parameters as key-value pairs:
+%          'type' - Type of plot:
+%                   'a' - Superimposed outputs (default).
+%                   'f' - Plot filled area encompassed by output extremes.
+%                    w  - Moving average plot, w is an integer representing
+%                        window size.
+%        'layout' - Vector of integers specifying how many outputs to plot
+%                   in each figure. Number of elements in vector will
+%                   correspond to the number of figures, while the value of
+%                   each element in vector will correspond to the number of
+%                   outputs plotted in each figure. By default all outputs
+%                   are plotted in the same figure.
+%         'scale' - Values in this vector are element-wise multiplied by
+%                   the corresponding outputs, and are used to scale
+%                   outputs. If only one element is given, all outputs are
+%                   multiplied by this element. Default is 1.
+%         'iters' - Number of iterations to plot (default is 0, i.e., plot
+%                   all iterations).
+%        'Colors' - Each of these options is a cell array specifying
+%    'LineStyles'   LineSpecs with which to plot individual outputs. If
+%    'LineWidths'   there are more outputs than specs in the cell array,
+%       'Markers'   the given specs are repeated. For 'f'type plots, these 
+%'MarkerEdgeColors' options are interpreted as PatchSpecs, with 'Colors'
+%'MarkerFaceColors' corresponding to 'FaceColors'. 'EdgeColors' is only
+%   'MarkerSizes'   used in PatchSpecs. See help for LineSpec and 
+%    'EdgeColors'   PatchSpec for more information on the available
+%                   options.
 %
 % Outputs:
 %    d - Matrix containing what was plotted. First dimension corresponds to
@@ -130,7 +138,7 @@ if type == 'a' % All, superimposed
             for i = i1:i2
                 
                 % Get line properties for current output
-                lp = struct2cell(lineprops(i - i1 + 1));
+                lp = struct2cell(lineprops(i));
                 
                 % Plot current output
                 plot(all_data(i, 1:iters, f) * scale(i), lp{:});
@@ -185,12 +193,11 @@ elseif type == 'f' % Filled
         for i = i1:i2
 
             % Get patch properties for current output
-            pp = struct2cell(patchprops(i - i1 + 1));
+            pp = struct2cell(patchprops(i));
                 
             % Plot extremes for current output
             fill_between(x, squeeze(d(i, :, 1)) * scale(i), ...
-                squeeze(d(i, :, 2)) * scale(i), ...
-                1, pp{:});
+                squeeze(d(i, :, 2)) * scale(i), 1, pp{:});
     
         end;
         
@@ -239,7 +246,7 @@ elseif isnumeric(type) && type >= 0 % Moving average
         for i = i1:i2
             
             % Get line properties for current output
-            lp = struct2cell(lineprops(i - i1 + 1));
+            lp = struct2cell(lineprops(i));
 
             % Plot moving average for current output
             plot(d(i, :) * scale(i), lp{:});
@@ -271,19 +278,17 @@ end;
 function [type, layout, scale, iters, lineprops, patchprops] = ...
     parse_args(num_outputs, args)
 
-
-
-% Default values
-
-lineprops = struct();
-patchprops = struct();
-
+% Some default values
 type = 'a';
 layout = num_outputs;
 scale = ones(1, num_outputs);
 iters = 0;
-Colors = exp_spec({'b', 'r', 'g', 'c', 'm', 'y', 'k'}, num_outputs);
+Colors = adjust_spec({'b', 'r', 'g', 'c', 'm', 'y', 'k'}, num_outputs);
+
+% Line and patch properties, initially only set default colors
 pidxs = 1:num_outputs;
+lineprops = struct();
+patchprops = struct();
 [lineprops(pidxs).Colors_tag] = deal('Color');
 [lineprops(pidxs).Colors] = deal(Colors{:});
 [patchprops(pidxs).FaceColors_tag] = deal('FaceColor');
@@ -322,7 +327,7 @@ if numArgs > 0
             elseif strcmp(args{i}, 'Colors')
                 
                 % Colors
-                Colors = exp_spec(args{i + 1}, num_outputs);
+                Colors = adjust_spec(args{i + 1}, num_outputs);
                 [lineprops(pidxs).Colors_tag] = deal('Color');
                 [lineprops(pidxs).Colors] = deal(Colors{:});
                 [patchprops(pidxs).FaceColors_tag] = deal('FaceColor');
@@ -331,7 +336,7 @@ if numArgs > 0
             elseif strcmp(args{i}, 'LineStyles')
 
                 % LineStyles
-                LineStyles = exp_spec(args{i + 1}, num_outputs);
+                LineStyles = adjust_spec(args{i + 1}, num_outputs);
                 [lineprops(pidxs).LineStyles_tag] = deal('LineStyle');
                 [lineprops(pidxs).LineStyles] = deal(LineStyles{:});
                 [patchprops(pidxs).LineStyles_tag] = deal('LineStyle');
@@ -340,7 +345,7 @@ if numArgs > 0
             elseif strcmp(args{i}, 'LineWidths')
 
                 % LineWidths
-                LineWidths = exp_spec(args{i + 1}, num_outputs);
+                LineWidths = adjust_spec(args{i + 1}, num_outputs);
                 [lineprops(pidxs).LineWidths_tag] = deal('LineWidth');
                 [lineprops(pidxs).LineWidths] = deal(LineWidths{:});
                 [patchprops(pidxs).LineWidths_tag] = deal('LineWidth');
@@ -349,7 +354,7 @@ if numArgs > 0
             elseif strcmp(args{i}, 'Markers')
                 
                 % Markers
-                Markers = exp_spec(args{i + 1}, num_outputs);
+                Markers = adjust_spec(args{i + 1}, num_outputs);
                 [lineprops(pidxs).Markers_tag] = deal('Marker');
                 [lineprops(pidxs).Markers] = deal(Markers{:});
                 [patchprops(pidxs).Markers_tag] = deal('Marker');
@@ -358,25 +363,33 @@ if numArgs > 0
             elseif strcmp(args{i}, 'MarkerEdgeColors')
                 
                 % MarkerEdgeColors
-                MarkerEdgeColors = exp_spec(args{i + 1}, num_outputs);
-                [lineprops(pidxs).MarkerEdgeColors_tag] = deal('MarkerEdgeColor');
-                [lineprops(pidxs).MarkerEdgeColors] = deal(MarkerEdgeColors{:});
-                [patchprops(pidxs).MarkerEdgeColors_tag] = deal('MarkerEdgeColor');
-                [patchprops(pidxs).MarkerEdgeColors] = deal(MarkerEdgeColors{:});                
+                MarkerEdgeColors = adjust_spec(args{i + 1}, num_outputs);
+                [lineprops(pidxs).MarkerEdgeColors_tag] = ...
+                    deal('MarkerEdgeColor');
+                [lineprops(pidxs).MarkerEdgeColors] = ...
+                    deal(MarkerEdgeColors{:});
+                [patchprops(pidxs).MarkerEdgeColors_tag] = ...
+                    deal('MarkerEdgeColor');
+                [patchprops(pidxs).MarkerEdgeColors] = ...
+                    deal(MarkerEdgeColors{:});                
                 
             elseif strcmp(args{i}, 'MarkerFaceColors')
 
                 % MarkerFaceColors
-                MarkerFaceColors = exp_spec(args{i + 1}, num_outputs);
-                [lineprops(pidxs).MarkerFaceColors_tag] = deal('MarkerFaceColor');
-                [lineprops(pidxs).MarkerFaceColors] = deal(MarkerFaceColors{:});
-                [patchprops(pidxs).MarkerFaceColors_tag] = deal('MarkerFaceColor');
-                [patchprops(pidxs).MarkerFaceColors] = deal(MarkerFaceColors{:});                
+                MarkerFaceColors = adjust_spec(args{i + 1}, num_outputs);
+                [lineprops(pidxs).MarkerFaceColors_tag] = ...
+                    deal('MarkerFaceColor');
+                [lineprops(pidxs).MarkerFaceColors] = ...
+                    deal(MarkerFaceColors{:});
+                [patchprops(pidxs).MarkerFaceColors_tag] = ...
+                    deal('MarkerFaceColor');
+                [patchprops(pidxs).MarkerFaceColors] = ...
+                    deal(MarkerFaceColors{:});                
 
             elseif strcmp(args{i}, 'MarkerSizes')
                 
                 % MarkerSizes
-                MarkerSizes = exp_spec(args{i + 1}, num_outputs);
+                MarkerSizes = adjust_spec(args{i + 1}, num_outputs);
                 [lineprops(pidxs).MarkerSizes_tag] = deal('MarkerSize');
                 [lineprops(pidxs).MarkerSizes] = deal(MarkerSizes{:});
                 [patchprops(pidxs).MarkerSizes_tag] = deal('MarkerSize');
@@ -385,7 +398,7 @@ if numArgs > 0
             elseif strcmp(args{i}, 'EdgeColors')
 
                 % EdgeColors, patch properties only
-                EdgeColors = exp_spec(args{i + 1}, num_outputs);
+                EdgeColors = adjust_spec(args{i + 1}, num_outputs);
                 [patchprops(pidxs).EdgeColors_tag] = deal('EdgeColor');
                 [patchprops(pidxs).EdgeColors] = deal(EdgeColors{:});
                 
@@ -410,17 +423,27 @@ if numel(scale) == 1
 end;
 
 % % % % % % % % % % % % % % % % % % % % % % % % 
-% Helper function to expand line specs and patch specs
+% Helper function to adjust line specs and patch specs
 % to match the number of outputs to plot
 % % % % % % % % % % % % % % % % % % % % % % % %
-function spec = exp_spec(spec, num_outputs)
+function spec = adjust_spec(spec, num_outputs)
 
+% If spec is not in cell format, put it in cell format
 if ~iscell(spec)
     spec = {spec};
 end;
+
+% Do we need to expand the spec to have number of elements equal to number
+% of outputs?
 if numel(spec) < num_outputs
+    
+    % Repeatly concatenate given spec until there are more elements than
+    % outputs 
     while numel(spec) < num_outputs
         spec = {spec{:}, spec{:}};
     end;
+    
 end;
+
+% Make sure there are no more specs than outputs
 spec = spec(1:num_outputs);
