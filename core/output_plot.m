@@ -69,13 +69,13 @@ else
 end;
 
 % ARGS HERE
-iters = size(data, 1);
+[type, layout, scale, iters, lineprops, patchprops] = ...
+    parse_args(num_outputs, varargin);
 
 % If iterations were not specified, use all available iterations
 if iters == 0
     iters = size(data, 1);
 end;
-
 
 % Initialize data vector
 all_data = zeros(num_outputs, iters, num_files);
@@ -129,9 +129,11 @@ if type == 'a' % All, superimposed
             % Cycle through outputs to plot in current figure
             for i = i1:i2
                 
+                % Get line properties for current output
+                lp = struct2cell(lineprops(i - i1 + 1));
+                
                 % Plot current output
-                plot(all_data(i, 1:iters, f) * scale(i), ...
-                    'Color', colors{i - i1 + 1});
+                plot(all_data(i, 1:iters, f) * scale(i), lp{:});
     
             end;
             
@@ -181,11 +183,14 @@ elseif type == 'f' % Filled
         
         % Cycle through outputs to plot in current figure
         for i = i1:i2
+
+            % Get patch properties for current output
+            pp = struct2cell(patchprops(i - i1 + 1));
                 
             % Plot extremes for current output
             fill_between(x, squeeze(d(i, :, 1)) * scale(i), ...
                 squeeze(d(i, :, 2)) * scale(i), ...
-                1, 'FaceColor', colors{i - i1 + 1});
+                1, pp{:});
     
         end;
         
@@ -233,8 +238,11 @@ elseif isnumeric(type) && type >= 0 % Moving average
         % Cycle through outputs to plot in current figure
         for i = i1:i2
             
+            % Get line properties for current output
+            lp = struct2cell(lineprops(i - i1 + 1));
+
             % Plot moving average for current output
-            plot(d(i, :) * scale(i), 'Color', colors{i - i1 + 1});
+            plot(d(i, :) * scale(i), lp{:});
     
         end;
         
@@ -274,27 +282,12 @@ type = 'a';
 layout = num_outputs;
 scale = ones(1, num_outputs);
 iters = 0;
-Colors = {'b', 'r', 'g', 'c', 'm', 'y', 'k'};
-
-%Color
-%LineStyle
-%LineWidth
-%Marker
-%MarkerEdgeColor
-%MarkerFaceColor
-%MarkerSize
-
-
-%EdgeColor
-%FaceColor
-%---
-%LineStyle
-%LineWidth
-%Marker
-%MarkerEdgeColor
-%MarkerFaceColor
-%MarkerSize
-
+Colors = exp_spec({'b', 'r', 'g', 'c', 'm', 'y', 'k'}, num_outputs);
+pidxs = 1:num_outputs;
+[lineprops(pidxs).Colors_tag] = deal('Color');
+[lineprops(pidxs).Colors] = deal(Colors{:});
+[patchprops(pidxs).FaceColors_tag] = deal('FaceColor');
+[patchprops(pidxs).FaceColors] = deal(Colors{:});
 
 % Check if any arguments are given
 numArgs = size(args, 2);
@@ -328,23 +321,74 @@ if numArgs > 0
                 
             elseif strcmp(args{i}, 'Colors')
                 
-                Colors = exp_spec(args{i + 1});
-                [lineprops(:).Colors] = Colors{:};
+                % Colors
+                Colors = exp_spec(args{i + 1}, num_outputs);
+                [lineprops(pidxs).Colors_tag] = deal('Color');
+                [lineprops(pidxs).Colors] = deal(Colors{:});
+                [patchprops(pidxs).FaceColors_tag] = deal('FaceColor');
+                [patchprops(pidxs).FaceColors] = deal(Colors{:});
 
             elseif strcmp(args{i}, 'LineStyles')
-                
+
+                % LineStyles
+                LineStyles = exp_spec(args{i + 1}, num_outputs);
+                [lineprops(pidxs).LineStyles_tag] = deal('LineStyle');
+                [lineprops(pidxs).LineStyles] = deal(LineStyles{:});
+                [patchprops(pidxs).LineStyles_tag] = deal('LineStyle');
+                [patchprops(pidxs).LineStyles] = deal(LineStyles{:});
+
             elseif strcmp(args{i}, 'LineWidths')
+
+                % LineWidths
+                LineWidths = exp_spec(args{i + 1}, num_outputs);
+                [lineprops(pidxs).LineWidths_tag] = deal('LineWidth');
+                [lineprops(pidxs).LineWidths] = deal(LineWidths{:});
+                [patchprops(pidxs).LineWidths_tag] = deal('LineWidth');
+                [patchprops(pidxs).LineWidths] = deal(LineWidths{:});
                 
             elseif strcmp(args{i}, 'Markers')
                 
+                % Markers
+                Markers = exp_spec(args{i + 1}, num_outputs);
+                [lineprops(pidxs).Markers_tag] = deal('Marker');
+                [lineprops(pidxs).Markers] = deal(Markers{:});
+                [patchprops(pidxs).Markers_tag] = deal('Marker');
+                [patchprops(pidxs).Markers] = deal(Markers{:});
+                
             elseif strcmp(args{i}, 'MarkerEdgeColors')
                 
-            elseif strcmp(args{i}, 'MarkerFaceColors')
+                % MarkerEdgeColors
+                MarkerEdgeColors = exp_spec(args{i + 1}, num_outputs);
+                [lineprops(pidxs).MarkerEdgeColors_tag] = deal('MarkerEdgeColor');
+                [lineprops(pidxs).MarkerEdgeColors] = deal(MarkerEdgeColors{:});
+                [patchprops(pidxs).MarkerEdgeColors_tag] = deal('MarkerEdgeColor');
+                [patchprops(pidxs).MarkerEdgeColors] = deal(MarkerEdgeColors{:});                
                 
+            elseif strcmp(args{i}, 'MarkerFaceColors')
+
+                % MarkerFaceColors
+                MarkerFaceColors = exp_spec(args{i + 1}, num_outputs);
+                [lineprops(pidxs).MarkerFaceColors_tag] = deal('MarkerFaceColor');
+                [lineprops(pidxs).MarkerFaceColors] = deal(MarkerFaceColors{:});
+                [patchprops(pidxs).MarkerFaceColors_tag] = deal('MarkerFaceColor');
+                [patchprops(pidxs).MarkerFaceColors] = deal(MarkerFaceColors{:});                
+
             elseif strcmp(args{i}, 'MarkerSizes')
+                
+                % MarkerSizes
+                MarkerSizes = exp_spec(args{i + 1}, num_outputs);
+                [lineprops(pidxs).MarkerSizes_tag] = deal('MarkerSize');
+                [lineprops(pidxs).MarkerSizes] = deal(MarkerSizes{:});
+                [patchprops(pidxs).MarkerSizes_tag] = deal('MarkerSize');
+                [patchprops(pidxs).MarkerSizes] = deal(MarkerSizes{:});
                 
             elseif strcmp(args{i}, 'EdgeColors')
 
+                % EdgeColors, patch properties only
+                EdgeColors = exp_spec(args{i + 1}, num_outputs);
+                [patchprops(pidxs).EdgeColors_tag] = deal('EdgeColor');
+                [patchprops(pidxs).EdgeColors] = deal(EdgeColors{:});
+                
             else
                 
                 % Oops... unknown parameter
@@ -371,12 +415,12 @@ end;
 % % % % % % % % % % % % % % % % % % % % % % % %
 function spec = exp_spec(spec, num_outputs)
 
+if ~iscell(spec)
+    spec = {spec};
+end;
 if numel(spec) < num_outputs
-    if ~iscell(spec)
-        spec = {spec};
-    end;
     while numel(spec) < num_outputs
         spec = {spec{:}, spec{:}};
     end;
 end;
-spec = spec{1:num_outputs};
+spec = spec(1:num_outputs);
