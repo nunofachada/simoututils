@@ -1,10 +1,9 @@
-function [d, h] = output_plot(...
-    folder, files, outputs, type, layout, scale, iters, colors)
+function [d, h] = output_plot(folder, files, outputs, varargin)
 % OUTPUT_PLOT Plot time-series simulation output from one or more 
 % replications using one of three approaches: superimposed, extremes or
 % moving average.
 %
-%   [d, h] = OUTPUT_PLOT(folder, file, outputs, type, layout, scale, iters, colors)
+%   [d, h] = OUTPUT_PLOT(folder, files, outputs, varargin)
 %
 % Parameters:
 %      folder - Folder containing simulation output files.
@@ -69,32 +68,14 @@ else
     [outputs, num_outputs] = parse_output_names(outputs);
 end;
 
-% Default type
-if nargin < 4
-    type = 'a';
-end;
+% ARGS HERE
+iters = size(data, 1);
 
-% Default layout
-if nargin < 5
-    layout = num_outputs;
-end;
-
-% Default scale
-if nargin < 6
-    scale = ones(1, num_outputs);
-elseif numel(scale) == 1
-    scale = scale * ones(1, num_outputs);
-end;
-
-% Default number of iterations
-if nargin < 7 || iters == 0
+% If iterations were not specified, use all available iterations
+if iters == 0
     iters = size(data, 1);
 end;
 
-% Default colors
-if nargin < 8
-    colors = {'b', 'r', 'g', 'c', 'm', 'y', 'k'}; 
-end;
 
 % Initialize data vector
 all_data = zeros(num_outputs, iters, num_files);
@@ -150,7 +131,7 @@ if type == 'a' % All, superimposed
                 
                 % Plot current output
                 plot(all_data(i, 1:iters, f) * scale(i), ...
-                    colors{i - i1 + 1});
+                    'Color', colors{i - i1 + 1});
     
             end;
             
@@ -253,8 +234,7 @@ elseif isnumeric(type) && type >= 0 % Moving average
         for i = i1:i2
             
             % Plot moving average for current output
-            plot(d(i, :) * scale(i), ...
-                colors{i - i1 + 1});
+            plot(d(i, :) * scale(i), 'Color', colors{i - i1 + 1});
     
         end;
         
@@ -277,7 +257,126 @@ else % Unknown type
 end;
 
 
+% % % % % % % % % % % % % % % % % % % % % % % %
+% Helper function to parse optional arguments %
+% % % % % % % % % % % % % % % % % % % % % % % %
+function [type, layout, scale, iters, lineprops, patchprops] = ...
+    parse_args(num_outputs, args)
 
 
 
+% Default values
 
+lineprops = struct();
+patchprops = struct();
+
+type = 'a';
+layout = num_outputs;
+scale = ones(1, num_outputs);
+iters = 0;
+Colors = {'b', 'r', 'g', 'c', 'm', 'y', 'k'};
+
+%Color
+%LineStyle
+%LineWidth
+%Marker
+%MarkerEdgeColor
+%MarkerFaceColor
+%MarkerSize
+
+
+%EdgeColor
+%FaceColor
+%---
+%LineStyle
+%LineWidth
+%Marker
+%MarkerEdgeColor
+%MarkerFaceColor
+%MarkerSize
+
+
+% Check if any arguments are given
+numArgs = size(args, 2);
+if numArgs > 0
+    
+    % arguments must come in pairs
+    if mod(numArgs, 2) == 0
+        
+        % Parse arguments
+        for i = 1:2:(numArgs - 1)
+            
+            if strcmp(args{i}, 'type')
+                
+                % Type of plot
+                type = args{i + 1};
+                
+            elseif strcmp(args{i}, 'layout')
+                
+                % Layout
+                layout = args{i + 1};
+                
+            elseif strcmp(args{i}, 'scale')
+                
+                % Scale
+                scale = args{i + 1};
+
+            elseif strcmp(args{i}, 'iters')
+                
+                % Iterations
+                iters = args{i + 1};
+                
+            elseif strcmp(args{i}, 'Colors')
+                
+                Colors = exp_spec(args{i + 1});
+                [lineprops(:).Colors] = Colors{:};
+
+            elseif strcmp(args{i}, 'LineStyles')
+                
+            elseif strcmp(args{i}, 'LineWidths')
+                
+            elseif strcmp(args{i}, 'Markers')
+                
+            elseif strcmp(args{i}, 'MarkerEdgeColors')
+                
+            elseif strcmp(args{i}, 'MarkerFaceColors')
+                
+            elseif strcmp(args{i}, 'MarkerSizes')
+                
+            elseif strcmp(args{i}, 'EdgeColors')
+
+            else
+                
+                % Oops... unknown parameter
+                error('Unknown parameter "%s"', args{i});
+                
+            end;
+        end;
+    else
+        
+        % arguments must come in pairs
+        error('Incorrect number of optional arguments.');
+        
+    end;
+end;
+
+% Adjust scale to number of outputs
+if numel(scale) == 1
+    scale = scale * ones(1, num_outputs);
+end;
+
+% % % % % % % % % % % % % % % % % % % % % % % % 
+% Helper function to expand line specs and patch specs
+% to match the number of outputs to plot
+% % % % % % % % % % % % % % % % % % % % % % % %
+function spec = exp_spec(spec, num_outputs)
+
+if numel(spec) < num_outputs
+    if ~iscell(spec)
+        spec = {spec};
+    end;
+    while numel(spec) < num_outputs
+        spec = {spec{:}, spec{:}};
+    end;
+end;
+spec = spec{1:num_outputs};
