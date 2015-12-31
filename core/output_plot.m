@@ -33,7 +33,7 @@ function [d, h] = output_plot(folder, files, outputs, varargin)
 %        'Colors' - Each of these options is a cell array specifying
 %    'LineStyles'   LineSpecs with which to plot individual outputs. If
 %    'LineWidths'   there are more outputs than specs in the cell array,
-%       'Markers'   the given specs are repeated. For 'f'type plots, these 
+%       'Markers'   the given specs are repeated. For 'f' type plots, these 
 %'MarkerEdgeColors' options are interpreted as PatchSpecs, with 'Colors'
 %'MarkerFaceColors' corresponding to 'FaceColors'. 'EdgeColors' is only
 %   'MarkerSizes'   used in PatchSpecs. See help for LineSpec and 
