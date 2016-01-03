@@ -131,7 +131,7 @@ output_plot([datafolder1 '/v1'], 'stats100v1r1.txt', outputs, 'layout', [3 3]);
 ```
 
 ![simout_ex01_02](https://cloud.githubusercontent.com/assets/3018963/11877082/02217ffa-a4e5-11e5-9729-ed5678443c96.png)
-![simout_ex01_021](https://cloud.githubusercontent.com/assets/3018963/12067390/11895a46-aff1-11e5-89f9-52b93ff3bffb.png)
+![simout_ex01_021](https://cloud.githubusercontent.com/assets/3018963/12080034/8eabfcf8-b245-11e5-9c28-ad4fc1bbf2fe.png)
 
 The 'layout' option is one of the several key-value arguments accepted by
 [output_plot](core/output_plot.m). Another option is the 'Colors' parameter,
@@ -145,8 +145,8 @@ output_plot([datafolder1 '/v1'], 'stats100v1r1.txt', outputs, 'layout', [3 3], '
 ![simout_ex01_02](https://cloud.githubusercontent.com/assets/3018963/11877082/02217ffa-a4e5-11e5-9729-ed5678443c96.png)
 ![simout_ex01_03](https://cloud.githubusercontent.com/assets/3018963/11877083/0230e2a6-a4e5-11e5-884f-fc6140e258af.png)
 
-A number of these key-value arguments consist of [LineSpecs] for individual
-outputs ([PatchSpecs] in the case of type **f** plots, discussed further ahead).
+A number of these key-value arguments consist of [LineSpec]s for individual
+outputs ([PatchSpec]s in the case of type **f** plots, discussed further ahead).
 If there are more outputs than specs in the associated cell array, the given
 specs are repeated. As such, in the previous command we could have shortened the
 given 'Colors' cell array, i.e.:
@@ -156,9 +156,9 @@ output_plot([datafolder1 '/v1'], 'stats100v1r1.txt', outputs, 'layout', [3 3], '
 ```
 
 The [output_plot](core/output_plot.m) function recognizes a number of 
-[LineSpecs] and [PatchSpecs], namely 'Colors', 'LineStyles', 'LineWidths',
+[LineSpec]s and [PatchSpec]s, namely 'Colors', 'LineStyles', 'LineWidths',
 'Markers', 'MarkerEdgeColors', 'MarkerFaceColors' and 'MarkerSizes'. There is
-also the 'EdgeColors' option, which is only recognized within the [PatchSpecs]
+also the 'EdgeColors' option, which is only recognized within the [PatchSpec]s
 context, i.e. for type **f** plots.
 
 Returning to the example, the 3rd and 6th outputs of the last command (GrassQty
@@ -220,7 +220,7 @@ different line styles:
 output_plot([datafolder1 '/v1'], 'stats100v1r*.txt', outputs(1:3), 'type', 10, 'Colors', 'k', 'scale', [1 1 1/4], 'LineStyles', {'-','--',':'});
 ```
 
-![simout_ex01_12](https://cloud.githubusercontent.com/assets/3018963/12067853/1999ff8a-aff9-11e5-92f4-d334c63a882e.png)
+![simout_ex01_12](https://cloud.githubusercontent.com/assets/3018963/12080126/2982dee2-b249-11e5-8b0a-a55230d2f32a.png)
 
 
 Figures generated with [output_plot](core/output_plot.m) can be converted to
