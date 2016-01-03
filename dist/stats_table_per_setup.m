@@ -43,7 +43,7 @@ if format == 0
     idx = 0;
     
     t = sprintf('-----------------------------------------------------------------------------------------\n');
-    t = sprintf('%s|   Output   | F. meas. |    Mean    |  Variance  |  % 2d%% Confidence interval | SW test |\n', ...
+    t = sprintf('%s|   Output   | Stat.    |    Mean    |  Variance  |  % 2d%% Confidence interval | SW test |\n', ...
         t, round(100 * (1 - alpha)));
     for outp = outputs
         for ssumm = ssumms

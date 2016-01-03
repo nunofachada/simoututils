@@ -99,7 +99,7 @@ conceptual model, which produces six outputs:
 3. Quantity of available grass
 4. Mean sheep energy
 5. Mean wolves energy
-6. Mean value of the countdown parameter in all cells.
+6. Mean value of the cells countdown parameter
 
 <a name="corefunctionality"></a>
 
@@ -109,8 +109,8 @@ conceptual model, which produces six outputs:
 
 #### 4.1.1\. Plot simulation output
 
-Use the [output_plot](core/output_plot.m) to plot outputs from one replication
-of the PPHPC model:
+Use the [output_plot](core/output_plot.m) function to plot outputs from one
+replication of the PPHPC model:
 
 ```matlab
 output_plot([datafolder1 '/v1'], 'stats100v1r1.txt', 6);
@@ -183,11 +183,11 @@ output_plot([datafolder1 '/v1'], 'stats100v1r*.txt', outputs, 'layout', [3 3], '
 ![simout_ex01_06](https://cloud.githubusercontent.com/assets/3018963/11877088/023508a4-a4e5-11e5-91d0-1cc2274a3537.png)
 ![simout_ex01_07](https://cloud.githubusercontent.com/assets/3018963/11877086/02362194-a4e5-11e5-889d-95f82bd69fac.png)
 
-When plotting multiple replications in this way, the figures tend to look
-somewhat heavy and slow to manipulate. We could alternatively plot only the
-output extremes (minimum and maximum of individual outputs at each iteration),
-and fill the space between with the output color. This can be accomplished by 
-specifying the **f**ill 'type':
+When plotting multiple replications this way, the figures tend to look somewhat
+heavy and slow to manipulate. We could alternatively plot only the output
+extremes (minimum and maximum of individual outputs at each iteration), and fill
+the space between with the output color. This can be accomplished by specifying
+the **f**ill 'type':
 
 ```matlab
 output_plot([datafolder1 '/v1'], 'stats100v1r*.txt', outputs, 'type', 'f', 'layout', [3 3], 'Colors', {'b', 'r', 'g'}, 'scale', [1 1 1/4 1 1 4]);
@@ -230,8 +230,11 @@ following commands would perform this conversion, assuming [matlab2tikz] is in
 
 ```matlab
 cleanfigure();
-matlab2tikz('standalone', true, 'filename', 'simout_ex01_13.tex');
+matlab2tikz('standalone', true, 'filename', 'simout_bw.tex');
 ```
+
+Compiling the `simout_bw.tex` file with LaTeX would produce the following
+figure:
 
 ![simout_ex01_13](https://cloud.githubusercontent.com/assets/3018963/12067963/73c55840-affb-11e5-840a-74c18d3cad30.png)
 
@@ -342,7 +345,7 @@ s100v1 = stats_gather('100v1', [datafolder1 '/v1'], 'stats100v1r*.txt', 6, 1000)
 The 4th parameter, 6, corresponds to the number of outputs of the PPHPC model.
 Instead of the number of outputs, the function alternatively accepts a cell 
 array of strings containing the output names, which can be useful for tables and
-plot. The 5th and last parameter, 1000 , corresponds to the iteration after 
+figures. The 5th and last parameter, 1000 , corresponds to the iteration after 
 which the outputs are in steady-state. The [stats_gather](core/stats_gather.m)
 function returns a _struct_ with several fields, of which the following are
 important to this discussion:
@@ -390,7 +393,7 @@ stats_table_per_setup(s100v1, 0.05, 0)
 
 ```
 -----------------------------------------------------------------------------------------
-|   Output   | F. meas. |    Mean    |  Variance  |   95% Confidence interval | SW test |
+|   Output   | Stat.    |    Mean    |  Variance  |   95% Confidence interval | SW test |
 |------------|----------|------------|------------|---------------------------|---------|
 |         o1 |      max |       2517 |       6699 | [       2486,       2547] |  0.8287 |
 |            |   argmax |      145.2 |      91.36 | [      141.7,      148.8] |  0.8255 |
@@ -475,12 +478,18 @@ s1600v2 = stats_gather('1600v2', [datafolder1 '/v2'], 'stats1600v2r*.txt', outpu
 
 % Group them into a cell array
 sv2 = {s100v2, s200v2, s400v2, s800v2, s1600v2};
+```
 
+The **argmin** of the *grass quantity* output is the 3rd statistical summary of
+the 4th output, as indicated in the 2nd and 3rd arguments of
+[dist_plot_per_fm](dist/dist_plot_per_fm.m):
+
+```matlab
 % Plot distributional properties
 dist_plot_per_fm(sv2, 3, 4);
 ```
 
-![simout_ex04](https://cloud.githubusercontent.com/assets/3018963/11901760/3e835fd4-a5a5-11e5-8198-c4658df94629.png)
+![simout_ex04](https://cloud.githubusercontent.com/assets/3018963/12080546/07401900-b256-11e5-8bfc-e868ce1f53b8.png)
 
 Note that in this example we explicitly specified the output names when calling
 the [stats_gather](core/stats_gather.m) function. Also, for parameter set 2, we
