@@ -106,8 +106,8 @@ conceptual model, which produces six outputs:
 
 #### 4.1.1\. Plot simulation output
 
-Use the [output_plot] function to plot outputs from one
-replication of the PPHPC model:
+Use the [output_plot] function to plot outputs from one replication of the PPHPC
+model:
 
 ```matlab
 output_plot([datafolder1 '/v1'], 'stats100v1r1.txt', 6);
@@ -131,9 +131,9 @@ output_plot([datafolder1 '/v1'], 'stats100v1r1.txt', outputs, 'layout', [3 3]);
 ![simout_ex01_021](https://cloud.githubusercontent.com/assets/3018963/12080034/8eabfcf8-b245-11e5-9c28-ad4fc1bbf2fe.png)
 
 The 'layout' option is one of the several key-value arguments accepted by
-[output_plot]. Another option is the 'Colors' parameter,
-which specifies the colors used for plotting individual outputs. It can be used,
-for example, to use the same colors for the outputs in both figures:
+[output_plot]. Another option is the 'Colors' parameter, which specifies the
+colors used for plotting individual outputs. It can be used, for example, to use
+the same colors for the outputs in both figures:
 
 ```matlab
 output_plot([datafolder1 '/v1'], 'stats100v1r1.txt', outputs, 'layout', [3 3], 'Colors', {'b', 'r', 'g', 'b', 'r', 'g'});
@@ -152,15 +152,15 @@ given 'Colors' cell array, i.e.:
 output_plot([datafolder1 '/v1'], 'stats100v1r1.txt', outputs, 'layout', [3 3], 'Colors', {'b', 'r', 'g'});
 ```
 
-The [output_plot] function recognizes a number of 
-[LineSpec]s and [PatchSpec]s, namely 'Colors', 'LineStyles', 'LineWidths',
-'Markers', 'MarkerEdgeColors', 'MarkerFaceColors' and 'MarkerSizes'. There is
-also the 'EdgeColors' option, which is only recognized within the [PatchSpec]s
-context, i.e. for type **f** plots.
+The [output_plot] function recognizes a number of [LineSpec]s and [PatchSpec]s,
+namely 'Colors', 'LineStyles', 'LineWidths', 'Markers', 'MarkerEdgeColors',
+'MarkerFaceColors' and 'MarkerSizes'. There is also the 'EdgeColors' option,
+which is only recognized within the [PatchSpec]s context, i.e. for type **f**
+plots.
 
-Returning to the example, the 3rd and 6th outputs of the last command (GrassQty
-and GrassEnergy, respectively) are still somewhat out of scale with the
-remaining outputs. This can be solved by specifying the 'scale' option:
+Returning to the example, the 3rd and 6th outputs of the last command
+(*GrassQty* and *GrassEnergy*, respectively) are still somewhat out of scale
+with the remaining outputs. This can be solved by specifying the 'scale' option:
 
 ```matlab
 outputs = {'SheepPop', 'WolfPop', 'GrassQty/4', 'SheepEnergy', 'WolfEnergy', '4*GrassEnergy'};
@@ -220,10 +220,9 @@ output_plot([datafolder1 '/v1'], 'stats100v1r*.txt', outputs(1:3), 'type', 10, '
 ![simout_ex01_12](https://cloud.githubusercontent.com/assets/3018963/12080126/2982dee2-b249-11e5-8b0a-a55230d2f32a.png)
 
 
-Figures generated with [output_plot] can be converted to
-LaTeX with the excellent [matlab2tikz] script. For the previous figure, the
-following commands would perform this conversion, assuming [matlab2tikz] is in
-[MATLAB]'s path:
+Figures generated with [output_plot] can be converted to LaTeX with the
+excellent [matlab2tikz] script. For the previous figure, the following commands
+would perform this conversion, assuming [matlab2tikz] is in [MATLAB]'s path:
 
 ```matlab
 cleanfigure();
@@ -239,11 +238,10 @@ figure:
 
 #### 4.1.2\. Get statistical summaries from one replication
 
-The [stats_get] function is the elementary building block of 
-_SimOutUtils_ for analyzing simulation output. It is indirectly used by
-practically all distributional analysis functions (via the higher-level
-[stats_gather] function). The goal of
-[stats_get] is to extract statistical summaries from
+The [stats_get] function is the elementary building block of _SimOutUtils_ for
+analyzing simulation output. It is indirectly used by practically all
+distributional analysis functions (via the higher-level [stats_gather] 
+function). The goal of [stats_get] is to extract statistical summaries from
 simulation outputs from one file. It does this through ancillary `stats_get_*`
 functions which perform the actual extraction. The exact function to use (and
 consequently, the exact statistical summaries to extract) is specified in the
@@ -253,20 +251,19 @@ first instruction of [stats_get]:
 sgfun = @stats_get_pphpc;
 ```
 
-As shown in the above instruction, the [stats_get_pphpc]
-is the package default. This function returns six statistical summaries, namely
-the maximum (**max**), iteration where maximum occurs (**argmax**), minimum
-(**min**), iteration where minimum occurs (**argmin**), mean (**mean**), and
-standard deviation (**std**). The **mean** and **std** summaries are obtained
-during the (user-specified) steady-state phase of the output. These summaries
-[were selected for the PPHPC model](https://peerj.com/articles/cs-36/), but are
-appropriate for any model with tendentiously stable time-series outputs.
+As shown in the above instruction, the [stats_get_pphpc] is the package default.
+This function returns six statistical summaries, namely the maximum (**max**),
+iteration where maximum occurs (**argmax**), minimum (**min**), iteration where
+minimum occurs (**argmin**), mean (**mean**), and standard deviation (**std**).
+The **mean** and **std** summaries are obtained during the (user-specified)
+steady-state phase of the output. These summaries were selected for the PPHPC
+model [\[1\]][ref1], but are appropriate for any model with tendentiously stable
+time-series outputs.
 
 In order to use alternative statistical summaries, the user should specify
 another function by editing the above instruction. _SimOutUtils_ includes a
-second `stats_get_*` function, [stats_get_iters], in
-which statistical summaries correspond to output values at user-specified
-iterations.
+second `stats_get_*` function, [stats_get_iters], in which statistical summaries
+correspond to output values at user-specified iterations.
 
 Lets get the statistical summaries of the first replication of the PPHPC model
 for size 100 and parameter set 1:
@@ -276,11 +273,10 @@ sdata = stats_get(1000, [datafolder1 '/v1/stats100v1r1.txt'], 6)
 ```
 
 The first argument is dependent on the actual `stats_get_*` being used. In this
-case, we're using the package default [stats_get_pphpc]
-function, which requires the user to specify the steady-state truncation point
-(i.e. 1000). The last argument specifies the number of outputs. The function
-returns a _n_ x _m_ matrix of focal measures, with _n_=6 statistical summaries
-and _m_=6 outputs:
+case, we're using the package default [stats_get_pphpc] function, which requires
+the user to specify the steady-state truncation point (i.e. 1000). The last
+argument specifies the number of outputs. The function returns a _n_ x _m_
+matrix of focal measures, with _n_=6 statistical summaries and _m_=6 outputs:
 
 ```
 sdata =
@@ -296,15 +292,14 @@ sdata =
 ```
 
 Changing the `stats_get_*` being used is simple. Lets edit the first instruction
-of the [stats_get] function, and specify the 
-[stats_get_iters] function instead:
+of the [stats_get] function, and specify the [stats_get_iters] function instead:
 
 ```matlab
 sgfun = @stats_get_iters;
 ```
 
-We can now call [stats_get] again. Note that the first
-argument now specifies the iterations at which to get output values:
+We can now call [stats_get] again. Note that the first argument now specifies
+the iterations at which to get output values:
 
 ```matlab
 sdata = stats_get([10 100 1000], [datafolder1 '/v1/stats100v1r1.txt'], 6)
@@ -324,16 +319,16 @@ sdata =
     1.0060    0.4690    6.6110    0.0170    0.0207    0.0018
 ```
 
-For the remainder of this discussion it is assumed that the
-[stats_get_pphpc] function is being used.
+For the remainder of this discussion it is assumed that the [stats_get_pphpc]
+function is being used.
 
 <a name="getandanalyzestatisticalsummariesfrommultiplereplications"></a>
 
 #### 4.1.3\. Get and analyze statistical summaries from multiple replications
 
-The [stats_gather] function extracts statistical summaries
-from simulation outputs from multiple files. Lets get statistical summaries for
-30 runs of the PPHPC model for size 100 and parameter set 1:
+The [stats_gather] function extracts statistical summaries from simulation
+outputs from multiple files. Lets get statistical summaries for 30 runs of the
+PPHPC model for size 100 and parameter set 1:
 
 ```matlab
 s100v1 = stats_gather('100v1', [datafolder1 '/v1'], 'stats100v1r*.txt', 6, 1000);
@@ -343,9 +338,9 @@ The 4th parameter, 6, corresponds to the number of outputs of the PPHPC model.
 Instead of the number of outputs, the function alternatively accepts a cell 
 array of strings containing the output names, which can be useful for tables and
 figures. The 5th and last parameter, 1000 , corresponds to the iteration after 
-which the outputs are in steady-state. The [stats_gather]
-function returns a _struct_ with several fields, of which the following are
-important to this discussion:
+which the outputs are in steady-state. The [stats_gather] function returns a
+_struct_ with several fields, of which the following are important to this
+discussion:
 
 * `name` contains the name with which the data was tagged, '100v1' in this case;
 * `outputs` is a cell array containing the output names (which default to 'o1', 
@@ -362,13 +357,12 @@ output):
 
 The 0.05 value in the 2nd parameter is the significance level for the confidence
 intervals and the Shapiro-Wilk test. The variables returned by the 
-[stats_analyze] function have 36 rows, one per focal
-measure. The `m` (mean), `v` (variance), `sw` (_p_-value of the Shapiro-Wilk
-test) and `sk` (skewness) variables have only one column, i.e. one value per
-focal measure, while the `cit` (_t_-confidence interval) and `ciw`
-([Willink confidence interval])
-variables have two columns, which correspond to the lower and upper limits of
-the respective intervals.
+[stats_analyze] function have 36 rows, one per focal measure. The `m` (mean),
+`v` (variance), `sw` (_p_-value of the Shapiro-Wilk test) and `sk` (skewness)
+variables have only one column, i.e. one value per focal measure, while the
+`cit` (_t_-confidence interval) and `ciw` (Willink confidence interval
+[\[4\]][ref4]) variables have two columns, which correspond to the lower and
+upper limits of the respective intervals.
 
 <a name="distributionalanalysisofoutput"></a>
 
@@ -378,10 +372,9 @@ the respective intervals.
 
 #### 4.2.1\. Distributional analysis tables
 
-While the data returned by the [stats_analyze] is in a
-format adequate for further processing and/or analysis, it is not very human
-readable. To this purpose, one can use the
-[stats_table_per_setup] function to output a nice
+While the data returned by the [stats_analyze] is in a format adequate for
+further processing and/or analysis, it is not very human readable. To this
+purpose, one can use the [stats_table_per_setup] function to output a nice
 plain text table:
 
 ```matlab
@@ -445,20 +438,19 @@ stats_table_per_setup(s100v1, 0.05, 1)
 
 ![simout_ex03](https://cloud.githubusercontent.com/assets/3018963/11901414/689d8b34-a5a3-11e5-803a-e5fc0688d09d.png)
 
-The produced LaTeX table requires the [siunitx], [multirow], [booktabs] 
-and [ulem] packages to compile.
+The produced LaTeX table requires the [siunitx], [multirow], [booktabs] and
+[ulem] packages to compile.
 
 <a name="visuallyanalyzethedistributionalpropertiesofafocalmeasure"></a>
 
 #### 4.2.2\. Visually analyze the distributional properties of a focal measure
 
-The [dist_plot_per_fm] function offers a simple way of
-assessing the distributional properties of a focal measure for different model
-configurations (i.e. different model sizes, different parameter set, etc). For
-each configuration the function shows an approximate probability density function
-(PDF), a histogram, and a QQ-plot. The
-[dist_plot_per_fm] function works with the data
-returned by [stats_gather]. 
+The [dist_plot_per_fm] function offers a simple way of assessing the
+distributional properties of a focal measure for different model configurations
+(i.e. different model sizes, different parameter set, etc). For each
+configuration the function shows an approximate probability density function 
+(PDF), a histogram, and a QQ-plot. The [dist_plot_per_fm] function works with
+the data returned by [stats_gather]. 
 
 For example, lets assess the distributional properties of the PPHPC focal
 measure given by the **argmin** of the _grass quantity_ output for parameter set
@@ -478,8 +470,7 @@ sv2 = {s100v2, s200v2, s400v2, s800v2, s1600v2};
 ```
 
 The **argmin** of the *grass quantity* output is the 3rd statistical summary of
-the 4th output, as indicated in the 2nd and 3rd arguments of
-[dist_plot_per_fm]:
+the 4th output, as indicated in the 2nd and 3rd arguments of [dist_plot_per_fm]:
 
 ```matlab
 % Plot distributional properties
@@ -489,21 +480,19 @@ dist_plot_per_fm(sv2, 3, 4);
 ![simout_ex04](https://cloud.githubusercontent.com/assets/3018963/12080546/07401900-b256-11e5-8bfc-e868ce1f53b8.png)
 
 Note that in this example we explicitly specified the output names when calling
-the [stats_gather] function. Also, for parameter set 2, we
-set the steady-state truncation point to iteration 2000.
+the [stats_gather] function. Also, for parameter set 2, we set the steady-state
+truncation point to iteration 2000.
 
 <a name="latextablewithdistributionalanalysisofallfocalmeasuresforonesetup"></a>
 
 #### 4.2.3\. LaTeX table with distributional analysis of all focal measures for one setup
 
-In the "[Towards a standard model...](https://peerj.com/articles/cs-36/)"
-article, a number of [tables](https://doi.org/10.7717/peerj-cs.36/supp-2)
-containing a detailed distributional analysis of all PPHPC focal measures are
-provided as supplemental information. Each table displays a distributional
-analysis for one setup, i.e. for one size/parameter set combination. The
-[dist_table_per_setup] function produces these
-tables, accepting a single parameter which corresponds to the output of
-[stats_gather]. For example, to get a table with the
+In reference [\[1\]][ref1], a number of [tables][ref1tables] containing a
+detailed distributional analysis of all PPHPC focal measures are provided as
+supplemental information. Each table displays a distributional analysis for one
+setup, i.e. for one size/parameter set combination. The [dist_table_per_setup]
+function produces these tables, accepting a single parameter which corresponds
+to the output of [stats_gather]. For example, to get a table with the
 distributional analysis of all PPHPC focal measures for model size 1600,
 parameter set 2, only two commands are required:
 
@@ -524,11 +513,11 @@ table as they appear in the article.
 
 A distributional analysis of a focal measure for multiple setups is often useful
 for evaluating how its distributional properties vary with different model
-configurations/setups. The [dist_table_per_fm]
-function fits this purpose. However, this function returns a partial table,
-which can have additional columns (specified with the 'pre' parameter) prior to
-the distributional data itself, as well as additional rows, such as headers,
-footers, similar partial tables for other focal measures, and so on.
+configurations/setups. The [dist_table_per_fm] function fits this purpose.
+However, this function returns a partial table, which can have additional
+columns (specified with the 'pre' parameter) prior to the distributional data
+itself, as well as additional rows, such as headers, footers, similar partial
+tables for other focal measures, and so on.
 
 Using the PPHPC model as an example, let us generate a table with the
 distributional analysis of the steady-state **mean** of the *sheep population*,
@@ -594,17 +583,15 @@ t
 
 #### 4.3.1\. Compare focal measures of two model implementations
 
-The [stats_compare] function is used for comparing
-focal measures from two or more model implementations by applying the specified
-statistical tests. For this purpose, it uses data obtained with the
-[stats_gather] function.
+The [stats_compare] function is used for comparing focal measures from two or
+more model implementations by applying the specified statistical tests. For this
+purpose, it uses data obtained with the [stats_gather] function.
 
 In this example we compare the NetLogo and Java EX implementations of the PPHPC
-model for model size 400, parameter set 1 (as described in the
-["Parallelization Strategies..."](http://arxiv.org/abs/1507.04047) manuscript). 
-Replications of the Java EX variant were performed with 12 threads. First, we
-need to obtain the focal measures (i.e. statistical summaries of simulation
-outputs) with the [stats_gather] function:
+model for model size 400, parameter set 1 (as described in reference
+[\[2\]][ref2]). Replications of the Java EX variant were performed with 12
+threads. First, we need to obtain the focal measures (i.e. statistical summaries
+of simulation outputs) with the [stats_gather] function:
 
 ```matlab
 % Get stats data for NetLogo implementation, parameter set 1, all sizes
@@ -630,10 +617,10 @@ summaries, except **argmax** and **argmin**, to which the Mann-Whitney test is
 applied instead. The options 'p' and 'np' stand for parametric and
 non-parametric, respectively.
 
-The [stats_compare] function return `ps`, a matrix of 
-_p_-values for the requested tests (rows correspond to outputs, columns to 
-statistical summaries), and `h_all`, containing the number of tests failed for 
-the specified significance level.
+The [stats_compare] function return `ps`, a matrix of _p_-values for the
+requested tests (rows correspond to outputs, columns to statistical summaries),
+and `h_all`, containing the number of tests failed for the specified
+significance level.
 
 ```
 ps =
@@ -655,10 +642,9 @@ h_all =
 
 #### 4.3.2\. Compare focal measures of multiple model implementations
 
-The [stats_compare] function also allows to compare
-focal measure from more than two model implementations. If more than two 
-[stats_gather] structs are passed as arguments, the 
-[stats_compare] function automatically uses _n_-sample
+The [stats_compare] function also allows to compare focal measure from more than
+two model implementations. If more than two [stats_gather] structs are passed as
+arguments, the [stats_compare] function automatically uses _n_-sample
 statistical tests, namely ANOVA as a parametric test, and Kruskal-Wallis as a
 non-parametric test. In the following, we compare all Java variants of the PPHPC
 model for size 800, parameter set 2:
@@ -699,13 +685,12 @@ ps =
 #### 4.3.3\. Pairwise comparison of model implementations
 
 When comparing multiple model implementations, if one or more are misaligned, 
-the [stats_compare] function will detected a
-misalignment, but will not provide information regarding which implementation is
-misaligned. The [stats_compare_pw] function performs
-pair-wise comparisons of multiple model implementations by outputting a table of
-failed tests for each pair of implementations, thus allowing to detect which
-implementation(s) is (are) misaligned. The following instruction outputs this
-table for the data used in the previous example:
+the [stats_compare] function will detected a misalignment, but will not provide
+information regarding which implementation is misaligned. The [stats_compare_pw]
+function performs pair-wise comparisons of multiple model implementations by
+outputting a table of failed tests for each pair of implementations, thus
+allowing to detect which implementation(s) is (are) misaligned. The following
+instruction outputs this table for the data used in the previous example:
 
 ```matlab
 % Output table of pair-wise failed tests for significance level 0.05
@@ -731,11 +716,10 @@ stats_compare_pw(0.05, {'p', 'np', 'p', 'np', 'p', 'p'}, sjst800v2, sjeq800v2, s
 In this example we have two PPHPC implementations which produce equivalent
 results (NLOK and JEXOK), and two other which display slightly different
 behavior (JEXNS and JEXDIFF). The following code loads simulation output data
-from these four implementations, and plots, using the 
-[stats_compare_plot] function, the PDF and CDF of
-the respective focal measures. Plots for each focal measure are overlaid,
-allowing the modeler to clearly observe distributional output differences
-between the various implementations.
+from these four implementations, and plots, using the [stats_compare_plot]
+function, the PDF and CDF of the respective focal measures. Plots for each focal
+measure are overlaid, allowing the modeler to clearly observe distributional
+output differences between the various implementations.
 
 ```matlab
 % Specify output names
@@ -770,16 +754,14 @@ _Mean value of the countdown parameter in all cells_
 ![compare_ex04_06](https://cloud.githubusercontent.com/assets/3018963/11904407/d915052c-a5b7-11e5-927a-f8fdc73ac497.png)
 
 More details regarding these four implementations and the specific differences
-between them are available in the manuscript 
-"[Model-independent comparison of simulation output](http://arxiv.org/abs/1509.09174)".
+between them are available in reference [\[3\]][ref3].
 
 <a name="tablewith_p_-valuesfromcomparisonoffocalmeasuresfrommodelimplementations"></a>
 
 #### 4.3.5\. Table with _p_-values from comparison of focal measures from model implementations
 
-The [stats_compare_table] function produces
-publication quality tables of _p_-values in LaTeX. This function accepts four
-parameters:
+The [stats_compare_table] function produces publication quality tables of
+_p_-values in LaTeX. This function accepts four parameters:
 
 1. `tests` - Type of statistical tests to perform (parametric or
 non-parametric).
@@ -820,10 +802,9 @@ comparison).
 
 #### 4.3.6\. Example 6. Multiple comparisons and comparison names
 
-In Table 2 of the "[Model-independent comparison...](http://arxiv.org/abs/1509.09174)",
-manuscript, three comparisons, I, II, and III, are performed. This is
-appropriate for setting the third argument, `tformat`, to 0, as shown in the
-following code:
+In Table 2 of reference [\[3\]][ref3], three comparisons, I, II, and III, are
+performed. This is appropriate for setting the third argument, `tformat`, to 0,
+as shown in the following code:
 
 ```matlab
 % Specify output names
@@ -850,13 +831,12 @@ _t_-test and from the non-parametric Mann-Whitney test.
 
 #### 4.3.7\. Example 7. Comparison groups
 
-In Table 8 of the "[Parallelization Strategies...](http://arxiv.org/abs/1507.04047)"
-manuscript, ten comparisons are performed. Each comparison is associated with a
-model size and tests for differences between six model implementations. 
-Comparisons are divided into two groups, according to the parameter set used.
-This is accomplished by passing a cell array of two strings (comparison group
-and comparison name) to the first item of each comparison. The following code 
-outputs this table:
+In Table 8 of reference [\[2\]][ref2] manuscript, ten comparisons are performed.
+Each comparison is associated with a model size and tests for differences
+between six model implementations. Comparisons are divided into two groups,
+according to the parameter set used. This is accomplished by passing a cell
+array of two strings (comparison group and comparison name) to the first item of
+each comparison. The following code outputs this table:
 
 ```matlab
 % Specify output names
@@ -969,7 +949,7 @@ number of comparisons.
 
 [\[1\]][ref1] Fachada N, Lopes VV, Martins RC, Rosa AC. (2015) Towards a
 standard model for research in agent-based modeling and simulation. *PeerJ
-Computer Science*. 1:e36 https://doi.org/10.7717/peerj-cs.36
+Computer Science* 1:e36. https://doi.org/10.7717/peerj-cs.36
 
 <a name="ref2"></a>
 
@@ -978,17 +958,23 @@ Strategies for Spatial Agent-Based Models. *International Journal of Parallel
 Programming*. https://doi.org/10.1007/s10766-015-0399-9 (arXiv version available
 at http://arxiv.org/abs/1507.04047)
 
-
 <a name="ref3"></a>
 
 [\[3\]][ref3] Fachada N, Lopes VV, Martins RC, Rosa AC. (2016) Model-independent
 comparison of simulation output. *Under peer-review*. (arXiv version available
 at http://arxiv.org/abs/1509.09174)
 
+<a name="ref4"></a>
+
+[\[4\]][ref4] Willink R. (2005) A Confidence Interval and Test for the Mean of
+an Asymmetric Distribution. *Communications in Statistics - Theory and Methods*
+34 (4): 753-766. https://doi.org/10.1081%2FSTA-200054419
 
 [ref1]: #ref1
 [ref2]: #ref2
 [ref3]: #ref3
+[ref4]: #ref4
+[ref1tables]: https://doi.org/10.7717/peerj-cs.36/supp-2
 [Matlab]: http://www.mathworks.com/products/matlab/
 [Octave]: https://gnu.org/software/octave/
 [PPHPC]: https://github.com/fakenmc/pphpc
