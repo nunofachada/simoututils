@@ -160,11 +160,6 @@ if type == 'a' % All, superimposed
     
 elseif type == 'f' % Filled
     
-    % There are problems with the legends in octave
-    if is_octave()
-        warning('Legends may not appear correctly in Octave');
-    end;
-    
     % Initialize output matrix
     d = zeros(num_outputs, iters, 2);
 

@@ -2,8 +2,10 @@ function [y1handle, y2handle, h] = fill_between(x, y1, y2, where, varargin)
 % function originally written by Ben Vincent, July 2014. Inspired by a
 % function of the same name available in the Matplotlib Python library.
 
-% Modified at Dec 1, 2015 by Nuno Fachada so it (+-) works with Octave
-% which does not implement uistack
+% Modified by Nuno Fachada under the terms of the MIT license, namely:
+% * Better (but not perfect) compatibility with Octave, which does not 
+%   implement uistack.
+% * Don't draw edges unless specifically requested.
 
 % Save current axes so it can't change during runtime
 ca = gca;
@@ -86,14 +88,6 @@ for n = 1:max(cat)
     % ---------------------------------
 end
 
-
-%% Now plot the full x,y1 and x,y2 lines
-hold on
-y1handle = plot(x,y1,'k-','LineStyle', 'none', 'Marker', 'none');
-y2handle = plot(x,y2,'k-','LineStyle', 'none', 'Marker', 'none');
-
-
-
 %% Apply formatting
 
 % cycle through options provided and apply them. These are patch properties
@@ -103,7 +97,7 @@ set(h, varargin{:});
 
 % move it to the back (does not work in Octave - added by Nuno Fachada)
 if ~is_octave()
-    uistack(h, 'bottom')
+    uistack(h, 'bottom');
 end;
 
 % return to initial hold state

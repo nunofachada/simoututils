@@ -70,7 +70,7 @@ startup
 
 ## 4\. Examples
 
-These examples use the following datasets:
+The examples use the following datasets:
 
 1. [![DOI](https://zenodo.org/badge/doi/10.5281/zenodo.34053.svg)](http://dx.doi.org/10.5281/zenodo.34053)
 2. [![DOI](https://zenodo.org/badge/doi/10.5281/zenodo.34049.svg)](http://dx.doi.org/10.5281/zenodo.34049)
@@ -181,7 +181,7 @@ output_plot([datafolder1 '/v1'], 'stats100v1r*.txt', outputs, 'layout', [3 3], '
 ![simout_ex01_07](https://cloud.githubusercontent.com/assets/3018963/11877086/02362194-a4e5-11e5-889d-95f82bd69fac.png)
 
 When plotting multiple replications this way, the figures tend to look somewhat
-heavy and slow to manipulate. We could alternatively plot only the output
+heavy and are slow to manipulate. We could alternatively plot only the output
 extremes (minimum and maximum of individual outputs at each iteration), and fill
 the space between with the output color. This can be accomplished by specifying
 the **f**ill 'type':
@@ -251,12 +251,12 @@ first instruction of [stats_get]:
 sgfun = @stats_get_pphpc;
 ```
 
-As shown in the above instruction, the [stats_get_pphpc] is the package default.
+As shown in the above instruction, [stats_get_pphpc] is the package default.
 This function returns six statistical summaries, namely the maximum (**max**),
 iteration where maximum occurs (**argmax**), minimum (**min**), iteration where
 minimum occurs (**argmin**), mean (**mean**), and standard deviation (**std**).
 The **mean** and **std** summaries are obtained during the (user-specified)
-steady-state phase of the output. These summaries were selected for the PPHPC
+steady-state stage of the output. These summaries were selected for the PPHPC
 model [\[1\]][ref1], but are appropriate for any model with tendentiously stable
 time-series outputs.
 
@@ -265,17 +265,17 @@ another function by editing the above instruction. _SimOutUtils_ includes a
 second `stats_get_*` function, [stats_get_iters], in which statistical summaries
 correspond to output values at user-specified iterations.
 
-Lets get the statistical summaries of the first replication of the PPHPC model
-for size 100 and parameter set 1:
+The following instruction gets the statistical summaries of the first
+replication of the PPHPC model for size 100 and parameter set 1:
 
 ```matlab
 sdata = stats_get(1000, [datafolder1 '/v1/stats100v1r1.txt'], 6)
 ```
 
 The first argument is dependent on the actual `stats_get_*` being used. In this
-case, we're using the package default [stats_get_pphpc] function, which requires
-the user to specify the steady-state truncation point (i.e. 1000). The last
-argument specifies the number of outputs. The function returns a _n_ x _m_
+case, we are using the package default [stats_get_pphpc] function, which
+requires the user to specify the steady-state truncation point (i.e. 1000). The
+last argument specifies the number of outputs. The function returns a _n_ x _m_
 matrix of focal measures, with _n_=6 statistical summaries and _m_=6 outputs:
 
 ```
@@ -291,8 +291,9 @@ sdata =
     0.1211    0.0487    0.2731    0.0007    0.0016    0.0002
 ```
 
-Changing the `stats_get_*` being used is simple. Lets edit the first instruction
-of the [stats_get] function, and specify the [stats_get_iters] function instead:
+Changing the `stats_get_*` being used is simple. Let us edit the first
+instruction of the [stats_get] function, and specify the [stats_get_iters]
+function instead:
 
 ```matlab
 sgfun = @stats_get_iters;
@@ -327,8 +328,8 @@ function is being used.
 #### 4.1.3\. Get and analyze statistical summaries from multiple replications
 
 The [stats_gather] function extracts statistical summaries from simulation
-outputs from multiple files. Lets get statistical summaries for 30 runs of the
-PPHPC model for size 100 and parameter set 1:
+outputs from multiple files. The following instruction obtains statistical
+summaries for 30 runs of the PPHPC model for size 100 and parameter set 1:
 
 ```matlab
 s100v1 = stats_gather('100v1', [datafolder1 '/v1'], 'stats100v1r*.txt', 6, 1000);
@@ -452,7 +453,7 @@ configuration the function shows an approximate probability density function
 (PDF), a histogram, and a QQ-plot. The [dist_plot_per_fm] function works with
 the data returned by [stats_gather]. 
 
-For example, lets assess the distributional properties of the PPHPC focal
+For example, let us assess the distributional properties of the PPHPC focal
 measure given by the **argmin** of the _grass quantity_ output for parameter set
 2 and a number of different model sizes:
 

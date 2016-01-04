@@ -1,3 +1,9 @@
+%
+% Original code by Mathieu Boutin, Copyright (c) 2011
+%
+% Modified by Nuno Fachada (Copyright (c) 2015) under the terms of  
+% the BSD License
+%
 function [v_f,v_x] = homemade_ecdf(v_data)
 
     nb_data = numel(v_data);
