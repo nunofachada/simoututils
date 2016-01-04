@@ -613,9 +613,9 @@ comparison using the [stats_compare] function:
 The 1st parameter specifies the significance level for the statistical tests.
 The 2nd parameter specifies the tests to apply on individual statistical
 summaries for each output. In this case we are performing the _t_-test to all
-summaries, except **argmax** and **argmin**, to which the Mann-Whitney test is
-applied instead. The options 'p' and 'np' stand for parametric and
-non-parametric, respectively.
+summaries, except **argmax** and **argmin**, to which the Mann-Whitney test
+[\[5\]][ref5] is applied instead. The options 'p' and 'np' stand for parametric
+and non-parametric, respectively.
 
 The [stats_compare] function return `ps`, a matrix of _p_-values for the
 requested tests (rows correspond to outputs, columns to statistical summaries),
@@ -645,8 +645,9 @@ h_all =
 The [stats_compare] function also allows to compare focal measure from more than
 two model implementations. If more than two [stats_gather] structs are passed as
 arguments, the [stats_compare] function automatically uses _n_-sample
-statistical tests, namely ANOVA as a parametric test, and Kruskal-Wallis as a
-non-parametric test. In the following, we compare all Java variants of the PPHPC
+statistical tests, namely ANOVA [\[6\]][ref6] as a parametric test, and
+Kruskal-Wallis [\[7\]][ref7] as a non-parametric test. In the following, we
+compare all Java variants of the PPHPC
 model for size 800, parameter set 2:
 
 ```matlab
@@ -966,14 +967,33 @@ at http://arxiv.org/abs/1509.09174)
 
 <a name="ref4"></a>
 
-[\[4\]][ref4] Willink R. (2005) A Confidence Interval and Test for the Mean of
+[\[4\]][ref4] Willink R (2005) A Confidence Interval and Test for the Mean of
 an Asymmetric Distribution. *Communications in Statistics - Theory and Methods*
 34 (4): 753-766. https://doi.org/10.1081%2FSTA-200054419
+
+<a name="ref5"></a>
+
+[\[5\]][ref5] Gibbons JD, Chakraborti S. (2010) *Nonparametric statistical
+inference*. Chapman and Hall/CRC
+
+<a name="ref6"></a>
+
+[\[6\]][ref6] Hogg RV, Ledolter J. (1987) *Engineering Statistics*. MacMillan
+
+<a name="ref7"></a>
+
+[\[7\]][ref7] Kruskal WH, Wallis WA. (1952) Use of Ranks in One-Criterion
+Variance Analysis. *Journal of the American Statistical Association* 47 (260): 
+583–621
+
 
 [ref1]: #ref1
 [ref2]: #ref2
 [ref3]: #ref3
 [ref4]: #ref4
+[ref5]: #ref5
+[ref6]: #ref6
+[ref7]: #ref7
 [ref1tables]: https://doi.org/10.7717/peerj-cs.36/supp-2
 [Matlab]: http://www.mathworks.com/products/matlab/
 [Octave]: https://gnu.org/software/octave/
