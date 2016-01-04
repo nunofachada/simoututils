@@ -632,10 +632,10 @@ ps =
 When comparing multiple model implementations, if one or more are misaligned, 
 the [stats_compare] function will detected a misalignment, but will not provide
 information regarding which implementation is misaligned. The [stats_compare_pw]
-function performs pair-wise comparisons of multiple model implementations by
-outputting a table of failed tests for each pair of implementations, thus
-allowing to detect which implementation(s) is (are) misaligned. The following
-instruction outputs this table for the data used in the previous example:
+function performs pair-wise comparisons of multiple model implementations and
+outputs a table of failed tests for each pair of implementations, allowing to
+detect which implementation(s) are misaligned. The following instruction outputs
+this table for the data used in the previous example:
 
 ```matlab
 % Output table of pair-wise failed tests for significance level 0.05
@@ -658,11 +658,12 @@ stats_compare_pw(0.05, {'p', 'np', 'p', 'np', 'p', 'p'}, sjst800v2, sjeq800v2, s
 
 In this example we have two PPHPC implementations which produce equivalent
 results (NLOK and JEXOK), and two other which display slightly different
-behavior (JEXNS and JEXDIFF). The following code loads simulation output data
-from these four implementations, and plots, using the [stats_compare_plot]
-function, the PDF and CDF of the respective focal measures. Plots for each focal
-measure are overlaid, allowing the modeler to clearly observe distributional
-output differences between the various implementations.
+behavior (JEXNS and JEXDIFF), as discussed in reference [\[3\]][ref3]. The
+following code loads simulation output data from these four implementations, and
+plots, using the [stats_compare_plot] function, the PDF and CDF of the
+respective focal measures. Plots for each focal measure are overlaid, allowing
+the modeler to observe distributional output differences between the various
+implementations.
 
 ```matlab
 % Specify output names
@@ -695,9 +696,6 @@ _Mean wolves energy_
 
 _Mean value of the countdown parameter in all cells_
 ![compare_ex04_06](https://cloud.githubusercontent.com/assets/3018963/11904407/d915052c-a5b7-11e5-927a-f8fdc73ac497.png)
-
-More details regarding these four implementations and the specific differences
-between them are available in reference [\[3\]][ref3].
 
 #### Table with _p_-values from comparison of focal measures from model implementations
 
@@ -732,18 +730,18 @@ stats_compare_table('np', 0.001, 0, {0, s800v2})
 
 ![compare_ex05](https://cloud.githubusercontent.com/assets/3018963/11904709/e54bee80-a5b9-11e5-9c18-feab61382675.png)
 
-As we're only performing one comparison (for model size 800, parameter set 2),
-the third argument is set to 0. For many comparisons, it is preferable to set
-this parameter to 1, as it puts comparisons along columns and outputs along 
+As we are only performing one comparison (for model size 800, parameter set 2),
+the third argument is set to 0. For multiple comparisons, it is preferable to
+set this parameter to 1, as it puts comparisons along columns and outputs along 
 rows. The first item in the final argument is set to 0, such that the comparison
 name is not printed (which makes sense when the table comprises a single
 comparison).
 
-#### Example 6. Multiple comparisons and comparison names
+#### Multiple comparisons and comparison names
 
 In Table 2 of reference [\[3\]][ref3], three comparisons, I, II, and III, are
-performed. This is appropriate for setting the third argument, `tformat`, to 0,
-as shown in the following code:
+performed. The comparison name can be specified in item 1 of the variable
+argument cell arrays, as shown in the following code:
 
 ```matlab
 % Specify output names
@@ -755,8 +753,13 @@ sjexok400v1 = stats_gather('JEXOK', [datafolder3 '/j_ex_ok'], 'stats400v1*.txt',
 sjexns400v1 = stats_gather('JEXNS', [datafolder3 '/j_ex_noshuff'], 'stats400v1*.txt', outputs, 1000);
 sjexdiff400v1 = stats_gather('JEXDIFF', [datafolder3 '/j_ex_diff'], 'stats400v1*.txt', outputs, 1000);
 
+% Comparisons to perform, specify name in item 1
+cmp1 = {'I', {snl400v1, sjexok400v1}};
+cmp2 = {'II', {snl400v1, sjexns400v1 }};
+cmp3 = {'III', {snl400v1, sjexdiff400v1}};
+
 % Output comparison table
-stats_compare_table({'p', 'np', 'p', 'np', 'p', 'p'}, 0.000001, 0, {'I', {snl400v1, sjexok400v1}}, {'II', {snl400v1, sjexns400v1 }}, {'III', {snl400v1, sjexdiff400v1}})
+stats_compare_table({'p', 'np', 'p', 'np', 'p', 'p'}, 0.000001, 0, cmp1, cmp2, cmp3)
 ```
 
 ![compare_ex06](https://cloud.githubusercontent.com/assets/3018963/11904749/39f23ba6-a5ba-11e5-9f10-d1d42fbd39f8.png)
@@ -766,14 +769,14 @@ table. Note that each comparison tests two model implementations. As such the
 resulting _p_-values come from two-sample tests, i.e. from the parametric 
 _t_-test and from the non-parametric Mann-Whitney test.
 
-#### Example 7. Comparison groups
+#### Comparison groups
 
-In Table 8 of reference [\[2\]][ref2] manuscript, ten comparisons are performed.
-Each comparison is associated with a model size and tests for differences
-between six model implementations. Comparisons are divided into two groups,
-according to the parameter set used. This is accomplished by passing a cell
-array of two strings (comparison group and comparison name) to the first item of
-each comparison. The following code outputs this table:
+In Table 8 of reference [\[2\]][ref2], ten comparisons are performed. Each
+comparison is associated with a model size and parameter set and tests for
+differences between six model implementations. Comparisons are divided into two
+groups, according to the parameter set used. This is accomplished by passing a
+cell array of two strings (comparison group and comparison name) to the first
+item of each comparison. The following code outputs this table:
 
 ```matlab
 % Specify output names
@@ -863,14 +866,26 @@ s400v2 = {snl400v2, sjst400v2, sjeq400v2, sjex400v2, sjer400v2, sjod400v2};
 s800v2 = {snl800v2, sjst800v2, sjeq800v2, sjex800v2, sjer800v2, sjod800v2};
 s1600v2 = {snl1600v2, sjst1600v2, sjeq1600v2, sjex1600v2, sjer1600v2, sjod1600v2};
 
+% Comparisons to perform
+cmp1 = {{'Param. set 1', '100'}, s100v1};
+cmp2 = {{'Param. set 1', '200'}, s200v1};
+cmp3 = {{'Param. set 1', '400'}, s400v1};
+cmp4 = {{'Param. set 1', '800'}, s800v1};
+cmp5 = {{'Param. set 1', '1600'}, s1600v1};
+cmp6 = {{'Param. set 2', '100'}, s100v2};
+cmp7 = {{'Param. set 2', '200'}, s200v2};
+cmp8 = {{'Param. set 2', '400'}, s400v2};
+cmp9 = {{'Param. set 2', '800'}, s800v2};
+cmp10 = {{'Param. set 2', '1600'}, s1600v2};
+
 % Output comparison table
-stats_compare_table('np', 0.000001, 1, {{'Param. set 1', '100'}, s100v1}, {{'Param. set 1', '200'}, s200v1}, {{'Param. set 1', '400'}, s400v1}, {{'Param. set 1', '800'}, s800v1}, {{'Param. set 1', '1600'}, s1600v1}, {{'Param. set 2', '100'}, s100v2}, {{'Param. set 2', '200'}, s200v2}, {{'Param. set 2', '400'}, s400v2}, {{'Param. set 2', '800'}, s800v2}, {{'Param. set 2', '1600'}, s1600v2})
+stats_compare_table('np', 1e-6, 1, cmp1, cmp2, cmp3, cmp4, cmp5, cmp6, cmp7, cmp8, cmp9, cmp10)
 ```
 
 ![compare_ex07](https://cloud.githubusercontent.com/assets/3018963/11904817/a80b1860-a5ba-11e5-9bb0-38a9ce329b85.png)
 
-We set the `tformat` parameter to 1, as this is more appropriate for larger
-number of comparisons.
+We set the `tformat` parameter to 1, as this is more appropriate when many
+comparisons are performed.
 
 ## License
 
