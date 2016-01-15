@@ -110,7 +110,7 @@ elseif strcmp(test, 'p') % Parametric test
         
     end;
     
-elseif strcmp(test, 'np')
+elseif strcmp(test, 'np') % Non-parametric test
     
     % Use Mann-Whitney for two-samples, Kruskal-Wallis for n samples
     if nimpl == 2
@@ -126,50 +126,12 @@ elseif strcmp(test, 'np')
         
         % Kruskal-Wallis
         if is_octave()
-
-            % Stupid way to do this in Octave, but is there any other way?
-            switch size(data, 2)
-                case 2
-                    p = kruskal_wallis_test(data(:, 1), data(:, 2));
-                case 3
-                    p = kruskal_wallis_test(data(:, 1), data(:, 2), ...
-                        data(:, 3));
-                case 4
-                    p = kruskal_wallis_test(data(:, 1), data(:, 2), ...
-                        data(:, 3), data(:, 4));
-                case 5
-                    p = kruskal_wallis_test(data(:, 1), data(:, 2), ...
-                        data(:, 3), data(:, 4), data(:, 5));
-                case 6
-                    p = kruskal_wallis_test(data(:, 1), data(:, 2), ...
-                        data(:, 3), data(:, 4), data(:, 5), data(:, 6));
-                case 7
-                    p = kruskal_wallis_test(data(:, 1), data(:, 2), ...
-                        data(:, 3), data(:, 4), data(:, 5), data(:, 6), ...
-                        data(:, 7));
-                case 8
-                    p = kruskal_wallis_test(data(:, 1), data(:, 2), ...
-                        data(:, 3), data(:, 4), data(:, 5), data(:, 6), ...
-                        data(:, 7), data(:, 8));
-                case 9
-                    p = kruskal_wallis_test(data(:, 1), data(:, 2), ...
-                        data(:, 3), data(:, 4), data(:, 5), data(:, 6), ...
-                        data(:, 7), data(:, 8), data(:, 9));
-                case 10
-                    p = kruskal_wallis_test(data(:, 1), data(:, 2), ...
-                        data(:, 3), data(:, 4), data(:, 5), data(:, 6), ...
-                        data(:, 7), data(:, 8), data(:, 9), data(:, 10));
-                otherwise
-                    error(['Cannot perform the Kruskal-Wallis test with more'...
-                        ' than 10 implementations in Octave.']);
-            end;
-
+            cdata = num2cell(data, 1);
+            p = kruskal_wallis_test(cdata{:});
         else
-
-            % With MATLAB
             p = kruskalwallis(data, inames, 'off');
-
         end;
+
     end;
 else
     

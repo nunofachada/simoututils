@@ -11,7 +11,7 @@
 function used by other functions).
 
 * [is_octave](is_octave.m) - Checks if the code is running in Octave or
-Matlab.
+MATLAB.
 
 * [ltxp](ltxp.m) - Formats a _p_-value for LaTeX using the [ltxpv](ltxpv.m) 
 function, setting 'minpv' to `0.001` (i.e. truncating _p_-values to 0.001) and 
