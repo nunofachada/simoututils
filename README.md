@@ -617,8 +617,8 @@ summaries for each output. In this case we are performing the _t_-test to all
 summaries, except **argmax** and **argmin**, to which the Mann-Whitney test
 [\[5\]][ref5] is applied instead. The options 'p' and 'np' stand for parametric
 and non-parametric, respectively. The 3rd parameter specifies the _p_-value
-adjustment method for comparison of multiple focal measures. In this case no
-correction is performed.
+adjustment method for comparison of multiple focal measures. No correction is
+performed in this case.
 
 The [stats_compare] function return `ps`, a matrix of _p_-values for the
 requested tests (rows correspond to outputs, columns to statistical summaries),
@@ -713,8 +713,8 @@ stats_compare_pw(0.05, {'p', 'np', 'p', 'np', 'p', 'p'}, 'none', sjst800v2, sjeq
 ```
 
 Since each pairwise comparison involves the comparison of multiple focal
-measures, it may can useful to correct the _p_-values for multiple comparisons,
-e.g. using the [Bonferroni] procedure:
+measures, it may can useful to correct the _p_-values to account for multiple
+comparisons, e.g. using the [Bonferroni] procedure:
 
 ```matlab
 % Output table of pairwise failed tests for significance level 0.05 with Bonferroni correction
@@ -733,8 +733,9 @@ stats_compare_pw(0.05, {'p', 'np', 'p', 'np', 'p', 'p'}, 'bonferroni', sjst800v2
 ------------------------------------------------------------------------------------
 ```
 
-With the correction no single test fails, strengthening the conclusion that the
-compared model implementations are aligned.
+No single test fails after the Bonferroni correction is applied to the
+_p_-values, strengthening the conclusion that the compared model implementations
+are aligned.
 
 <a name="plotthepdfandcdfoffocalmeasuresfromoneormoremodelimplementations"></a>
 
