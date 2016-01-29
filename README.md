@@ -792,7 +792,8 @@ _p_-values in LaTeX. This function accepts four parameters:
 1. `tests` - Type of statistical tests to perform (parametric or
 non-parametric).
 2. `adjust` - Adjustment to _p_-values for comparison of multiple focal
-measures: 'holm', 'hochberg', 'hommel', 'bonferroni', 'BH', 'BY' or 'none'.
+measures: 'holm', 'hochberg', 'hommel', 'bonferroni', 'BH', 'BY', 'sidak' or
+'none'.
 3. `pthresh` - Minimum value of _p_-values before truncation (e.g. if this value
 is set to 0.001 and a certain _p_-value is less than that, the table will
 display "&lt; 0.001".
