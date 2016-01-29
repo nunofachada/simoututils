@@ -1,10 +1,10 @@
-function [t, h_all] = stats_compare_pw(alpha, tests, varargin)
+function [t, h_all] = stats_compare_pw(alpha, tests, adjust, varargin)
 % STATS_COMPARE_PW Compare focal measures from multiple model 
 % implementations, pair-wise, by applying the specified two-sample
 % statistical tests. This function outputs a plain text table of pair-wise 
 % failed tests.
 %
-%   [t, h_all] = STATS_COMPARE_PW(alpha, tests, varargin)
+%   [t, h_all] = STATS_COMPARE_PW(alpha, tests, adjust, varargin)
 %
 % Parameters:
 %    alpha - Significante level for the tests.
@@ -12,6 +12,9 @@ function [t, h_all] = stats_compare_pw(alpha, tests, varargin)
 %            strings, each string corresponding to the test to apply to 
 %            each of the statistical summaries produced by the stats_get
 %            function.
+%   adjust - Adjust p-values for comparison of multiple focal measures?
+%            Available options are: 'holm', 'hochberg', 'hommel',
+%            'bonferroni', 'BH', 'BY' or 'none'.
 % varargin - Statistical summaries (given by the stats_gather function) 
 %            for each implementation.
 %
@@ -28,7 +31,7 @@ function [t, h_all] = stats_compare_pw(alpha, tests, varargin)
 %
 
 % Number of implementations
-num_impls = nargin - 2;
+num_impls = nargin - 3;
 
 % Matrix of failed tests
 h_all = zeros(num_impls, num_impls);
@@ -38,7 +41,8 @@ for i = 1:num_impls
     for j = (i + 1):num_impls
         
         % Compare implementations i and j
-        [~, fails] = stats_compare(alpha, tests, varargin{i}, varargin{j});
+        [~, fails] = stats_compare(...
+            alpha, tests, adjust, varargin{i}, varargin{j});
         
         % Update matrix of failed tests
         h_all(i, j) = h_all(i, j) + fails;

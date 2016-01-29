@@ -1,8 +1,8 @@
-function [ps, h_all] = stats_compare(alpha, tests, varargin)
+function [ps, h_all] = stats_compare(alpha, tests, adjust, varargin)
 % STATS_COMPARE Compare focal measures from two or more model 
 % implementations by applying the specified statistical tests.
 %
-%   [ps, h_all] = STATS_COMPARE(alpha, tests, varargin)
+%   [ps, h_all] = STATS_COMPARE(alpha, tests, adjust, varargin)
 %
 % Parameters:
 %    alpha - Significante level for the tests.
@@ -13,6 +13,9 @@ function [ps, h_all] = stats_compare(alpha, tests, varargin)
 %            comparing two or more models, respectively. Can also be a 
 %            cell array of strings, each string corresponding to the test 
 %            to apply to each statistical summary returned by stats_get.
+%   adjust - Adjust p-values for comparison of multiple focal measures?
+%            Available options are: 'holm', 'hochberg', 'hommel',
+%            'bonferroni', 'BH', 'BY' or 'none'.
 % varargin - Statistical summaries (given by the stats_gather function) 
 %            for each implementation.
 %
@@ -27,7 +30,7 @@ function [ps, h_all] = stats_compare(alpha, tests, varargin)
 %
 
 % Number of implementations
-nimpl = nargin - 2;
+nimpl = nargin - 3;
 
 % Implementation names
 inames = cell(1, nimpl);
@@ -50,9 +53,6 @@ nssumms = numel(ssumms.text);
 % Vector of p-values (will be reshaped into a matrix later)
 ps = zeros(1, 6 * nout);
 
-% Total failed tests
-h_all = 0;
-
 % Cycle through focal measures
 for i = 1:(nssumms * nout)
     
@@ -65,14 +65,17 @@ for i = 1:(nssumms * nout)
     % Perform statistical test
     ps(i) = dotest(tests{mod(i - 1, numel(tests)) + 1}, cmpdata, inames);
     
-    % Did the test succeed?
-    h_all = h_all + (ps(i) < alpha);
-    
 end;
 
 % Convert vector of p-values to matrix (rows correspond to outputs, columns
 % to statistical summaries).
 ps = reshape(ps, nssumms, nout)';
+
+% Perform p-value correction, if any
+ps = pval_adjust(ps, adjust);
+
+% How many tests failed?
+h_all = sum(reshape(ps < alpha, 1, numel(ps)));
 
 % %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% %
 % Helper function to perform the actual tests %

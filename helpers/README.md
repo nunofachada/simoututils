@@ -31,6 +31,8 @@ _x_ using a window of size _w_.
 * [parse_output_names](parse_output_names.m) - Determine effective output names
 and number of outputs.
 
+* [pval_adjust](pval_adjust.m) - Adjust _p_-values for multiple comparisons.
+
 * [qqcalc](qqcalc.m) - Calculates the (normalized) points for a QQ-plot 
 of the specified sample data versus the normal distribution.
 

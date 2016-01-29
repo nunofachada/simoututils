@@ -1,9 +1,9 @@
-function t = stats_compare_table(tests, pthresh, tformat, varargin)
+function t = stats_compare_table(tests, adjust, pthresh, tformat, varargin)
 % STATS_COMPARE_TABLE Output a LaTeX table with p-values resulting from
 % statistical tests used to evaluate the alignment of model 
 % implementations.
 %
-%   t = STATS_COMPARE_TABLE(tests, pthresh, tformat, varargin)
+%   t = STATS_COMPARE_TABLE(tests, adjust, pthresh, tformat, varargin)
 %
 % Parameters:
 %    tests - Either 'p' or 'np', for parametric or non-parametric tests,
@@ -14,7 +14,11 @@ function t = stats_compare_table(tests, pthresh, tformat, varargin)
 %            cell array of strings, each string corresponding to the test 
 %            to apply to each of the statistical summaries produced by the
 %            stats_get function.
-%  pthresh - Minimum value of p-values before truncation.
+%   adjust - Adjust p-values for comparison of multiple focal measures?
+%            Available options are: 'holm', 'hochberg', 'hommel',
+%            'bonferroni', 'BH', 'BY' or 'none'.
+%  pthresh - Minimum value of p-values before truncation (after 
+%            correction).
 %  tformat - Either 0 or 1. If 0, output names are placed in the table
 %            header (better for fewer comparisons). If 1, output names are
 %            placed in the first column (better for more comparisons).
@@ -38,7 +42,7 @@ function t = stats_compare_table(tests, pthresh, tformat, varargin)
 %
 
 % How many comparisons?
-ncomps = nargin - 3;
+ncomps = nargin - 4;
 if ncomps < 1
     error('At least one comparison must be specified.');
 end;
@@ -51,7 +55,7 @@ nsumms = numel(ssumms);
 % Perform statistical comparison
 cmp_pvals = cell(1, ncomps);
 for i = 1:ncomps
-    cmp_pvals{i} = stats_compare(0.01, tests, varargin{i}{2}{:});
+    cmp_pvals{i} = stats_compare(0.01, tests, adjust, varargin{i}{2}{:});
 end;
 
 % Comparison grouping and names
@@ -76,7 +80,7 @@ elseif iscellstr(varargin{1}{1})
     ngrps = 1;
     grps(1).name = varargin{1}{1}{1};
     grps(1).ncomps = 1;
-    for i = 2:(nargin - 3)
+    for i = 2:ncomps
         if strcmp(varargin{i}{1}{1}, varargin{i - 1}{1}{1})
             grps(ngrps).ncomps = grps(ngrps).ncomps + 1;
         else

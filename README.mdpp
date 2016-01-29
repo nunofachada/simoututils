@@ -556,7 +556,7 @@ comparison using the [stats_compare] function:
 
 ```matlab
 % Perform comparison
-[ps, h_all] = stats_compare(0.01, {'p', 'np', 'p', 'np', 'p', 'p'}, snl400v1, sjex400v1)
+[ps, h_all] = stats_compare(0.01, {'p', 'np', 'p', 'np', 'p', 'p'}, 'none', snl400v1, sjex400v1)
 ```
 
 The 1st parameter specifies the significance level for the statistical tests.
@@ -564,7 +564,9 @@ The 2nd parameter specifies the tests to apply on individual statistical
 summaries for each output. In this case we are performing the _t_-test to all
 summaries, except **argmax** and **argmin**, to which the Mann-Whitney test
 [\[5\]][ref5] is applied instead. The options 'p' and 'np' stand for parametric
-and non-parametric, respectively.
+and non-parametric, respectively. The 3rd parameter specifies the _p_-value
+adjustment method for comparison of multiple focal measures. In this case no
+correction is performed.
 
 The [stats_compare] function return `ps`, a matrix of _p_-values for the
 requested tests (rows correspond to outputs, columns to statistical summaries),
@@ -594,8 +596,7 @@ two model implementations. If more than two [stats_gather] structs are passed as
 arguments, the [stats_compare] function automatically uses _n_-sample
 statistical tests, namely ANOVA [\[6\]][ref6] as a parametric test, and
 Kruskal-Wallis [\[7\]][ref7] as a non-parametric test. In the following, we
-compare all Java variants of the PPHPC
-model for size 800, parameter set 2:
+compare all Java variants of the PPHPC model for size 800, parameter set 2:
 
 ```matlab
 % Get stats data for Java implementation, ST strategy
@@ -614,7 +615,7 @@ sjer800v2 = stats_gather('ER', [datafolder2 '/simout/ER'], 'stats800v2pERt12r*.t
 sjod800v2 = stats_gather('OD', [datafolder2 '/simout/OD'], 'stats800v2pODb500t12r*.txt', 6, 2000);
 
 % Perform comparison
-ps = stats_compare(0.05, {'p','np','p','np','p','p'}, sjst800v2, sjeq800v2, sjex800v2, sjer800v2, sjod800v2)
+ps = stats_compare(0.05, {'p', 'np', 'p', 'np', 'p', 'p'}, 'none', sjst800v2, sjeq800v2, sjex800v2, sjer800v2, sjod800v2)
 ```
 
 ```
@@ -633,14 +634,14 @@ ps =
 When comparing multiple model implementations, if one or more are misaligned, 
 the [stats_compare] function will detected a misalignment, but will not provide
 information regarding which implementation is misaligned. The [stats_compare_pw]
-function performs pair-wise comparisons of multiple model implementations and
+function performs pairwise comparisons of multiple model implementations and
 outputs a table of failed tests for each pair of implementations, allowing to
 detect which implementation(s) are misaligned. The following instruction outputs
 this table for the data used in the previous example:
 
 ```matlab
-% Output table of pair-wise failed tests for significance level 0.05
-stats_compare_pw(0.05, {'p', 'np', 'p', 'np', 'p', 'p'}, sjst800v2, sjeq800v2, sjex800v2, sjer800v2, sjod800v2)
+% Output table of pairwise failed tests for significance level 0.05
+stats_compare_pw(0.05, {'p', 'np', 'p', 'np', 'p', 'p'}, 'none', sjst800v2, sjeq800v2, sjex800v2, sjer800v2, sjod800v2)
 ```
 
 ```
@@ -654,6 +655,30 @@ stats_compare_pw(0.05, {'p', 'np', 'p', 'np', 'p', 'p'}, sjst800v2, sjeq800v2, s
 |         OD |           2 |           1 |           0 |           1 |           0 |
 ------------------------------------------------------------------------------------
 ```
+
+Since each pairwise comparison involves the comparison of multiple focal
+measures, it may can useful to correct the _p_-values for multiple comparisons,
+e.g. using the [Bonferroni] procedure:
+
+```matlab
+% Output table of pairwise failed tests for significance level 0.05 with Bonferroni correction
+stats_compare_pw(0.05, {'p', 'np', 'p', 'np', 'p', 'p'}, 'bonferroni', sjst800v2, sjeq800v2, sjex800v2, sjer800v2, sjod800v2)
+```
+
+```
+             -----------------------------------------------------------------------
+             |          ST |          EQ |          EX |          ER |          OD |
+------------------------------------------------------------------------------------
+|         ST |           0 |           0 |           0 |           0 |           0 |
+|         EQ |           0 |           0 |           0 |           0 |           0 |
+|         EX |           0 |           0 |           0 |           0 |           0 |
+|         ER |           0 |           0 |           0 |           0 |           0 |
+|         OD |           0 |           0 |           0 |           0 |           0 |
+------------------------------------------------------------------------------------
+```
+
+With the correction no single test fails, strengthening the conclusion that the
+compared model implementations are aligned.
 
 #### Plot the PDF and CDF of focal measures from one or more model implementations
 
@@ -705,12 +730,14 @@ _p_-values in LaTeX. This function accepts four parameters:
 
 1. `tests` - Type of statistical tests to perform (parametric or
 non-parametric).
-2. `pthresh` - Minimum value of _p_-values before truncation (e.g. if this value
+2. `adjust` - Adjustment to _p_-values for comparison of multiple focal
+measures: 'holm', 'hochberg', 'hommel', 'bonferroni', 'BH', 'BY' or 'none'.
+3. `pthresh` - Minimum value of _p_-values before truncation (e.g. if this value
 is set to 0.001 and a certain _p_-value is less than that, the table will
 display "&lt; 0.001".
-3. `tformat` - Specifies if outputs appear in the header (0) or in the first
+4. `tformat` - Specifies if outputs appear in the header (0) or in the first
 column (1).
-4. `varargin` - Variable number of cell arrays containing the following two
+5. `varargin` - Variable number of cell arrays containing the following two
 items defining a comparison: 
    * Item 1 can take one of three formats: a) zero, 0, which is an indication 
      not to print any type of comparison name; b) a string describing the 
@@ -726,7 +753,7 @@ focal measures:
 
 ```matlab
 s800v2 = {sjst800v2, sjeq800v2, sjex800v2, sjer800v2, sjod800v2};
-stats_compare_table('np', 0.001, 0, {0, s800v2})
+stats_compare_table('np', 'none', 0.001, 0, {0, s800v2})
 ```
 
 ![compare_ex05](https://cloud.githubusercontent.com/assets/3018963/11904709/e54bee80-a5b9-11e5-9c18-feab61382675.png)
@@ -760,7 +787,7 @@ cmp2 = {'II', {snl400v1, sjexns400v1 }};
 cmp3 = {'III', {snl400v1, sjexdiff400v1}};
 
 % Output comparison table
-stats_compare_table({'p', 'np', 'p', 'np', 'p', 'p'}, 0.000001, 0, cmp1, cmp2, cmp3)
+stats_compare_table({'p', 'np', 'p', 'np', 'p', 'p'}, 'none', 0.000001, 0, cmp1, cmp2, cmp3)
 ```
 
 ![compare_ex06](https://cloud.githubusercontent.com/assets/3018963/11904749/39f23ba6-a5ba-11e5-9f10-d1d42fbd39f8.png)
@@ -880,7 +907,7 @@ cmp9 = {{'Param. set 2', '800'}, s800v2};
 cmp10 = {{'Param. set 2', '1600'}, s1600v2};
 
 % Output comparison table
-stats_compare_table('np', 1e-6, 1, cmp1, cmp2, cmp3, cmp4, cmp5, cmp6, cmp7, cmp8, cmp9, cmp10)
+stats_compare_table('np', 'none', 1e-6, 1, cmp1, cmp2, cmp3, cmp4, cmp5, cmp6, cmp7, cmp8, cmp9, cmp10)
 ```
 
 ![compare_ex07](https://cloud.githubusercontent.com/assets/3018963/11904817/a80b1860-a5ba-11e5-9bb0-38a9ce329b85.png)
@@ -954,6 +981,7 @@ Variance Analysis. *Journal of the American Statistical Association* 47 (260):
 [LineSpec]: http://www.mathworks.com/help/matlab/ref/linespec.html
 [PatchSpec]: http://www.mathworks.com/help/matlab/ref/patch-properties.html
 [Willink confidence interval]: https://doi.org/10.1081%2FSTA-200054419
+[Bonferroni]: https://en.wikipedia.org/wiki/Bonferroni_correction
 [startup]: startup.m
 [output_plot]: core/output_plot.m
 [stats_get]: core/stats_get.m
