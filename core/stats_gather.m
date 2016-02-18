@@ -8,8 +8,9 @@ function stats = stats_gather(name, folder, files, outputs, args)
 % Parameters:
 %        name - Name with which to tag this data.
 %      folder - Folder with files containing simulation output.
-%       files - Files containing simulation output (use wildcards), each
-%               file corresponds to an observation.
+%       files - String or cell array of strings specifying files containing
+%               simulation output, each file corresponds to an observation.
+%               Accepts the * wildcard.
 %     outputs - Either an integer representing the number of outputs in 
 %               each file or a cell array of strings with the output names.
 %               In the former case, output names will be 'o1', 'o2', etc.
@@ -45,8 +46,24 @@ ssnum = numel(ssnames.text);
 % Determine effective output names and number of outputs
 [outputs, num_outputs] = parse_output_names(outputs);
 
+% Obtain full path for all specified files
+all_files = fullfile(folder, files);
+
 % Get file list
-listing = dir([folder '/' files]);
+if ischar(all_files)
+    
+    % Files were specified in one string
+    listing = dir(all_files);
+    
+else
+    
+    % Files were specified in multiple strings
+    listing = [];
+    for i = 1:numel(all_files)
+        listing = [listing ; dir(all_files{i})];
+    end;
+    
+end;
 
 % How many files?
 numFiles = size(listing, 1);
