@@ -74,7 +74,7 @@ The examples use the following datasets:
 
 1. [![DOI](https://zenodo.org/badge/doi/10.5281/zenodo.34053.svg)](http://dx.doi.org/10.5281/zenodo.34053)
 2. [![DOI](https://zenodo.org/badge/doi/10.5281/zenodo.34049.svg)](http://dx.doi.org/10.5281/zenodo.34049)
-3. [![DOI](https://zenodo.org/badge/doi/10.5281/zenodo.35240.svg)](http://dx.doi.org/10.5281/zenodo.35240)
+3. [![DOI](https://zenodo.org/badge/doi/10.5281/zenodo.46848.svg)](http://dx.doi.org/10.5281/zenodo.46848)
 
 These datasets correspond to the results presented in references [\[1\]][ref1],
 [\[2\]][ref2] and [\[3\]][ref3], respectively.
