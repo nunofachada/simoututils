@@ -23,6 +23,8 @@ The following links list the available functions:
 * [Helper functions](helpers)
 * [Third-party functions](3rdparty)
 
+If you use _SimOutUtils_, please cite reference [\[1\]][ref1].
+
 ## File format
 
 These utilities expect files in the TSV (tab-separated values) format, one
@@ -46,8 +48,8 @@ The examples use the following datasets:
 2. [![DOI](https://zenodo.org/badge/doi/10.5281/zenodo.34049.svg)](http://dx.doi.org/10.5281/zenodo.34049)
 3. [![DOI](https://zenodo.org/badge/doi/10.5281/zenodo.46848.svg)](http://dx.doi.org/10.5281/zenodo.46848)
 
-These datasets correspond to the results presented in references [\[1\]][ref1],
-[\[2\]][ref2] and [\[3\]][ref3], respectively.
+These datasets correspond to the results presented in references [\[2\]][ref2],
+[\[3\]][ref3] and [\[4\]][ref4], respectively.
 
 Unpack the datasets to any folder and put the complete path to these folders in
 variables `datafolder1`, `datafolder2` and `datafolder3`, respectively:
@@ -221,7 +223,7 @@ iteration where maximum occurs (**argmax**), minimum (**min**), iteration where
 minimum occurs (**argmin**), mean (**mean**), and standard deviation (**std**).
 The **mean** and **std** summaries are obtained during the (user-specified)
 steady-state stage of the output. These summaries were selected for the PPHPC
-model [\[1\]][ref1], but are appropriate for any model with tendentiously stable
+model [\[2\]][ref2], but are appropriate for any model with tendentiously stable
 time-series outputs.
 
 In order to use alternative statistical summaries, the user should specify
@@ -324,7 +326,7 @@ intervals and the Shapiro-Wilk test. The variables returned by the
 `v` (variance), `sw` (_p_-value of the Shapiro-Wilk test) and `sk` (skewness)
 variables have only one column, i.e. one value per focal measure, while the
 `cit` (_t_-confidence interval) and `ciw` (Willink confidence interval
-[\[4\]][ref4]) variables have two columns, which correspond to the lower and
+[\[5\]][ref5]) variables have two columns, which correspond to the lower and
 upper limits of the respective intervals.
 
 ### Distributional analysis of output
@@ -442,7 +444,7 @@ truncation point to iteration 2000.
 
 #### LaTeX table with distributional analysis of all focal measures for one setup
 
-In reference [\[1\]][ref1], a number of [tables][ref1tables] containing a
+In reference [\[2\]][ref2], a number of [tables][ref2tables] containing a
 detailed distributional analysis of all PPHPC focal measures are provided as
 supplemental information. Each table displays a distributional analysis for one
 setup, i.e. for one size/parameter set combination. The [dist_table_per_setup]
@@ -538,7 +540,7 @@ purpose, it uses data obtained with the [stats_gather] function.
 
 In this example we compare the NetLogo and Java EX implementations of the PPHPC
 model for model size 400, parameter set 1 (as described in reference
-[\[2\]][ref2]). Replications of the Java EX variant were performed with 12
+[\[3\]][ref3]). Replications of the Java EX variant were performed with 12
 threads. First, we need to obtain the focal measures (i.e. statistical summaries
 of simulation outputs) with the [stats_gather] function:
 
@@ -563,7 +565,7 @@ The 1st parameter specifies the significance level for the statistical tests.
 The 2nd parameter specifies the tests to apply on individual statistical
 summaries for each output. In this case we are performing the _t_-test to all
 summaries, except **argmax** and **argmin**, to which the Mann-Whitney test
-[\[5\]][ref5] is applied instead. The options 'p' and 'np' stand for parametric
+[\[6\]][ref6] is applied instead. The options 'p' and 'np' stand for parametric
 and non-parametric, respectively. The 3rd parameter specifies the _p_-value
 adjustment method for comparison of multiple focal measures. No correction is
 performed in this case.
@@ -594,8 +596,8 @@ h_all =
 The [stats_compare] function also allows to compare focal measure from more than
 two model implementations. If more than two [stats_gather] structs are passed as
 arguments, the [stats_compare] function automatically uses _n_-sample
-statistical tests, namely ANOVA [\[6\]][ref6] as a parametric test, and
-Kruskal-Wallis [\[7\]][ref7] as a non-parametric test. In the following, we
+statistical tests, namely ANOVA [\[7\]][ref7] as a parametric test, and
+Kruskal-Wallis [\[8\]][ref8] as a non-parametric test. In the following, we
 compare all Java variants of the PPHPC model for size 800, parameter set 2:
 
 ```matlab
@@ -685,7 +687,7 @@ are aligned.
 
 In this example we have two PPHPC implementations which produce equivalent
 results (NLOK and JEXOK), and two other which display slightly different
-behavior (JEXNS and JEXDIFF), as discussed in reference [\[3\]][ref3]. The
+behavior (JEXNS and JEXDIFF), as discussed in reference [\[4\]][ref4]. The
 following code loads simulation output data from these four implementations, and
 plots, using the [stats_compare_plot] function, the PDF and CDF of the
 respective focal measures. Plots for each focal measure are overlaid, allowing
@@ -769,7 +771,7 @@ comparison).
 
 #### Multiple comparisons and comparison names
 
-In Table 2 of reference [\[3\]][ref3], three comparisons, I, II, and III, are
+In Table 2 of reference [\[4\]][ref4], three comparisons, I, II, and III, are
 performed. The comparison name can be specified in item 1 of the variable
 argument cell arrays, as shown in the following code:
 
@@ -801,7 +803,7 @@ _t_-test and from the non-parametric Mann-Whitney test.
 
 #### Comparison groups
 
-In Table 8 of reference [\[2\]][ref2], ten comparisons are performed. Each
+In Table 8 of reference [\[3\]][ref3], ten comparisons are performed. Each
 comparison is associated with a model size and parameter set and tests for
 differences between six model implementations. Comparisons are divided into two
 groups, according to the parameter set used. This is accomplished by passing a
@@ -925,44 +927,49 @@ comparisons are performed.
 
 <a name="ref1"></a>
 
-[\[1\]][ref1] Fachada N, Lopes VV, Martins RC, Rosa AC. (2015) Towards a
-standard model for research in agent-based modeling and simulation. *PeerJ
-Computer Science* 1:e36. https://doi.org/10.7717/peerj-cs.36
+[\[1\]][ref1] Fachada N, Lopes VV, Martins RC, Rosa AC. (2016) SimOutUtils -
+ Utilities for analyzing simulation output. *Under peer-review*. (arXiv version
+available at http://arxiv.org/abs/1603.06914)
 
 <a name="ref2"></a>
 
-[\[2\]][ref2] Fachada N, Lopes VV, Martins RC, Rosa AC. (2016) Parallelization
+[\[2\]][ref2] Fachada N, Lopes VV, Martins RC, Rosa AC. (2015) Towards a
+standard model for research in agent-based modeling and simulation. *PeerJ
+Computer Science* 1:e36. https://doi.org/10.7717/peerj-cs.36
+
+<a name="ref3"></a>
+
+[\[3\]][ref3] Fachada N, Lopes VV, Martins RC, Rosa AC. (2016) Parallelization
 Strategies for Spatial Agent-Based Models. *International Journal of Parallel
 Programming*. https://doi.org/10.1007/s10766-015-0399-9 (arXiv version available
 at http://arxiv.org/abs/1507.04047)
 
-<a name="ref3"></a>
+<a name="ref4"></a>
 
-[\[3\]][ref3] Fachada N, Lopes VV, Martins RC, Rosa AC. (2016) Model-independent
+[\[4\]][ref4] Fachada N, Lopes VV, Martins RC, Rosa AC. (2016) Model-independent
 comparison of simulation output. *Under peer-review*. (arXiv version available
 at http://arxiv.org/abs/1509.09174)
 
-<a name="ref4"></a>
+<a name="ref5"></a>
 
-[\[4\]][ref4] Willink R (2005) A Confidence Interval and Test for the Mean of
+[\[5\]][ref5] Willink R (2005) A Confidence Interval and Test for the Mean of
 an Asymmetric Distribution. *Communications in Statistics - Theory and Methods*
 34 (4): 753-766. https://doi.org/10.1081%2FSTA-200054419
 
-<a name="ref5"></a>
-
-[\[5\]][ref5] Gibbons JD, Chakraborti S. (2010) *Nonparametric statistical
-inference*. Chapman and Hall/CRC
-
 <a name="ref6"></a>
 
-[\[6\]][ref6] Hogg RV, Ledolter J. (1987) *Engineering Statistics*. MacMillan
+[\[6\]][ref6] Gibbons JD, Chakraborti S. (2010) *Nonparametric statistical
+inference*. Chapman and Hall/CRC
 
 <a name="ref7"></a>
 
-[\[7\]][ref7] Kruskal WH, Wallis WA. (1952) Use of Ranks in One-Criterion
+[\[7\]][ref7] Hogg RV, Ledolter J. (1987) *Engineering Statistics*. MacMillan
+
+<a name="ref8"></a>
+
+[\[8\]][ref8] Kruskal WH, Wallis WA. (1952) Use of Ranks in One-Criterion
 Variance Analysis. *Journal of the American Statistical Association* 47 (260): 
 583–621
-
 
 [ref1]: #ref1
 [ref2]: #ref2
@@ -971,7 +978,8 @@ Variance Analysis. *Journal of the American Statistical Association* 47 (260):
 [ref5]: #ref5
 [ref6]: #ref6
 [ref7]: #ref7
-[ref1tables]: https://doi.org/10.7717/peerj-cs.36/supp-2
+[ref8]: #ref8
+[ref2tables]: https://doi.org/10.7717/peerj-cs.36/supp-2
 [Matlab]: http://www.mathworks.com/products/matlab/
 [Octave]: https://gnu.org/software/octave/
 [PPHPC]: https://github.com/fakenmc/pphpc
