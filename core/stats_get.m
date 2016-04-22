@@ -33,13 +33,13 @@ function sdata = stats_get(args, file, num_outputs)
 %
 
 % Actual function to use - Edit this line to use another function
-sgfun = @stats_get_pphpc;
+global simoututils_stats_get_;
 
 % How many arguments were passed?
 if nargin == 1
     % Return names of statistical summaries.
-    sdata = sgfun(args);
+    sdata = simoututils_stats_get_(args);
 else
     % Return matrix of statistical summaries.
-    sdata = sgfun(args, file, num_outputs);
+    sdata = simoututils_stats_get_(args, file, num_outputs);
 end;
