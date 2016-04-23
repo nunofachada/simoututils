@@ -39,3 +39,39 @@ function test_ci_t
         assertElementsAlmostEqual(ci, ci_loc);
     end;
     
+
+function test_ci_w
+
+    % Set RNG to a specific reproducible state
+    if is_octave()
+        rand('seed', 321);
+    else
+        rng(321, 'twister');
+    end;
+    
+    % Some random data
+    vecs = cell(3, 1);
+    vecs{1} = randn(20, 1);
+    vecs{2} = randn(200, 1) + 1;
+    vecs{3} = randn(2000, 1) + 100;
+    
+    % Base alpha
+    alpha = 0.05;
+
+    % G function for Willink CI
+    G = @(r, a) ((1 + 6 * a * (r - a))^(1/3) - 1) / (2 * a);
+    
+    % Get confidence intervals
+    for i = 1:numel(vecs)
+        ci = ci_willink(vecs{i}, alpha);
+        n = numel(vecs{i});
+        s = std(vecs{i}) / sqrt(n);
+        mvec = mean(vecs{i});
+        mu3 = n * sum((vecs{i} - mvec).^3) / ((n - 1) * (n - 2));
+        a = mu3 / (6 * sqrt(n) * var(vecs{i})^(3/2));
+        ci_loc = [mvec - G(tinv(1 - alpha / 2, n - 1), a) * s, ...
+            mvec - G(-tinv(1 - alpha / 2, n - 1), a) * s];
+        assertElementsAlmostEqual(ci, ci_loc);
+    end;
+
+    

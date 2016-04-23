@@ -196,6 +196,9 @@ function test_stats_analyze
     else
         rng(43210, 'twister');
     end;
+
+    % G function for Willink CI
+    G = @(r, a) ((1 + 6 * a * (r - a))^(1/3) - 1) / (2 * a);
     
     % Test stats_analyze with 20 random vectors with various sizes
     nvecs = 20;
@@ -240,7 +243,6 @@ function test_stats_analyze
             assertElementsAlmostEqual(cit(j, :), cit_loc);
             
             % Willink confidence interval
-            G = @(r, a) ((1 + 6 * a * (r - a))^(1/3) - 1) / (2 * a);
             mu3 = n * sum((vec - mvec).^3) / ((n - 1) * (n - 2));
             a = mu3 / (6 * sqrt(n) * var(vec)^(3/2));
             ciw_loc = [mvec - G(tinv(1 - alpha / 2, n - 1), a) * s, ...
