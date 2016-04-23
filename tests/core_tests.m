@@ -11,6 +11,7 @@
 function test_suite = core_tests
     initTestSuite
 
+% Test stats_get and stats_get_* functions
 function test_stats_get_
 
     % Global specifying the defined stats_get_* function
@@ -106,7 +107,8 @@ function test_stats_get_
 
     % Set originally defined stats_get_* function
     simoututils_stats_get_ = original_stats_get;
-    
+
+% Test stats_gather function
 function test_stats_gather
 
     % Global specifying the defined stats_get_* function
@@ -184,4 +186,76 @@ function test_stats_gather
     
     % Set originally defined stats_get_* function
     simoututils_stats_get_ = original_stats_get;
+    
+% Test stats_analyze function
+function test_stats_analyze
+
+    % Set RNG to a specific reproducible state
+    if is_octave()
+        rand('seed', 43210);
+    else
+        rng(43210, 'twister');
+    end;
+    
+    % Test stats_analyze with 20 random vectors with various sizes
+    nvecs = 20;
+    for i = 1:nvecs
+        
+        % Number of focal measures (up to 50)
+        nfm = randi(50);
+        
+        % Number of observations (up to 501)
+        nobs = randi(500) + 1;
+        
+        % Generate random matrix of focal measure observations
+        mat = rand(nobs, nfm) .* repmat(randi(10000, 1, nfm), nobs, 1);
+        
+        % Generate random alpha
+        alpha = rand(1);
+        
+        % Invoke stats_analyze
+        [m, v, cit, ciw, sw, sk] = stats_analyze(mat, alpha);
+        
+        % Check if stats per fm correspond to what is expected
+        for j = 1:nfm
+            
+            % Current vector
+            vec = mat(:, j);
+            
+            % Vector mean
+            mvec = mean(vec);
+            
+            % Check mean
+            assertElementsAlmostEqual(m(j), mvec);
+            
+            % Check variance
+            assertElementsAlmostEqual(v(j), var(vec));
+            
+            % t-Confidence interval
+            n = numel(vec);
+            s = std(vec) / sqrt(n);
+            cit_loc = [...
+                mvec - tinv(1 - alpha / 2, n - 1) * s, ...
+                mvec + tinv(1 - alpha / 2, n - 1) * s];
+            assertElementsAlmostEqual(cit(j, :), cit_loc);
+            
+            % Willink confidence interval
+            G = @(r, a) ((1 + 6 * a * (r - a))^(1/3) - 1) / (2 * a);
+            mu3 = n * sum((vec - mvec).^3) / ((n - 1) * (n - 2));
+            a = mu3 / (6 * sqrt(n) * var(vec)^(3/2));
+            ciw_loc = [mvec - G(tinv(1 - alpha / 2, n - 1), a) * s, ...
+                mvec - G(-tinv(1 - alpha / 2, n - 1), a) * s];
+            assertElementsAlmostEqual(ciw(j, :), ciw_loc);
+
+            % Shapiro-Wilk p-value
+            [~, swpval] = swtest(vec);
+            assertElementsAlmostEqual(sw(j), swpval);
+            
+            % Skewness
+            assertElementsAlmostEqual(sk(j), skewness(vec));
+            
+        end;
+        
+    end;
+ 
  

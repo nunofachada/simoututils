@@ -5,8 +5,7 @@ function [m, v, cit, ciw, sw, sk] = stats_analyze(data, alpha)
 %   [m, v, cit, ciw, sw, sk] = STATS_ANALYZE(data, alpha)
 %
 % Parameters:
-%  data - Data to analyze, n x m matrix, n observations, m statistical
-%         summaries.
+%  data - Data to analyze, n x m matrix, n observations, m focal measures.
 % alpha - Significance level for confidence intervals and Shapiro-Wilk
 %         test.
 %
@@ -18,7 +17,7 @@ function [m, v, cit, ciw, sw, sk] = stats_analyze(data, alpha)
 %    sw - Vector of m p-values of the Shappiro-Wilk test.
 %    sk - Vector of m skewnesses.
 % 
-% Copyright (c) 2015 Nuno Fachada
+% Copyright (c) 2016 Nuno Fachada
 % Distributed under the MIT License (See accompanying file LICENSE or copy 
 % at http://opensource.org/licenses/MIT)
 %
