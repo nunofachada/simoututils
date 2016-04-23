@@ -1,7 +1,8 @@
 function stats = stats_gather(name, folder, files, outputs, args)
 % STATS_GATHER Get statistical summaries taken from simulation outputs from
-% multiple files. The exact statistical summaries depend on how the 
-% stats_get function is configured.
+% multiple files. The exact statistical summaries depend on the specific
+% stats_get_* function defined in the simoututils_stats_get_ global
+% variable.
 %
 %   stats = STATS_GATHER(name, folder, files, outputs, args)
 %
