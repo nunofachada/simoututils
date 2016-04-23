@@ -1,8 +1,8 @@
-addpath('3rdparty');
-addpath('helpers');
-addpath('core');
-addpath('dist');
-addpath('compare');
+addpath([pwd() filesep '3rdparty']);
+addpath([pwd() filesep 'helpers']);
+addpath([pwd() filesep 'core']);
+addpath([pwd() filesep 'dist']);
+addpath([pwd() filesep 'compare']);
 
 global simoututils_stats_get_ simoututils_version;
 simoututils_stats_get_ = @stats_get_pphpc;
