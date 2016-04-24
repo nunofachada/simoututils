@@ -259,18 +259,18 @@ function test_stats_compare_table
     sg1 =  struct('name', 'sg1', 'sdata', randn(nobs, nfms), ...
         'outputs', {{'o1'}}, ...
         'ssnames', ...
-        struct('text', {{'fm1','fm2','fm3'}}, ...
-            'latex', {{'fm1','fm2','fm3'}}));
+        struct('text', {{'fm1', 'fm2', 'fm3'}}, ...
+            'latex', {{'fm1', 'fm2', 'fm3'}}));
     sg2 =  struct('name', 'sg2', 'sdata', randn(nobs, nfms), ...
         'outputs', {{'o1'}}, ...
         'ssnames', ...
-        struct('text', {{'fm1','fm2','fm3'}}, ...
-            'latex', {{'fm1','fm2','fm3'}}));
+        struct('text', {{'fm1', 'fm2', 'fm3'}}, ...
+            'latex', {{'fm1', 'fm2', 'fm3'}}));
     sg3 =  struct('name', 'sg3', 'sdata', randn(nobs, nfms), ...
         'outputs', {{'o1'}}, ...
         'ssnames', ...
-        struct('text', {{'fm1','fm2','fm3'}}, ...
-            'latex', {{'fm1','fm2','fm3'}}));
+        struct('text', {{'fm1', 'fm2', 'fm3'}}, ...
+            'latex', {{'fm1', 'fm2', 'fm3'}}));
     
     % Comparison cases
     cmps = {{{0, {sg1, sg2}}}, ...
@@ -292,5 +292,72 @@ function test_stats_compare_table
                     assertEqual(class(t), 'char');
                 end;
             end;
+        end;
+    end;
+
+% Test stats_compare_pw function
+function test_stats_compare_pw
+
+    %
+    % Use artificially created stats_gather data
+    %
+    nobs = 15;
+    nouts = 2;
+    nss = 1;
+    nfms = nouts * nss;
+    
+    % Set RNG to a specific reproducible state
+    if is_octave()
+        rand('seed', 1111);
+    else
+        rng(1111, 'twister');
+    end;
+  
+    % Create bogus stats_gather data with 15 observations and 2 FMs
+    % (2 outputs x 1 statistical measure)
+    sg1 =  struct('name', 'sg1', 'sdata', randn(nobs, nfms), ...
+        'outputs', {{'o1', 'o2'}}, ...
+        'ssnames', struct('text', {{'fm1'}}, 'latex', {{'fm1'}}));
+    sg2 =  struct('name', 'sg2', 'sdata', randn(nobs, nfms), ...
+        'outputs', {{'o1', 'o2'}}, ...
+        'ssnames', struct('text', {{'fm1'}}, 'latex', {{'fm1'}}));
+    sg3 =  struct('name', 'sg3', 'sdata', randn(nobs, nfms), ...
+        'outputs', {{'o1', 'o2'}}, ...
+        'ssnames', struct('text', {{'fm1'}}, 'latex', {{'fm1'}}));
+    sg_all = {sg1, sg2, sg3};
+
+    % Comparison cases
+    tests = {'p', 'np'};
+    alphas = [0.005 0.15];
+    
+    % Perform tests
+    for tst = tests
+        for a = alphas
+            
+            % Invoke stats_compare_pw
+            [t, h_all] = stats_compare_pw(a, tst, 'none', sg1, sg2, sg3);
+            
+            % Check that returned table is of type char
+            assertEqual(class(t), 'char');
+
+            % Compare all implementations pair-wise "by hand"
+            h_all_loc = zeros(numel(sg_all));
+            for i = 1: numel(sg_all)
+                for j = (i + 1): numel(sg_all)
+
+                    % Compare implementations i and j
+                    [~, fails] = stats_compare(...
+                        a, tst, 'none', sg_all{i}, sg_all{j});
+
+                    % Update matrix of failed tests
+                    h_all_loc(i, j) = h_all_loc(i, j) + fails;
+                    h_all_loc(j, i) = h_all_loc(j, i) + fails;
+
+                end;
+            end;        
+        
+            % Check that table values are the same
+            assertEqual(h_all, h_all_loc);
+            
         end;
     end;
