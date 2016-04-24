@@ -85,7 +85,7 @@ function test_stats_compare
     end;
   
     % Create bogus stats_gather data with 20 observations and 10 FMs
-    % (5 outputs, 2 statistical measures)
+    % (5 outputs x 2 statistical measures)
     sg1 =  struct('name', 'sg1', 'sdata', randn(nobs, nfms), ...
         'outputs', {{'o1','o2','o3','o4','o5'}}, ...
         'ssnames', ...
@@ -236,3 +236,61 @@ function test_stats_compare
     simoututils_stats_get_ = original_stats_get;
 
   
+% Test stats_compare_table function
+function test_stats_compare_table
+
+    %
+    % Use artificially created stats_gather data
+    %
+    nobs = 30;
+    nouts = 1;
+    nss = 3;
+    nfms = nouts * nss;
+    
+    % Set RNG to a specific reproducible state
+    if is_octave()
+        rand('seed', 98765);
+    else
+        rng(98765, 'twister');
+    end;
+  
+    % Create bogus stats_gather data with 30 observations and 3 FMs
+    % (1 output x 3 statistical measures)
+    sg1 =  struct('name', 'sg1', 'sdata', randn(nobs, nfms), ...
+        'outputs', {{'o1'}}, ...
+        'ssnames', ...
+        struct('text', {{'fm1','fm2','fm3'}}, ...
+            'latex', {{'fm1','fm2','fm3'}}));
+    sg2 =  struct('name', 'sg2', 'sdata', randn(nobs, nfms), ...
+        'outputs', {{'o1'}}, ...
+        'ssnames', ...
+        struct('text', {{'fm1','fm2','fm3'}}, ...
+            'latex', {{'fm1','fm2','fm3'}}));
+    sg3 =  struct('name', 'sg3', 'sdata', randn(nobs, nfms), ...
+        'outputs', {{'o1'}}, ...
+        'ssnames', ...
+        struct('text', {{'fm1','fm2','fm3'}}, ...
+            'latex', {{'fm1','fm2','fm3'}}));
+    
+    % Comparison cases
+    cmps = {{{0, {sg1, sg2}}}, ...
+        {{0, {sg1, sg2, sg3}}}, ...
+        {{'1', {sg1, sg2}}, {'2', {sg1, sg3}}, {'3', {sg2, sg3}}}, ...
+        {{{'G1', 'C1'}, {sg1, sg2}}, {{'G1', 'C2'}, {sg1, sg3}}, ...
+        {{'G2', 'C1'}, {sg3, sg2}}, {{'G2', 'C2'}, {sg3, sg1}}}};
+    tests = {'p', 'np'};
+    pthresh = [0.1 0.00001];
+    tformat = [0 1];
+    
+    % Perform tests
+    for cmp = cmps
+        for tst = tests
+            for pt = pthresh
+                for tf = tformat
+                    t = stats_compare_table(...
+                        tst, 'none', pt, tf, cmp{:}{:});
+                    assertEqual(class(t), 'char');
+                end;
+            end;
+        end;
+    end;
