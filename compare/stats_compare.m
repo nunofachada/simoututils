@@ -15,7 +15,7 @@ function [ps, h_all] = stats_compare(alpha, tests, adjust, varargin)
 %            to apply to each statistical summary returned by stats_get.
 %   adjust - Adjust p-values for comparison of multiple focal measures?
 %            Available options are: 'holm', 'hochberg', 'hommel',
-%            'bonferroni', 'BH', 'BY' or 'none'.
+%            'bonferroni', 'BH', 'BY', 'sidak' or 'none'.
 % varargin - Statistical summaries (given by the stats_gather function) 
 %            for each implementation.
 %
@@ -24,7 +24,7 @@ function [ps, h_all] = stats_compare(alpha, tests, adjust, varargin)
 %            outputs, columns to statistical summaries.
 %    h_all - How many tests failed for the specified significance level.
 %
-% Copyright (c) 2015 Nuno Fachada
+% Copyright (c) 2016 Nuno Fachada
 % Distributed under the MIT License (See accompanying file LICENSE or copy 
 % at http://opensource.org/licenses/MIT)
 %
@@ -51,7 +51,7 @@ ssumms = varargin{1}.ssnames;
 nssumms = numel(ssumms.text);
 
 % Vector of p-values (will be reshaped into a matrix later)
-ps = zeros(1, 6 * nout);
+ps = zeros(1, nssumms * nout);
 
 % Cycle through focal measures
 for i = 1:(nssumms * nout)
