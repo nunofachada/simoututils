@@ -117,7 +117,7 @@ output_plot([datafolder1 '/v1'], 'stats100v1r1.txt', 6);
 
 ![simout_ex01_01](https://cloud.githubusercontent.com/assets/3018963/11877081/0209605a-a4e5-11e5-8092-95dfe0bbcd5b.png)
 
-The 3rd parameter specifies the number of outputs. Alternatively, a cell array
+The third parameter specifies the number of outputs. Alternatively, a cell array
 of strings can be passed in order to display personalized output names.
 Furthermore, outputs 4 to 6 are practically not visible, as they have a very
 different scale from outputs 1 to 3. The 'layout' option defines how many
@@ -160,7 +160,7 @@ namely 'Colors', 'LineStyles', 'LineWidths', 'Markers', 'MarkerEdgeColors',
 which is only recognized within the [PatchSpec]s context, i.e. for type **f**
 plots.
 
-Returning to the example, the 3rd and 6th outputs of the last command
+Returning to the example, the third and sixth outputs of the last command
 (*GrassQty* and *GrassEnergy*, respectively) are still somewhat out of scale
 with the remaining outputs. This can be solved by specifying the 'scale' option:
 
@@ -337,13 +337,13 @@ summaries for 30 runs of the PPHPC model for size 100 and parameter set 1:
 s100v1 = stats_gather('100v1', [datafolder1 '/v1'], 'stats100v1r*.txt', 6, 1000);
 ```
 
-The 4th parameter, 6, corresponds to the number of outputs of the PPHPC model.
-Instead of the number of outputs, the function alternatively accepts a cell 
-array of strings containing the output names, which can be useful for tables and
-figures. The 5th and last parameter, 1000 , corresponds to the iteration after 
-which the outputs are in steady-state. The [stats_gather] function returns a
-_struct_ with several fields, of which the following are important to this
-discussion:
+The fourth parameter, 6, corresponds to the number of outputs of the PPHPC
+model. Instead of the number of outputs, the function alternatively accepts a
+cell array of strings containing the output names, which can be useful for
+tables and figures. The fifth and last parameter, 1000 , corresponds to the
+iteration after which the outputs are in steady-state. The [stats_gather]
+function returns a _struct_ with several fields, of which the following are
+important to this discussion:
 
 * `name` contains the name with which the data was tagged, '100v1' in this case;
 * `outputs` is a cell array containing the output names (which default to 'o1', 
@@ -358,8 +358,8 @@ output):
 [m, v, cit, ciw, sw, sk] = stats_analyze(s100v1.sdata', 0.05);
 ```
 
-The 0.05 value in the 2nd parameter is the significance level for the confidence
-intervals and the Shapiro-Wilk test. The variables returned by the 
+The 0.05 value in the second parameter is the significance level for the
+confidence intervals and the Shapiro-Wilk test. The variables returned by the 
 [stats_analyze] function have 36 rows, one per focal measure. The `m` (mean),
 `v` (variance), `sw` (_p_-value of the Shapiro-Wilk test) and `sk` (skewness)
 variables have only one column, i.e. one value per focal measure, while the
@@ -472,8 +472,9 @@ s1600v2 = stats_gather('1600v2', [datafolder1 '/v2'], 'stats1600v2r*.txt', outpu
 sv2 = {s100v2, s200v2, s400v2, s800v2, s1600v2};
 ```
 
-The **argmin** of the *grass quantity* output is the 3rd statistical summary of
-the 4th output, as indicated in the 2nd and 3rd arguments of [dist_plot_per_fm]:
+The **argmin** of the *grass quantity* output is the third statistical summary
+of the fourth output, as indicated in the second and third arguments of
+[dist_plot_per_fm]:
 
 ```matlab
 % Plot distributional properties
@@ -604,8 +605,8 @@ snl400v1 = stats_gather('NL', [datafolder2 '/simout/NL'], 'stats400v1r*.txt', 6,
 sjex400v1 = stats_gather('JEX', [datafolder2 '/simout/EX'], 'stats400v1pEXt12r*.txt', 6, 1000);
 ```
 
-The 3rd parameter, 6, corresponds to the number of model outputs, while 4th
-parameter, 1000, is the steady-state truncation point. We can now perform the
+The fourth parameter, 6, corresponds to the number of model outputs, while the
+last, 1000, is the steady-state truncation point. We can now perform the
 comparison using the [stats_compare] function:
 
 ```matlab
@@ -613,12 +614,12 @@ comparison using the [stats_compare] function:
 [ps, h_all] = stats_compare(0.01, {'p', 'np', 'p', 'np', 'p', 'p'}, 'none', snl400v1, sjex400v1)
 ```
 
-The 1st parameter specifies the significance level for the statistical tests.
-The 2nd parameter specifies the tests to apply on individual statistical
+The first parameter specifies the significance level for the statistical tests.
+The second parameter specifies the tests to apply on individual statistical
 summaries for each output. In this case we are performing the _t_-test to all
 summaries, except **argmax** and **argmin**, to which the Mann-Whitney test
 [\[6\]][ref6] is applied instead. The options 'p' and 'np' stand for parametric
-and non-parametric, respectively. The 3rd parameter specifies the _p_-value
+and non-parametric, respectively. The third parameter specifies the _p_-value
 adjustment method for comparison of multiple focal measures. No correction is
 performed in this case.
 
