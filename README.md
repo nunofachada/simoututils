@@ -22,8 +22,9 @@ SimOutUtils - Utilities for analyzing simulation output
 4.3.5\.  [Table with _p_-values from comparison of focal measures from model implementations](#tablewith_p_-valuesfromcomparisonoffocalmeasuresfrommodelimplementations)  
 4.3.6\.  [Multiple comparisons and comparison names](#multiplecomparisonsandcomparisonnames)  
 4.3.7\.  [Comparison groups](#comparisongroups)  
-5\.  [License](#license)  
-6\.  [References](#references)  
+5\.  [Unit tests](#unittests)  
+6\.  [License](#license)  
+7\.  [References](#references)  
 
 <a name="whatissimoututils?"></a>
 
@@ -53,8 +54,11 @@ If you use _SimOutUtils_, please cite reference [\[1\]][ref1].
 
 ## 2\. File format
 
-These utilities expect files in the TSV (tab-separated values) format, one
-column per output, one row per iteration.
+The provided functions use the [dlmread] MATLAB/Octave function to open files
+containing simulation output. As such, these functions expect text files with
+numeric values delimited by a separator (automatically inferred by [dlmread]).
+The files should contain data values in tabular format, with one column per
+output and one row per iteration.
 
 <a name="howtousetheutilities"></a>
 
@@ -247,25 +251,16 @@ function). The goal of [stats_get] is to extract statistical summaries from
 simulation outputs from one file. It does this through ancillary `stats_get_*`
 functions which perform the actual extraction. The exact function to use (and
 consequently, the exact statistical summaries to extract) is specified in the
-first instruction of [stats_get]:
+`simoututils_stats_get_` global variable, set when _SimOutUtils_ is loaded.
 
-```matlab
-sgfun = @stats_get_pphpc;
-```
-
-As shown in the above instruction, [stats_get_pphpc] is the package default.
-This function returns six statistical summaries, namely the maximum (**max**),
-iteration where maximum occurs (**argmax**), minimum (**min**), iteration where
-minimum occurs (**argmin**), mean (**mean**), and standard deviation (**std**).
-The **mean** and **std** summaries are obtained during the (user-specified)
-steady-state stage of the output. These summaries were selected for the PPHPC
-model [\[2\]][ref2], but are appropriate for any model with tendentiously stable
-time-series outputs.
-
-In order to use alternative statistical summaries, the user should specify
-another function by editing the above instruction. _SimOutUtils_ includes a
-second `stats_get_*` function, [stats_get_iters], in which statistical summaries
-correspond to output values at user-specified iterations.
+The [stats_get_pphpc] function is the package default. This function returns six
+statistical summaries, namely the maximum (**max**), iteration where maximum
+occurs (**argmax**), minimum (**min**), iteration where minimum occurs
+(**argmin**), mean (**mean**), and standard deviation (**std**). The **mean**
+and **std** summaries are obtained during the (user-specified) steady-state
+stage of the output. These summaries were selected for the PPHPC model
+[\[2\]][ref2], but are appropriate for any model with tendentiously stable
+time series outputs.
 
 The following instruction gets the statistical summaries of the first
 replication of the PPHPC model for size 100 and parameter set 1:
@@ -293,13 +288,18 @@ sdata =
     0.1211    0.0487    0.2731    0.0007    0.0016    0.0002
 ```
 
-Changing the `stats_get_*` being used is simple. Let us edit the first
-instruction of the [stats_get] function, and specify the [stats_get_iters]
-function instead:
+In order to use alternative statistical summaries, the user should specify
+another function by setting the appropriate function handle in the
+`simoututils_stats_get_` global variable:
 
 ```matlab
-sgfun = @stats_get_iters;
+simoututils_stats_get_ = @stats_get_iters;
 ```
+
+The previous instruction sets [stats_get_iters] as the `stats_get_*` function
+to use by [stats_get] in particular and _SimOutUtils_ in general. For the
+[stats_get_iters] function, statistical summaries correspond to output values at
+user-specified iterations.
 
 We can now call [stats_get] again. Note that the first argument now specifies
 the iterations at which to get output values:
@@ -312,7 +312,6 @@ The returned _n_ x _m_ matrix of focal measure now has _n_=3 statistical
 summaries and _m_=6 outputs:
 
 ```
-
 sdata =
 
    1.0e+03 *
@@ -321,6 +320,10 @@ sdata =
     1.9110    0.0240    4.9280    0.0160    0.0246    0.0028
     1.0060    0.4690    6.6110    0.0170    0.0207    0.0018
 ```
+
+The default `stats_get_*` function is set in the [startup] script. To
+permanently use another function as default, edit this file and change the value
+of the `simoututils_stats_get_` global variable as desired.
 
 For the remainder of this discussion it is assumed that the [stats_get_pphpc]
 function is being used.
@@ -984,15 +987,29 @@ stats_compare_table('np', 'none', 1e-6, 1, cmp1, cmp2, cmp3, cmp4, cmp5, cmp6, c
 We set the `tformat` parameter to 1, as this is more appropriate when many
 comparisons are performed.
 
+<a name="unittests"></a>
+
+## 5\. Unit tests
+
+The _SimOutUtils_ unit tests require the [MOxUnit] framework. Set the
+appropriate path to this framework as specified in the respective instructions,
+`cd` into the [tests] folder and execute the following instruction:
+
+```
+moxunit_run_tests
+```
+
+The tests can take a few minutes to run.
+
 <a name="license"></a>
 
-## 5\. License
+## 6\. License
 
 [MIT License](LICENSE)
 
 <a name="references"></a>
 
-## 6\. References
+## 7\. References
 
 <a name="ref1"></a>
 
@@ -1051,6 +1068,7 @@ Variance Analysis. *Journal of the American Statistical Association* 47 (260):
 [ref2tables]: https://doi.org/10.7717/peerj-cs.36/supp-2
 [Matlab]: http://www.mathworks.com/products/matlab/
 [Octave]: https://gnu.org/software/octave/
+[dlmread]: http://www.mathworks.com/help/matlab/ref/dlmread.html
 [PPHPC]: https://github.com/fakenmc/pphpc
 [matlab2tikz]: http://www.mathworks.com/matlabcentral/fileexchange/22022-matlab2tikz-matlab2tikz
 [siunitx]: https://www.ctan.org/pkg/siunitx
@@ -1076,3 +1094,5 @@ Variance Analysis. *Journal of the American Statistical Association* 47 (260):
 [stats_compare_pw]: compare/stats_compare_pw.m
 [stats_compare_plot]: compare/stats_compare_plot.m
 [stats_compare_table]: compare/stats_compare_table.m
+[tests]: tests
+[MOxUnit]: https://github.com/MOxUnit/MOxUnit
