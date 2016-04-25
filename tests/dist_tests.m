@@ -11,6 +11,7 @@
 function test_suite = dist_tests
     initTestSuite
 
+% Test stats_table_per_setup function
 function test_stats_table_per_setup
     
     % Set RNG to a specific reproducible state
@@ -68,4 +69,49 @@ function test_stats_table_per_setup
             end;
         end;
     end;
+
+% Test dist_table_per_setup function
+function test_dist_table_per_setup
     
+    % Set RNG to a specific reproducible state
+    if is_octave()
+        rand('seed', 2345);
+    else
+        rng(2345, 'twister');
+    end;
+
+    %
+    % Setup test cases
+    %
+    nobs = [5 25 50];
+    nouts = [1 4 8];
+    nss = [1 5];
+    
+    % Create template outputs and statistical summary vectors
+    outs = cell(1, max(nouts));
+    for i = 1:numel(outs), outs{i} = ['o' int2str(i)]; end;
+    sss = cell(1, max(nss));
+    for i = 1:numel(sss), sss{i} = ['ss' int2str(i)]; end;
+    
+    % Perform tests for all test cases
+    for i = nobs
+        for j = nouts
+            for k = nss
+                
+                % Artificially create stats_gather data
+                sg =  struct('name', 'sg', ...
+                    'sdata', randg(3, i, j * k), ...
+                    'outputs', {outs(1:j)}, ...
+                    'ssnames', ...
+                    struct('text', {sss(1:k)}, ...
+                    'latex', {sss(1:k)}));
+                
+                % Generate table
+                t = dist_table_per_setup(sg);
+                
+                % Check if table is char
+                assertEqual(class(t), 'char');
+                
+            end;
+        end;
+    end;
