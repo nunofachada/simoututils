@@ -15,11 +15,11 @@ function t = stats_table_per_setup(data, alpha, format)
 %          packages).
 %
 % Returns:
-%      t - A string containing the LaTeX table.
+%      t - A string containing the plain text or LaTeX table.
 % 
 % See also STATS_ANALYZE, DIST_TABLE_PER_SETUP.
 % 
-% Copyright (c) 2015 Nuno Fachada
+% Copyright (c) 2016 Nuno Fachada
 % Distributed under the MIT License (See accompanying file LICENSE or copy 
 % at http://opensource.org/licenses/MIT)
 %
@@ -43,12 +43,12 @@ if format == 0
     idx = 0;
     
     t = sprintf('-----------------------------------------------------------------------------------------\n');
-    t = sprintf('%s|   Output   | Stat.    |    Mean    |  Variance  |  % 2d%% Confidence interval | SW test |\n', ...
-        t, round(100 * (1 - alpha)));
+    t = sprintf('%s|   Output   | Stat.    |    Mean    |  Variance  |   % 2.1f%% Conf. interval   | SW test |\n', ...
+        t, 100 * (1 - alpha));
     for outp = outputs
         for ssumm = ssumms
             idx = idx + 1;
-            if rem(idx, nssums) == 1
+            if (rem(idx, nssums) == 1) || (nssums == 1)
                 t = sprintf('%s|------------|----------|------------|------------|---------------------------|---------|\n',...
                     t);
                 t = sprintf('%s| % 10s ', t, outp{1});
@@ -77,7 +77,7 @@ else
     for outp = outputs
         for ssumm = ssumms
             idx = idx + 1;
-            if rem(idx, nssums) == 1
+            if (rem(idx, nssums) == 1) || (nssums == 1)
                 t = sprintf('%s\\midrule\n', t);
                 t = sprintf('%s\\multirow{%d}{*}{%s}\n', ...
                     t, nssums, outp{1});
