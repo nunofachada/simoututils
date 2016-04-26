@@ -51,13 +51,13 @@ function [d, h] = output_plot(folder, files, outputs, varargin)
 %    h - Handles of created figures.
 %
 %
-% Copyright (c) 2015 Nuno Fachada
+% Copyright (c) 2016 Nuno Fachada
 % Distributed under the MIT License (See accompanying file LICENSE or copy 
 % at http://opensource.org/licenses/MIT)
 %
 
 % Read files containing outputs
-listing = dir([folder '/' files]);
+listing = dirnd([folder '/' files]);
 num_files = size(listing, 1);
 
 % Were any files found?

@@ -123,7 +123,7 @@ function test_stats_gather
     % Folder and files to load
     folder = '../data/pphpc/j_ex_ok';
     files = 'stats*.tsv';
-    file_lst = dir([folder filesep files]);
+    file_lst = dirnd([folder filesep files]);
     
     % Steady-state separator for stats_get_pphpc
     ss = 100;

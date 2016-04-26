@@ -35,7 +35,7 @@ function stats = stats_gather(name, folder, files, outputs, args)
 %
 % See also STATS_GET.
 % 
-% Copyright (c) 2015 Nuno Fachada
+% Copyright (c) 2016 Nuno Fachada
 % Distributed under the MIT License (See accompanying file LICENSE or copy 
 % at http://opensource.org/licenses/MIT)
 %
@@ -54,14 +54,14 @@ all_files = fullfile(folder, files);
 if ischar(all_files)
     
     % Files were specified in one string
-    listing = dir(all_files);
+    listing = dirnd(all_files);
     
 else
     
     % Files were specified in multiple strings
     listing = [];
     for i = 1:numel(all_files)
-        listing = [listing ; dir(all_files{i})];
+        listing = [listing ; dirnd(all_files{i})];
     end;
     
 end;

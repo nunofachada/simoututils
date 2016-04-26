@@ -7,6 +7,8 @@
 * [ci_willink](ci_willink.m) - Obtain a Willink confidence interval 
 (accounts for skewness).
 
+* [dirnd](dirnd.m) - Lists files ignoring folders.
+
 * [hist_edges](hist_edges.m) - Finds the edges for an histogram (helper 
 function used by other functions).
 
