@@ -208,14 +208,13 @@ figure:
 #### Get statistical summaries from one replication
 
 The [stats_get] function is the elementary building block of _SimOutUtils_ for
-analyzing simulation output. It is indirectly used by practically all
-distributional analysis functions (via the higher-level [stats_gather] 
-function). The goal of [stats_get] is to extract statistical summaries from
-simulation outputs from one file. It does this through ancillary `stats_get_*`
-functions which perform the actual extraction. The exact function to use (and
-consequently, the exact statistical summaries to extract) is specified in the
-`simoututils_stats_get_` global variable, defined in the [startup] script when
-_SimOutUtils_ is loaded.
+analyzing simulation output. It is indirectly used by most package functions
+(via the higher-level [stats_gather] function). The goal of [stats_get] is to
+extract statistical summaries from simulation outputs from one file. It does
+this through ancillary `stats_get_*` functions which perform the actual
+extraction. The exact function to use (and consequently, the exact statistical
+summaries to extract) is specified in the `simoututils_stats_get_` global
+variable, defined in the [startup] script when _SimOutUtils_ is selected.
 
 The [stats_get_pphpc] function is the package default. This function returns six
 statistical summaries, namely the maximum (**max**), iteration where maximum
@@ -311,7 +310,7 @@ important to this discussion:
 * `sdata` is a 30 x 36 matrix, with 30 observations (from 30 files) and 36 focal
 measures (six statistical summaries for each of the six outputs).
 
-Let's now analyze the focal measures (i.e., statistical summaries for each 
+Next, we analyze the focal measures (i.e., statistical summaries for each
 output):
 
 ```matlab
@@ -333,8 +332,8 @@ upper limits of the respective intervals.
 
 While the data returned by the [stats_analyze] is in a format adequate for
 further processing and/or analysis, it is not very human readable. For this
-purpose, one can use the [stats_table_per_setup] function to output a nice
-plain text table:
+purpose, we can use the [stats_table_per_setup] function to output an
+informative plain text table:
 
 ```matlab
 stats_table_per_setup(s100v1, 0.05, 0)
@@ -405,9 +404,9 @@ The produced LaTeX table requires the [siunitx], [multirow], [booktabs] and
 The [dist_plot_per_fm] function offers a simple way of assessing the
 distributional properties of a focal measure for different model configurations
 (i.e., different model sizes, different parameter set, etc). For each
-configuration the function shows an approximate probability density function 
+configuration the function shows an approximate probability density function
 (PDF), a histogram, and a QQ-plot. The [dist_plot_per_fm] function works with
-the data returned by [stats_gather]. 
+the data returned by [stats_gather].
 
 For example, let us assess the distributional properties of the PPHPC focal
 measure given by the **argmin** of the _grass quantity_ output for parameter set
@@ -590,7 +589,6 @@ h_all =
      1
 ```
 
-<a name="cmp_fms_multmodimpls"></a>
 #### Compare focal measures of multiple model implementations
 
 The [stats_compare] function also allows to compare focal measure from more than
@@ -751,7 +749,7 @@ items defining a comparison:
      [stats_gather] function) of the implementations 
      to be compared.
 
-The following command uses data from a [previous example](cmp_fms_multmodimpls)
+The following command uses data from a [previous example](#comparefocalmeasuresofmultiplemodelimplementations)
 and outputs a table of _p_-values returned by the non-parametric, multi-sample
 Kruskal-Wallis test for individual focal measures:
 
@@ -764,7 +762,7 @@ stats_compare_table('np', 'none', 0.001, 0, {0, s800v2})
 
 As we are only performing one comparison (for model size 800, parameter set 2),
 the third argument is set to 0. For multiple comparisons, it is preferable to
-set this parameter to 1, as it puts comparisons along columns and outputs along 
+set this parameter to 1, as it puts comparisons along columns and outputs along
 rows. The first item in the final argument is set to 0, such that the comparison
 name is not printed (which makes sense when the table only contains a single
 comparison).
