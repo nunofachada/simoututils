@@ -95,14 +95,30 @@ datafolder3 = 'path/to/dataset3';
 ```
 
 The datasets contain output from several implementations of the [PPHPC]
-conceptual model, which produces six outputs: 
+agent-based model. [PPHPC] is a realization of prototypical predator-prey
+system with six outputs: 
 
 1. Sheep population
 2. Wolves population
 3. Quantity of available grass
 4. Mean sheep energy
 5. Mean wolves energy
-6. Mean value of the cells countdown parameter
+6. Mean value of the grass countdown parameter
+
+Dataset 1 contains output from the [NetLogo] implementation of [PPHPC]. It is
+used in the [core functionality](#corefunctionality) and
+[distributional analysis of output](#distributionalanalysisofoutput) examples.
+Dataset 2 contains output from the NetLogo implementation and from six variants
+of a parallel Java implementation, namely, ST, EQ, EX, ER and OD. These
+implementations and variants are *aligned*, i.e., they display the same dynamic
+behavior. Finally, dataset 3 contains aligned output from the NetLogo and Java
+EX implementations, and also output from two purposefully misaligned versions of
+the latter. Datasets 2 and 3 are used in the examples concerning the
+[comparison of model implementations](#comparisonofmodelimplementations).
+
+The datasets were collected under five different model sizes (100 _x_ 100,
+200 _x_ 200, 400 _x_ 400, 800 _x_ 800 and 1600 _x_ 1600) and two distinct
+parameterizations (_v1_ and _v2_).
 
 <a name="corefunctionality"></a>
 
@@ -1063,6 +1079,7 @@ Variance Analysis. *Journal of the American Statistical Association* 47 (260):
 [ref2tables]: https://doi.org/10.7717/peerj-cs.36/supp-2
 [Matlab]: http://www.mathworks.com/products/matlab/
 [Octave]: https://gnu.org/software/octave/
+[NetLogo]: https://ccl.northwestern.edu/netlogo/
 [dlmread]: http://www.mathworks.com/help/matlab/ref/dlmread.html
 [PPHPC]: https://github.com/fakenmc/pphpc
 [matlab2tikz]: http://www.mathworks.com/matlabcentral/fileexchange/22022-matlab2tikz-matlab2tikz
