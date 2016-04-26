@@ -6,8 +6,9 @@ function h = stats_compare_plot(varargin)
 %   h = STATS_COMPARE_PLOT(varargin)
 %
 % Parameters:
-%   varargin - Samples of focal measures obtained with the stats_gather
-%   function.
+%   varargin - One or more objects returned by the stats_gather function
+%              for a number of runs with the desired model
+%              setup/configuration.
 %
 % Returns:
 %    h - Struct array of figure handles, with three fields: 
@@ -15,7 +16,7 @@ function h = stats_compare_plot(varargin)
 %        pdf - Handles for PDF subplots.
 %        cdf - Handles for CDF subplots.
 %
-% Copyright (c) 2015 Nuno Fachada
+% Copyright (c) 2016 Nuno Fachada
 % Distributed under the MIT License (See accompanying file LICENSE or copy 
 % at http://opensource.org/licenses/MIT)
 %
@@ -61,7 +62,13 @@ for i = 1:numel(outputs)
     
     % Focus current figure
     figure(handles(i).fig);
-    
+        
+    % Avoid bug in Octave 4.0.0 for multiple plots
+    % http://savannah.gnu.org/bugs/?46466
+    if is_octave()
+        sleep(1);
+    end;
+
     % Cycle through statistical summaries
     for j = 1:numel(ssumms)
 
