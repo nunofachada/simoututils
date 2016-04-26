@@ -1,5 +1,5 @@
-SimOutUtils - Utilities for analyzing simulation output
-=======================================================
+SimOutUtils - Utilities for analyzing time series simulation output
+===================================================================
 
 1\.  [What is SimOutUtils?](#whatissimoututils?)  
 2\.  [File format](#fileformat)  
@@ -54,11 +54,11 @@ If you use _SimOutUtils_, please cite reference [\[1\]][ref1].
 
 ## 2\. File format
 
-The provided functions use the [dlmread] MATLAB/Octave function to open files
-containing simulation output. As such, these functions expect text files with
-numeric values delimited by a separator (automatically inferred by [dlmread]).
-The files should contain data values in tabular format, with one column per
-output and one row per iteration.
+The functions provided by _SimOutUtils_ use the [dlmread] MATLAB/Octave function
+to open files containing simulation output. As such, these functions expect text
+files with numeric values delimited by a separator (automatically inferred by
+[dlmread]). The files should contain data values in tabular format, with one
+column per output and one row per iteration.
 
 <a name="howtousetheutilities"></a>
 
@@ -251,7 +251,8 @@ function). The goal of [stats_get] is to extract statistical summaries from
 simulation outputs from one file. It does this through ancillary `stats_get_*`
 functions which perform the actual extraction. The exact function to use (and
 consequently, the exact statistical summaries to extract) is specified in the
-`simoututils_stats_get_` global variable, set when _SimOutUtils_ is loaded.
+`simoututils_stats_get_` global variable, defined in the [startup] script when
+_SimOutUtils_ is loaded.
 
 The [stats_get_pphpc] function is the package default. This function returns six
 statistical summaries, namely the maximum (**max**), iteration where maximum
@@ -271,7 +272,7 @@ sdata = stats_get(1000, [datafolder1 '/v1/stats100v1r1.txt'], 6)
 
 The first argument is dependent on the actual `stats_get_*` being used. In this
 case, we are using the package default [stats_get_pphpc] function, which
-requires the user to specify the steady-state truncation point (i.e. 1000). The
+requires the user to specify the steady-state truncation point (i.e., 1000). The
 last argument specifies the number of outputs. The function returns a _n_ x _m_
 matrix of focal measures, with _n_=6 statistical summaries and _m_=6 outputs:
 
@@ -296,13 +297,10 @@ another function by setting the appropriate function handle in the
 simoututils_stats_get_ = @stats_get_iters;
 ```
 
-The previous instruction sets [stats_get_iters] as the `stats_get_*` function
-to use by [stats_get] in particular and _SimOutUtils_ in general. For the
-[stats_get_iters] function, statistical summaries correspond to output values at
-user-specified iterations.
-
-We can now call [stats_get] again. Note that the first argument now specifies
-the iterations at which to get output values:
+The previous instruction configures [stats_get_iters] as the `stats_get_*`
+function to use. The statistical summaries fetched by this function are simply
+the output values at user-specified iterations. Invoking [stats_get] again, the
+first argument now specifies the iterations at which to get output values:
 
 ```matlab
 sdata = stats_get([10 100 1000], [datafolder1 '/v1/stats100v1r1.txt'], 6)
@@ -321,12 +319,10 @@ sdata =
     1.0060    0.4690    6.6110    0.0170    0.0207    0.0018
 ```
 
-The default `stats_get_*` function is set in the [startup] script. To
-permanently use another function as default, edit this file and change the value
-of the `simoututils_stats_get_` global variable as desired.
-
-For the remainder of this discussion it is assumed that the [stats_get_pphpc]
-function is being used.
+To permanently use another `stats_get_*` function as default, edit the [startup]
+script and change the value of the `simoututils_stats_get_` global variable as
+desired. For the remainder of this discussion it is assumed that the
+[stats_get_pphpc] function is being used.
 
 <a name="getandanalyzestatisticalsummariesfrommultiplereplications"></a>
 
@@ -354,7 +350,7 @@ important to this discussion:
 * `sdata` is a 30 x 36 matrix, with 30 observations (from 30 files) and 36 focal
 measures (six statistical summaries for each of the six outputs).
 
-Let's now analyze the focal measures (i.e. statistical summaries for each 
+Let's now analyze the focal measures (i.e., statistical summaries for each 
 output):
 
 ```matlab
@@ -379,7 +375,7 @@ upper limits of the respective intervals.
 #### 4.2.1\. Distributional analysis tables
 
 While the data returned by the [stats_analyze] is in a format adequate for
-further processing and/or analysis, it is not very human readable. To this
+further processing and/or analysis, it is not very human readable. For this
 purpose, one can use the [stats_table_per_setup] function to output a nice
 plain text table:
 
@@ -389,7 +385,7 @@ stats_table_per_setup(s100v1, 0.05, 0)
 
 ```
 -----------------------------------------------------------------------------------------
-|   Output   | Stat.    |    Mean    |  Variance  |   95% Confidence interval | SW test |
+|   Output   | Stat.    |    Mean    |  Variance  |    95.0% Conf. interval   | SW test |
 |------------|----------|------------|------------|---------------------------|---------|
 |         o1 |      max |       2517 |       6699 | [       2486,       2547] |  0.8287 |
 |            |   argmax |      145.2 |      91.36 | [      141.7,      148.8] |  0.8255 |
@@ -453,7 +449,7 @@ The produced LaTeX table requires the [siunitx], [multirow], [booktabs] and
 
 The [dist_plot_per_fm] function offers a simple way of assessing the
 distributional properties of a focal measure for different model configurations
-(i.e. different model sizes, different parameter set, etc). For each
+(i.e., different model sizes, different parameter set, etc). For each
 configuration the function shows an approximate probability density function 
 (PDF), a histogram, and a QQ-plot. The [dist_plot_per_fm] function works with
 the data returned by [stats_gather]. 
@@ -497,7 +493,7 @@ truncation point to iteration 2000.
 In reference [\[2\]][ref2], a number of [tables][ref2tables] containing a
 detailed distributional analysis of all PPHPC focal measures are provided as
 supplemental information. Each table displays a distributional analysis for one
-setup, i.e. for one size/parameter set combination. The [dist_table_per_setup]
+setup, i.e., for one size/parameter set combination. The [dist_table_per_setup]
 function produces these tables, accepting a single parameter which corresponds
 to the output of [stats_gather]. For example, to get a table with the
 distributional analysis of all PPHPC focal measures for model size 1600,
@@ -591,14 +587,14 @@ t
 #### 4.3.1\. Compare focal measures of two model implementations
 
 The [stats_compare] function is used for comparing focal measures from two or
-more model implementations by applying the specified statistical tests. For this
-purpose, it uses data obtained with the [stats_gather] function.
+more model implementations. For this purpose, it applies statistical tests to
+data obtained with the [stats_gather] function.
 
 In this example we compare the NetLogo and Java EX implementations of the PPHPC
 model for model size 400, parameter set 1 (as described in reference
 [\[3\]][ref3]). Replications of the Java EX variant were performed with 12
-threads. First, we need to obtain the focal measures (i.e. statistical summaries
-of simulation outputs) with the [stats_gather] function:
+threads. First, we need to obtain the focal measures (i.e., statistical
+summaries of simulation outputs) with the [stats_gather] function:
 
 ```matlab
 % Get stats data for NetLogo implementation, parameter set 1, all sizes
@@ -623,7 +619,7 @@ summaries for each output. In this case we are performing the _t_-test to all
 summaries, except **argmax** and **argmin**, to which the Mann-Whitney test
 [\[6\]][ref6] is applied instead. The options 'p' and 'np' stand for parametric
 and non-parametric, respectively. The third parameter specifies the _p_-value
-adjustment method for comparison of multiple focal measures. No correction is
+adjustment method for comparing multiple focal measures. No correction is
 performed in this case.
 
 The [stats_compare] function return `ps`, a matrix of _p_-values for the
@@ -647,6 +643,7 @@ h_all =
      1
 ```
 
+<a name="cmp_fms_multmodimpls"></a>
 <a name="comparefocalmeasuresofmultiplemodelimplementations"></a>
 
 #### 4.3.2\. Compare focal measures of multiple model implementations
@@ -695,11 +692,11 @@ ps =
 
 When comparing multiple model implementations, if one or more are misaligned, 
 the [stats_compare] function will detected a misalignment, but will not provide
-information regarding which implementation is misaligned. The [stats_compare_pw]
-function performs pairwise comparisons of multiple model implementations and
-outputs a table of failed tests for each pair of implementations, allowing to
-detect which implementation(s) are misaligned. The following instruction outputs
-this table for the data used in the previous example:
+information regarding which implementations are misaligned. The
+[stats_compare_pw] function performs pairwise comparisons of multiple model
+implementations and outputs a table of failed tests for each pair of
+implementations, allowing to detect which ones are misaligned. The following
+instruction outputs this table for the data used in the previous example:
 
 ```matlab
 % Output table of pairwise failed tests for significance level 0.05
@@ -719,8 +716,8 @@ stats_compare_pw(0.05, {'p', 'np', 'p', 'np', 'p', 'p'}, 'none', sjst800v2, sjeq
 ```
 
 Since each pairwise comparison involves the comparison of multiple focal
-measures, it may can useful to correct the _p_-values to account for multiple
-comparisons, e.g. using the [Bonferroni] procedure:
+measures, it can be useful to correct the _p_-values to account for multiple
+comparisons, e.g., using the [Bonferroni] procedure:
 
 ```matlab
 % Output table of pairwise failed tests for significance level 0.05 with Bonferroni correction
@@ -800,8 +797,8 @@ non-parametric).
 2. `adjust` - Adjustment to _p_-values for comparison of multiple focal
 measures: 'holm', 'hochberg', 'hommel', 'bonferroni', 'BH', 'BY', 'sidak' or
 'none'.
-3. `pthresh` - Minimum value of _p_-values before truncation (e.g. if this value
-is set to 0.001 and a certain _p_-value is less than that, the table will
+3. `pthresh` - Minimum value of _p_-values before truncation (e.g., if this
+value is set to 0.001 and a certain _p_-value is less than that, the table will
 display "&lt; 0.001".
 4. `tformat` - Specifies if outputs appear in the header (0) or in the first
 column (1).
@@ -815,9 +812,9 @@ items defining a comparison:
      [stats_gather] function) of the implementations 
      to be compared.
 
-The following command uses data from example 2 and outputs a table of _p_-values
-returned by the non-parametric, multi-sample Kruskal-Wallis test for individual
-focal measures:
+The following command uses data from a [previous example](cmp_fms_multmodimpls)
+and outputs a table of _p_-values returned by the non-parametric, multi-sample
+Kruskal-Wallis test for individual focal measures:
 
 ```matlab
 s800v2 = {sjst800v2, sjeq800v2, sjex800v2, sjer800v2, sjod800v2};
@@ -830,7 +827,7 @@ As we are only performing one comparison (for model size 800, parameter set 2),
 the third argument is set to 0. For multiple comparisons, it is preferable to
 set this parameter to 1, as it puts comparisons along columns and outputs along 
 rows. The first item in the final argument is set to 0, such that the comparison
-name is not printed (which makes sense when the table comprises a single
+name is not printed (which makes sense when the table only contains a single
 comparison).
 
 <a name="multiplecomparisonsandcomparisonnames"></a>
@@ -864,7 +861,7 @@ stats_compare_table({'p', 'np', 'p', 'np', 'p', 'p'}, 'none', 0.000001, 0, cmp1,
 
 Here we specify comparison names, I, II, and II, which will be printed in the
 table. Note that each comparison tests two model implementations. As such the 
-resulting _p_-values come from two-sample tests, i.e. from the parametric 
+resulting _p_-values come from two-sample tests, i.e., from the parametric 
 _t_-test and from the non-parametric Mann-Whitney test.
 
 <a name="comparisongroups"></a>
@@ -872,8 +869,8 @@ _t_-test and from the non-parametric Mann-Whitney test.
 #### 4.3.7\. Comparison groups
 
 In Table 8 of reference [\[3\]][ref3], ten comparisons are performed. Each
-comparison is associated with a model size and parameter set and tests for
-differences between six model implementations. Comparisons are divided into two
+comparison is associated with a model size and parameter set, and tests for
+differences between six model implementations. Comparisons are divided in two
 groups, according to the parameter set used. This is accomplished by passing a
 cell array of two strings (comparison group and comparison name) to the first
 item of each comparison. The following code outputs this table:
@@ -996,7 +993,7 @@ appropriate path to this framework as specified in the respective instructions,
 `cd` into the [tests] folder and execute the following instruction:
 
 ```
-moxunit_run_tests
+moxunit_runtests
 ```
 
 The tests can take a few minutes to run.
