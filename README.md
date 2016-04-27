@@ -265,9 +265,9 @@ analyzing simulation output. It is indirectly used by most package functions
 (via the higher-level [stats_gather] function). The goal of [stats_get] is to
 extract statistical summaries from simulation outputs from one file. It does
 this through ancillary `stats_get_*` functions which perform the actual
-extraction. The exact function to use (and consequently, the exact statistical
-summaries to extract) is specified in the `simoututils_stats_get_` global
-variable, defined in the [startup] script when _SimOutUtils_ is selected.
+extraction. The exact function to use (and consequently, the concrete
+statistical summaries to extract) is specified in the `simoututils_stats_get_`
+global variable, defined in the [startup] script when _SimOutUtils_ is loaded.
 
 The [stats_get_pphpc] function is the package default. This function returns six
 statistical summaries, namely the maximum (**max**), iteration where maximum

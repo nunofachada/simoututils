@@ -15,8 +15,10 @@ on how the [stats_get](stats_get.m) function is configured.
 
 * [stats_get](stats_get.m) - This is a facade function for `stats_get_*` 
 functions. These functions extract statistical summaries from simulation outputs 
-from one file. The exact `stats_get_*` function to use is specified within this
-function. Two `stats_get_*` functions are included in this package:
+from one file. The exact `stats_get_*` function to use is specified in the
+`simoututils_stats_get_` global variable, set in the [startup](../startup.m)
+script when _SimOutUtils_ is loaded. Two `stats_get_*` functions are included in
+this package:
 
   * [stats_get_pphpc](stats_get_pphpc.m) - Obtain the **max**, **argmax**,
     **min**, **argmin**, **mean** and **std** statistical summaries from 
