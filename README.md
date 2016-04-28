@@ -848,7 +848,7 @@ comparison).
 
 #### 4.3.6\. Multiple comparisons and comparison names
 
-In Table 2 of reference [\[4\]][ref4], three comparisons, I, II, and III, are
+In Table 1 of reference [\[4\]][ref4], three comparisons, I, II, and III, are
 performed. The comparison name can be specified in item 1 of the variable
 argument cell arrays, as shown in the following code:
 
