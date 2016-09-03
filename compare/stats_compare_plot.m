@@ -73,7 +73,7 @@ for i = 1:numel(outputs)
     for j = 1:numel(ssumms)
 
         % What is the exact index of the focal measure being analyzed?
-        idx = (i - 1) * numel(outputs) + j;
+        idx = (i - 1) * numel(ssumms) + j;
 
         % Determine PDF estimate
         if var(stats.sdata(:, idx)) > 0
