@@ -51,11 +51,13 @@ if format == 0
             if (rem(idx, nssums) == 1) || (nssums == 1)
                 t = sprintf('%s|------------|----------|------------|------------|---------------------------|---------|\n',...
                     t);
-                t = sprintf('%s| % 10s ', t, outp{1});
+                outp_final = outp{1};
+                outp_final = outp_final(1:min(numel(outp_final), 10));
+                t = sprintf('%s| % 10s ', t, outp_final);
             else
                 t = sprintf('%s| % 10s ', t, ' ');
             end;
-            t = sprintf('%s| % 8s | % 10.4g | % 10.4g | [ %10.4g, %10.4g] | % 6.4f |\n', ...
+            t = sprintf('%s| % 8s | % 10.4g | % 10.4g | [ %10.4g, %10.4g] | % 7.4f |\n', ...
                 t, ssumm{1}, m(idx), v(idx), c(idx, 1), c(idx, 2), sw(idx));
         end;
     end;
