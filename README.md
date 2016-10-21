@@ -1025,9 +1025,8 @@ The tests can take a few minutes to run.
 <a name="ref1"></a>
 
 [\[1\]][ref1] Fachada N, Lopes VV, Martins RC, Rosa AC. (2016) SimOutUtils -
- Utilities for analyzing simulation output. *Under peer-review*. (arXiv version
-available at http://arxiv.org/abs/1603.06914)
-
+ Utilities for analyzing simulation output. *Journal of Open Research Software*
+4(1):e38. http://doi.org/10.5334/jors.110
 <a name="ref2"></a>
 
 [\[2\]][ref2] Fachada N, Lopes VV, Martins RC, Rosa AC. (2015) Towards a
