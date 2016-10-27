@@ -1059,7 +1059,8 @@ inference*. Chapman and Hall/CRC
 
 <a name="ref7"></a>
 
-[\[7\]][ref7] Hogg RV, Ledolter J. (1987) *Engineering Statistics*. MacMillan
+[\[7\]][ref7] Montgomery DC, Runger GC. (2014) *Applied statistics and
+probability for engineers*. John Wiley \& Sons
 
 <a name="ref8"></a>
 
