@@ -57,7 +57,7 @@ function [d, h] = output_plot(folder, files, outputs, varargin)
 %
 
 % Read files containing outputs
-listing = dirnd([folder '/' files]);
+listing = dirnd([folder filesep files]);
 num_files = size(listing, 1);
 
 % Were any files found?
@@ -66,7 +66,7 @@ if num_files == 0
 end;
 
 % Load data from first file (used for defaults)
-data = dlmread([folder '/' listing(1).name]);
+data = dlmread([folder filesep listing(1).name]);
 
 % Default output names if respective arguments not given
 if nargin < 3
@@ -91,7 +91,7 @@ all_data = zeros(num_outputs, iters, num_files);
 % Load data from files
 for i = 1:num_files
             
-    data = dlmread([folder '/' listing(i).name]);
+    data = dlmread([folder filesep listing(i).name]);
     for j = 1:num_outputs
         all_data(j, :, i) = data(1:iters, j);
     end;
