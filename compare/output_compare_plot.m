@@ -68,21 +68,13 @@ d = zeros(num_modimpls, num_outputs, iters - ws);
 for i = 1:num_modimpls
     
     % Read files containing outputs for current model implementation
-    listing = dirnd([folders{i} '/' files{i}]);
+    listing = dirnd([folders{i} filesep files{i}]);
     num_files = size(listing, 1);
 
     % Were any files found?
     if num_files == 0
         error(['No files found for model implementation ' num2str(i)]);
     end;    
-
-%     % Load data from first file (used for defaults)
-%     data = dlmread([folders{i} '/' listing(1).name]);
-% 
-%     % If iterations were not specified, use all available iterations
-%     if iters == 0
-%         iters = size(data, 1);
-%     end;
 
     % Initialize data vector
     all_data = zeros(num_outputs, iters, num_files);
@@ -169,35 +161,35 @@ if numArgs > 0
             elseif strcmp(args{i}, 'Colors')
                 
                 % Colors
-                Colors = adjust_spec(args{i + 1}, num_outputs);
+                Colors = adjust_spec(args{i + 1}, num_modimpls);
                 [lineprops(pidxs).Colors_tag] = deal('Color');
                 [lineprops(pidxs).Colors] = deal(Colors{:});
 
             elseif strcmp(args{i}, 'LineStyles')
 
                 % LineStyles
-                LineStyles = adjust_spec(args{i + 1}, num_outputs);
+                LineStyles = adjust_spec(args{i + 1}, num_modimpls);
                 [lineprops(pidxs).LineStyles_tag] = deal('LineStyle');
                 [lineprops(pidxs).LineStyles] = deal(LineStyles{:});
 
             elseif strcmp(args{i}, 'LineWidths')
 
                 % LineWidths
-                LineWidths = adjust_spec(args{i + 1}, num_outputs);
+                LineWidths = adjust_spec(args{i + 1}, num_modimpls);
                 [lineprops(pidxs).LineWidths_tag] = deal('LineWidth');
                 [lineprops(pidxs).LineWidths] = deal(LineWidths{:});
                 
             elseif strcmp(args{i}, 'Markers')
                 
                 % Markers
-                Markers = adjust_spec(args{i + 1}, num_outputs);
+                Markers = adjust_spec(args{i + 1}, num_modimpls);
                 [lineprops(pidxs).Markers_tag] = deal('Marker');
                 [lineprops(pidxs).Markers] = deal(Markers{:});
                 
             elseif strcmp(args{i}, 'MarkerEdgeColors')
                 
                 % MarkerEdgeColors
-                MarkerEdgeColors = adjust_spec(args{i + 1}, num_outputs);
+                MarkerEdgeColors = adjust_spec(args{i + 1}, num_modimpls);
                 [lineprops(pidxs).MarkerEdgeColors_tag] = ...
                     deal('MarkerEdgeColor');
                 [lineprops(pidxs).MarkerEdgeColors] = ...
@@ -206,7 +198,7 @@ if numArgs > 0
             elseif strcmp(args{i}, 'MarkerFaceColors')
 
                 % MarkerFaceColors
-                MarkerFaceColors = adjust_spec(args{i + 1}, num_outputs);
+                MarkerFaceColors = adjust_spec(args{i + 1}, num_modimpls);
                 [lineprops(pidxs).MarkerFaceColors_tag] = ...
                     deal('MarkerFaceColor');
                 [lineprops(pidxs).MarkerFaceColors] = ...
@@ -215,7 +207,7 @@ if numArgs > 0
             elseif strcmp(args{i}, 'MarkerSizes')
                 
                 % MarkerSizes
-                MarkerSizes = adjust_spec(args{i + 1}, num_outputs);
+                MarkerSizes = adjust_spec(args{i + 1}, num_modimpls);
                 [lineprops(pidxs).MarkerSizes_tag] = deal('MarkerSize');
                 [lineprops(pidxs).MarkerSizes] = deal(MarkerSizes{:});
                 
@@ -239,7 +231,7 @@ end;
 % Helper function to adjust line specs and patch specs
 % to match the number of model implementations
 % % % % % % % % % % % % % % % % % % % % % % % %
-function spec = adjust_spec(spec, num_modimples)
+function spec = adjust_spec(spec, num_modimpls)
 
 % If spec is not in cell format, put it in cell format
 if ~iscell(spec)
@@ -248,15 +240,15 @@ end;
 
 % Do we need to expand the spec to have number of elements equal to number
 % of model implementations?
-if numel(spec) < num_modimples
+if numel(spec) < num_modimpls
     
     % Repeatly concatenate given spec until there are more elements than
     % model implementations
-    while numel(spec) < num_modimples
+    while numel(spec) < num_modimpls
         spec = {spec{:}, spec{:}};
     end;
     
 end;
 
 % Make sure there are no more specs than model implementations
-spec = spec(1:num_modimples);
+spec = spec(1:num_modimpls);
