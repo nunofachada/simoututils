@@ -58,15 +58,7 @@ h = zeros(1, num_outputs);
 for i = 1:num_outputs
     h(i) = figure();
     hold on;
-    grid on; 
-
-    % Legend and axis labels
-    xlim([0 (iters - ws)]);
-    legend(impls);
-    xlabel('Iterations');
-    ylabel('Value');
-    title(outputs{i});
-    
+    grid on;     
 end;
 
 % Initialize output matrix
@@ -84,13 +76,13 @@ for i = 1:num_modimpls
         error(['No files found for model implementation ' num2str(i)]);
     end;    
 
-    % Load data from first file (used for defaults)
-    data = dlmread([folder '/' listing(1).name]);
-
-    % If iterations were not specified, use all available iterations
-    if iters == 0
-        iters = size(data, 1);
-    end;
+%     % Load data from first file (used for defaults)
+%     data = dlmread([folders{i} '/' listing(1).name]);
+% 
+%     % If iterations were not specified, use all available iterations
+%     if iters == 0
+%         iters = size(data, 1);
+%     end;
 
     % Initialize data vector
     all_data = zeros(num_outputs, iters, num_files);
@@ -115,15 +107,30 @@ for i = 1:num_modimpls
         figure(h(j));
 
         % Get line properties for current output
-        lp = struct2cell(lineprops(j));
+        lp = struct2cell(lineprops(i));
 
         % Plot moving average for current output
-        plot(d(i, j, :), lp{:});
+        plot(reshape(d(i, j, :), [1 numel(d(i, j, :))]), lp{:});
         
     end;
     
 end;
    
+% Decorate figures
+for i = 1:num_outputs
+    
+    % Select figure
+    figure(h(i));
+
+    % Legend and axis labels
+    xlim([0 (iters - ws)]);
+    legend(impls);
+    xlabel('Iterations');
+    ylabel('Value');
+    title(outputs{i});
+    
+end;
+
 % % % % % % % % % % % % % % % % % % % % % % % %
 % Helper function to parse optional arguments %
 % % % % % % % % % % % % % % % % % % % % % % % %
