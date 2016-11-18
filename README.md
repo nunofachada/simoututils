@@ -636,7 +636,9 @@ output_compare_plot({'NetLogo','Java-NS', 'Java-DIFF'}, ...
 
 The [stats_compare] function is used for comparing focal measures from two or
 more model implementations. For this purpose, it applies statistical tests to
-data obtained with the [stats_gather] function.
+data obtained with the [stats_gather] function. Currently, [stats_compare] and
+the remaining functions for model comparison are limited to comparing samples of
+the same size.
 
 In this example we compare the NetLogo and Java EX implementations of the PPHPC
 model for model size 400, parameter set 1 (as described in reference

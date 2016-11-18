@@ -59,6 +59,10 @@ for i = 1:(nssumms * nout)
     % Get sample from each implementation for current focal measure
     cmpdata = zeros(size(varargin{1}.sdata, 1), nimpl);
     for j = 1:nimpl
+        
+        % Currently only balanced tests (samples with same size) are
+        % allowed. For unbalanced tests the format of cmpdata must be a
+        % vector, and the dotest function must be updated accordingly.
         cmpdata(:, j) = varargin{j}.sdata(:, i);
     end;
 
@@ -142,5 +146,3 @@ else
     error(['Unknown test ' test]);
     
 end;
-    
-    
