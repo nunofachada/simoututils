@@ -1,7 +1,9 @@
 function [d, h] = ...
     output_compare_plot(impls, folders, files, outputs, varargin)
-% OUTPUT_COMPARE_PLOT Plot time-series simulation output from one or more 
-% replications of two or more model implementations using a moving average.
+% OUTPUT_COMPARE_PLOT Compare the plots of time-series simulation output
+% from two or more model implementations. Multiple replications from each
+% implementation are averaged, and an optional moving average filter can be
+% used to smooth the per implementation plots.
 %
 %   [d, h] = OUTPUT_COMPARE_PLOT(impls, folders, files, outputs, varargin)
 %

@@ -2,6 +2,11 @@
 
 #### Functions for comparing two or more model implementations
 
+* [output_compare_plot](output_compare_plot.m) - Compare the plots of
+time-series simulation output from two or more model implementations. Multiple
+replications from each implementation are averaged, and an optional moving
+average filter can be used to smooth the per implementation plots.
+
 * [stats_compare](stats_compare.m) - Compare focal measures from two or more 
 model implementations by applying the specified statistical tests.
 

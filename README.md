@@ -15,13 +15,14 @@ SimOutUtils - Utilities for analyzing time series simulation output
 4.2.3\.  [LaTeX table with distributional analysis of all focal measures for one setup](#latextablewithdistributionalanalysisofallfocalmeasuresforonesetup)  
 4.2.4\.  [LaTeX table with a distributional analysis of one focal measure for multiple setups](#latextablewithadistributionalanalysisofonefocalmeasureformultiplesetups)  
 4.3\.  [Comparison of model implementations](#comparisonofmodelimplementations)  
-4.3.1\.  [Compare focal measures of two model implementations](#comparefocalmeasuresoftwomodelimplementations)  
-4.3.2\.  [Compare focal measures of multiple model implementations](#comparefocalmeasuresofmultiplemodelimplementations)  
-4.3.3\.  [Pairwise comparison of model implementations](#pairwisecomparisonofmodelimplementations)  
-4.3.4\.  [Plot the PDF and CDF of focal measures from one or more model implementations](#plotthepdfandcdfoffocalmeasuresfromoneormoremodelimplementations)  
-4.3.5\.  [Table with _p_-values from comparison of focal measures from model implementations](#tablewith_p_-valuesfromcomparisonoffocalmeasuresfrommodelimplementations)  
-4.3.6\.  [Multiple comparisons and comparison names](#multiplecomparisonsandcomparisonnames)  
-4.3.7\.  [Comparison groups](#comparisongroups)  
+4.3.1\.  [Compare the outputs of two or more model implementations](#comparetheoutputsoftwoormoremodelimplementations)  
+4.3.2\.  [Compare focal measures of two model implementations](#comparefocalmeasuresoftwomodelimplementations)  
+4.3.3\.  [Compare focal measures of multiple model implementations](#comparefocalmeasuresofmultiplemodelimplementations)  
+4.3.4\.  [Pairwise comparison of model implementations](#pairwisecomparisonofmodelimplementations)  
+4.3.5\.  [Plot the PDF and CDF of focal measures from one or more model implementations](#plotthepdfandcdfoffocalmeasuresfromoneormoremodelimplementations)  
+4.3.6\.  [Table with _p_-values from comparison of focal measures from model implementations](#tablewith_p_-valuesfromcomparisonoffocalmeasuresfrommodelimplementations)  
+4.3.7\.  [Multiple comparisons and comparison names](#multiplecomparisonsandcomparisonnames)  
+4.3.8\.  [Comparison groups](#comparisongroups)  
 5\.  [Unit tests](#unittests)  
 6\.  [License](#license)  
 7\.  [References](#references)  
@@ -597,9 +598,41 @@ t
 
 ### 4.3\. Comparison of model implementations
 
+<a name="comparetheoutputsoftwoormoremodelimplementations"></a>
+
+#### 4.3.1\. Compare the outputs of two or more model implementations
+
+The [output_compare_plot] function can be used to graphically compare outputs
+from two or more model implementations. Multiple replications from each
+implementation are averaged, and an optional moving average filter can be used
+to smooth the per implementation output plots. It works in a similar fashion to
+[output_plot], but is oriented towards multiple model implementations.
+
+In the following example we compare the outputs of the NetLogo, Java EX (no
+agent shuffling) and Java EX (different parameter), using dataset 3.
+
+```matlab
+% Specify output names
+outputs = {'SheepPop', 'WolfPop', 'GrassQty', 'SheepEnergy', 'WolfEnergy', 'GrassEnergy'};
+
+% Compare outputs
+output_compare_plot({'NetLogo','Java-NS', 'Java-DIFF'}, ...
+    {[datafolder3 '/nl_ok'], [datafolder3 '/j_ex_noshuff'], [datafolder3 '/j_ex_diff']}, ...
+    {'stats400v1*.txt', 'stats400v1*.txt', 'stats400v1*.txt'}, outputs, ...
+     'ws', 10, 'Colors', {'b','k','g'}, 'LineWidths', {2,1,3});
+
+```
+
+![compare_plot_01](https://cloud.githubusercontent.com/assets/3018963/20432922/5be6760e-ad99-11e6-893c-8dc40ceff77f.png)
+![compare_plot_02](https://cloud.githubusercontent.com/assets/3018963/20432923/5be6fce6-ad99-11e6-8576-ccb6f7763c6d.png)
+![compare_plot_03](https://cloud.githubusercontent.com/assets/3018963/20432926/5beb5232-ad99-11e6-9ecc-8a6d2a7da311.png)
+![compare_plot_04](https://cloud.githubusercontent.com/assets/3018963/20432925/5beab322-ad99-11e6-92e4-168b9f67fb6c.png)
+![compare_plot_05](https://cloud.githubusercontent.com/assets/3018963/20432924/5be96ed6-ad99-11e6-9de4-dab34b418989.png)
+![compare_plot_06](https://cloud.githubusercontent.com/assets/3018963/20432927/5becb0fa-ad99-11e6-8728-3c0005477867.png)
+
 <a name="comparefocalmeasuresoftwomodelimplementations"></a>
 
-#### 4.3.1\. Compare focal measures of two model implementations
+#### 4.3.2\. Compare focal measures of two model implementations
 
 The [stats_compare] function is used for comparing focal measures from two or
 more model implementations. For this purpose, it applies statistical tests to
@@ -660,7 +693,7 @@ h_all =
 
 <a name="comparefocalmeasuresofmultiplemodelimplementations"></a>
 
-#### 4.3.2\. Compare focal measures of multiple model implementations
+#### 4.3.3\. Compare focal measures of multiple model implementations
 
 The [stats_compare] function also allows to compare focal measure from more than
 two model implementations. If more than two [stats_gather] structs are passed as
@@ -702,7 +735,7 @@ ps =
 
 <a name="pairwisecomparisonofmodelimplementations"></a>
 
-#### 4.3.3\. Pairwise comparison of model implementations
+#### 4.3.4\. Pairwise comparison of model implementations
 
 When comparing multiple model implementations, if one or more are misaligned, 
 the [stats_compare] function will detected a misalignment, but will not provide
@@ -756,7 +789,7 @@ are aligned.
 
 <a name="plotthepdfandcdfoffocalmeasuresfromoneormoremodelimplementations"></a>
 
-#### 4.3.4\. Plot the PDF and CDF of focal measures from one or more model implementations
+#### 4.3.5\. Plot the PDF and CDF of focal measures from one or more model implementations
 
 In this example we have two PPHPC implementations which produce equivalent
 results (NLOK and JEXOK), and two other which display slightly different
@@ -801,7 +834,7 @@ _Mean value of the countdown parameter in all cells_
 
 <a name="tablewith_p_-valuesfromcomparisonoffocalmeasuresfrommodelimplementations"></a>
 
-#### 4.3.5\. Table with _p_-values from comparison of focal measures from model implementations
+#### 4.3.6\. Table with _p_-values from comparison of focal measures from model implementations
 
 The [stats_compare_table] function produces publication quality tables of
 _p_-values in LaTeX. This function accepts four parameters:
@@ -846,7 +879,7 @@ comparison).
 
 <a name="multiplecomparisonsandcomparisonnames"></a>
 
-#### 4.3.6\. Multiple comparisons and comparison names
+#### 4.3.7\. Multiple comparisons and comparison names
 
 In Table 1 of reference [\[4\]][ref4], three comparisons, I, II, and III, are
 performed. The comparison name can be specified in item 1 of the variable
@@ -880,7 +913,7 @@ _t_-test and from the non-parametric Mann-Whitney test.
 
 <a name="comparisongroups"></a>
 
-#### 4.3.7\. Comparison groups
+#### 4.3.8\. Comparison groups
 
 In Table 8 of reference [\[3\]][ref3], ten comparisons are performed. Each
 comparison is associated with a model size and parameter set, and tests for
@@ -1102,6 +1135,7 @@ Variance Analysis. *Journal of the American Statistical Association* 47 (260):
 [dist_plot_per_fm]: dist/dist_plot_per_fm.m
 [dist_table_per_setup]: dist/dist_table_per_setup.m
 [dist_table_per_fm]: dist/dist_table_per_fm.m
+[output_compare_plot]: compare/output_compare_plot.m
 [stats_compare]: compare/stats_compare.m
 [stats_compare_pw]: compare/stats_compare_pw.m
 [stats_compare_plot]: compare/stats_compare_plot.m
