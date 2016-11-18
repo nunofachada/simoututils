@@ -76,7 +76,7 @@ else
     [outputs, num_outputs] = parse_output_names(outputs);
 end;
 
-% ARGS HERE
+% Parse remaining args
 [type, layout, scale, iters, lineprops, patchprops] = ...
     parse_args(num_outputs, varargin);
 

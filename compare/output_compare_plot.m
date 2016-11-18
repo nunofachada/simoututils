@@ -46,10 +46,9 @@ function [d, h] = ...
 % Determine number of outputs and output names
 [outputs, num_outputs] = parse_output_names(outputs);
 
-num_modimpls = numel(folders);
-
-% Parse optional arguments
-[ws, iters, lineprops] = parse_args(num_modimpls, varargin);
+% Parse arguments
+[num_modimpls, ws, iters, lineprops] = ...
+    parse_args(impls, folders, files, varargin);
 
 % Vector with handles to the created figures
 h = zeros(1, num_outputs);
@@ -126,7 +125,22 @@ end;
 % % % % % % % % % % % % % % % % % % % % % % % %
 % Helper function to parse optional arguments %
 % % % % % % % % % % % % % % % % % % % % % % % %
-function [ws, iters, lineprops] = parse_args(num_modimpls, args)
+function [num_modimpls, ws, iters, lineprops] = ...
+    parse_args(impls, folders, files, args)
+
+% Check if first three parameters are cell array of strings
+if ~iscellstr(impls) || ~iscellstr(folders) || ~iscellstr(files)
+    error('The first three parameters must be cell array of strings.');
+end;
+
+% Check if first three parameters have the same size
+if numel(impls) ~= numel(folders) || numel(folders) ~= numel(files)
+    error(['The first three parameters must contain the same ' ...
+        'number of elements.']);
+end;
+
+% Determine the number of implementations
+num_modimpls = numel(impls);
 
 % Some default values
 ws = 0;
@@ -224,6 +238,25 @@ if numArgs > 0
         error('Incorrect number of optional arguments.');
         
     end;
+end;
+
+% If number of iterations was not specified, use maximum possible
+if iters == 0
+    
+    % List files for first implementation in order to determine
+    % number of iterations
+    listing = dirnd([folders{1} filesep files{1}]);
+    num_files = size(listing, 1);
+
+    % Read first file from first implementation in order to determine
+    % number of iterations
+    if num_files > 0
+        data = dlmread([folders{1} filesep listing(1).name]);
+        iters = size(data, 1);
+    else
+        error('No files found for model implementation 1');
+    end;
+    
 end;
 
 
