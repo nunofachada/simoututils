@@ -11,11 +11,11 @@ function [d, h] = ...
 %    impls - Cell array of strings containing the names of the model
 %            implementations.
 %  folders - Cell array of strings specifying folders containing simulation
-%            output files. Each folder corresponds to a model
-%            implementation.
+%            output files. Each folder corresponds to the respective model
+%            implementation specified in the 'impls' parameter.
 %    files - Cell array of strings specifying simulation output files (use
-%            wildcards for more than one file). Each file string
-%            corresponds to a folder
+%            wildcards for more than one file). Each string corresponds to files
+%            within the respective folder in the 'folders' parameter.
 %  outputs - Either an integer representing the number of outputs in 
 %            each file or a cell array of strings with the output names.
 %            In the former case, output names will be 'o1', 'o2', etc.
