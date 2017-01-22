@@ -988,6 +988,7 @@ The tests can take a few minutes to run.
 [\[1\]][ref1] Fachada N, Lopes VV, Martins RC, Rosa AC. (2016) SimOutUtils -
  Utilities for analyzing simulation output. *Journal of Open Research Software*
 4(1):e38. http://doi.org/10.5334/jors.110
+
 <a name="ref2"></a>
 
 [\[2\]][ref2] Fachada N, Lopes VV, Martins RC, Rosa AC. (2015) Towards a
@@ -998,18 +999,19 @@ Computer Science* 1:e36. https://doi.org/10.7717/peerj-cs.36
 
 [\[3\]][ref3] Fachada N, Lopes VV, Martins RC, Rosa AC. (2016) Parallelization
 Strategies for Spatial Agent-Based Models. *International Journal of Parallel
-Programming*. https://doi.org/10.1007/s10766-015-0399-9 (arXiv version available
-at http://arxiv.org/abs/1507.04047)
+Programming*. https://doi.org/10.1007/s10766-015-0399-9
+([arXiv preprint](http://arxiv.org/abs/1507.04047))
 
 <a name="ref4"></a>
 
-[\[4\]][ref4] Fachada N, Lopes VV, Martins RC, Rosa AC. (2016) Model-independent
-comparison of simulation output. *Under peer-review*. (arXiv version available
-at http://arxiv.org/abs/1509.09174)
+[\[4\]][ref4] Fachada N, Lopes VV, Martins RC, Rosa AC. (2017)
+Model-independent comparison of simulation output. *Simulation Modelling
+Practice and Theory*. 72:131-149. http://dx.doi.org/10.1016/j.simpat.2016.12.013
+([arXiv preprint](http://arxiv.org/abs/1509.09174))
 
 <a name="ref5"></a>
 
-[\[5\]][ref5] Willink R (2005) A Confidence Interval and Test for the Mean of
+[\[5\]][ref5] Willink R. (2005) A Confidence Interval and Test for the Mean of
 an Asymmetric Distribution. *Communications in Statistics - Theory and Methods*
 34 (4): 753-766. https://doi.org/10.1081%2FSTA-200054419
 
