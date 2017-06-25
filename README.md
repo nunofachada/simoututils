@@ -1071,23 +1071,24 @@ Computer Science* 1:e36. https://doi.org/10.7717/peerj-cs.36
 
 <a name="ref3"></a>
 
-[\[3\]][ref3] Fachada N, Lopes VV, Martins RC, Rosa AC. (2016) Parallelization
-Strategies for Spatial Agent-Based Models. *International Journal of Parallel
-Programming*. https://doi.org/10.1007/s10766-015-0399-9
+[\[3\]][ref3] Fachada N, Lopes VV, Martins RC, Rosa AC. (2017)
+Parallelization strategies for spatial agent-based models. *International
+Journal of Parallel Programming*. 45(3):449–481.
+http://dx.doi.org/10.1007/s10766-015-0399-9
 ([arXiv preprint](http://arxiv.org/abs/1507.04047))
 
 <a name="ref4"></a>
 
 [\[4\]][ref4] Fachada N, Lopes VV, Martins RC, Rosa AC. (2017)
 Model-independent comparison of simulation output. *Simulation Modelling
-Practice and Theory*. 72:131-149. http://dx.doi.org/10.1016/j.simpat.2016.12.013
+Practice and Theory*. 72:131–149. http://dx.doi.org/10.1016/j.simpat.2016.12.013
 ([arXiv preprint](http://arxiv.org/abs/1509.09174))
 
 <a name="ref5"></a>
 
 [\[5\]][ref5] Willink R. (2005) A Confidence Interval and Test for the Mean of
 an Asymmetric Distribution. *Communications in Statistics - Theory and Methods*
-34 (4): 753-766. https://doi.org/10.1081%2FSTA-200054419
+34 (4): 753–766. https://doi.org/10.1081%2FSTA-200054419
 
 <a name="ref6"></a>
 
