@@ -3,12 +3,25 @@
 %
 % These tests require the MOxUnit framework available at
 % https://github.com/MOxUnit/MOxUnit
-%    
-% Copyright (c) 2016 Nuno Fachada
+%
+% To run the tests: 
+% 1 - Make sure MOxUnit is on the MATLAB/Octave path
+% 2 - Make sure SimOutUtils is on the MATLAB/Octave path by running
+%     startup.m
+% 3 - cd into the tests folder
+% 4 - Invoke the moxunit_runtests script
+%
+% Copyright (c) 2016-2017 Nuno Fachada
 % Distributed under the MIT License (See accompanying file LICENSE or copy 
 % at http://opensource.org/licenses/MIT)
 %
-function test_suite = core_tests
+function test_suite = tests_core
+    try
+        % assignment of 'localfunctions' is necessary in Matlab >= 2016
+        test_functions = localfunctions();
+    catch
+        % no problem; early Matlab versions can use initTestSuite fine
+    end;
     initTestSuite
 
 % Test stats_get and stats_get_* functions
